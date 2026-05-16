@@ -19,5 +19,14 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      "semi": ["error", "never"],
+      "max-len": ["error", {
+        "code": 120,
+        "tabWidth": 2,
+      }],
+      "comma-dangle": ["error", "never"],
+      "quotes": ["error", "single"],
+    },
   },
 ])
