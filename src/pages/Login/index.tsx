@@ -5,7 +5,8 @@ import type { FormProps } from 'antd'
 import { Button, Form, Input, message } from 'antd'
 import { SwapOutlined } from '@ant-design/icons'
 
-import { registerService, checkUsernameService } from '@/api/user'
+import { registerService, checkUsernameService, loginService } from '@/api/user'
+import { setStorage } from '@/utils/storage'
 
 const Login = () => {
   // 切换登录注册
@@ -44,7 +45,15 @@ const Login = () => {
     }
     // 登录处理
     else {
-      console.log('登录', values)
+      const res = await loginService({ user_name: values.username, user_password: values.password })
+      if (res.code === 4001) {
+        return message.error('用户名或密码错误')
+      } else if (res.code === 200) {
+        message.success('登录成功')
+        // 存储唯一会话标识
+        setStorage('token', res.data.token)
+        // 跳转到首页
+      }
     }
   }
   // 登录表单提交失败处理函数
