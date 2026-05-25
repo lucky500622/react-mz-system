@@ -15,5 +15,8 @@ export const getStorage = <T>(key: string) => {
 
 // 删除本地存储
 export const removeStorage = (key: string) => {
-  localStorage.removeItem(key)
+  const item = localStorage.getItem(key)
+  if (item) {
+    localStorage.removeItem(key)
+  }
 }

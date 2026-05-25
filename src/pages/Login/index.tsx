@@ -1,5 +1,6 @@
 import '@/pages/Login/index.scss'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import type { FormProps } from 'antd'
 import { Button, Form, Input, message } from 'antd'
@@ -9,6 +10,9 @@ import { registerService, checkUsernameService, loginService } from '@/api/user'
 import { setStorage } from '@/utils/storage'
 
 const Login = () => {
+  // 导航实例
+  const navigate = useNavigate()
+
   // 切换登录注册
   const [isLogin, setIsLogin] = useState(true)
   // 登录注册切换处理函数
@@ -53,6 +57,7 @@ const Login = () => {
         // 存储唯一会话标识
         setStorage('token', res.data.token)
         // 跳转到首页
+        navigate('/', { replace: true })
       }
     }
   }
