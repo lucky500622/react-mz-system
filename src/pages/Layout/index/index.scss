@@ -1,0 +1,25 @@
+.header {
+  margin: 0 8px 8px 8px;
+  height: 100px;
+  background-color: rgb(255, 255, 255);
+}
+.middle {
+  margin: 0 8px;
+  height: calc(100vh - 116px);
+  background-color: transparent;
+  .sider {
+    height: 100%;
+    .menu {
+      margin-top: 8px;
+      .menu-item {
+        margin-bottom: 10px !important;
+      }
+    }
+  }
+  .content {
+    margin-left: 8px;
+    padding: 8px;
+    height: 100%;
+    background-color: #ffffff;
+  }
+}
