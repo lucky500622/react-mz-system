@@ -1,6 +1,8 @@
 import { Outlet } from 'react-router-dom'
 
-const Layout = () => {
+import './index.scss'
+
+const LayoutIndex = () => {
   return (
     <div>
       <Outlet />
@@ -8,4 +10,4 @@ const Layout = () => {
   )
 }
 
-export default Layout
+export default LayoutIndex

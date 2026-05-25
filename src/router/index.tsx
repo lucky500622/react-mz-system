@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import AuthRoute from './authRoute'
-import Layout from '@/pages/Layout/index'
-import Home from '@/pages/Layout/home'
+import LayoutIndex from '@/pages/Layout/index'
+import Home from '@/pages/Layout/home/home'
 import Login from '@/pages/Login/index'
 
 const router = createBrowserRouter([
@@ -9,7 +9,7 @@ const router = createBrowserRouter([
     element: <AuthRoute />,
     children: [{
       path: '/',
-      element: <Layout />,
+      element: <LayoutIndex />,
       children: [
         {
           index: true,

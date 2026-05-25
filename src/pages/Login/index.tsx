@@ -67,38 +67,36 @@ const Login = () => {
   }
 
   return (
-    <div className="main-box">
+    <div className="login-box">
+      {/* 登录/注册标题 */}
+      <div className='login-title'>
+        <span className="title">{isLogin ? '用户登录' : '用户注册'}</span>
+      </div>
 
-      <div className="login-box">
-        {/* 登录/注册标题 */}
-        <div className='login-title'>
-          <span className="title">{isLogin ? '用户登录' : '用户注册'}</span>
-        </div>
+      {/* 登录/注册表单 */}
+      <Form
+        form={form}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+        className="login-form"
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 18 }} >
+        <Form.Item<FieldType>
+          name="username" label="用户名" rules={[{ required: true, min: 3, max: 20, message: '请输入3-20个字符的用户名' }]}>
+          <Input />
+        </Form.Item>
 
-        {/* 登录/注册表单 */}
-        <Form
-          form={form}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-          className="login-form"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 18 }} >
+        <Form.Item<FieldType>
+          name="password" label="密码" rules={[{ required: true, min: 6, max: 12, message: '请输入6-12个字符的密码' }]}>
+          <Input.Password />
+        </Form.Item>
+
+        {/* 注册时确认密码项 */}
+        {!isLogin && (
           <Form.Item<FieldType>
-            name="username" label="用户名" rules={[{ required: true, min: 3, max: 20, message: '请输入3-20个字符的用户名' }]}>
-            <Input />
-          </Form.Item>
-
-          <Form.Item<FieldType>
-            name="password" label="密码" rules={[{ required: true, min: 6, max: 12, message: '请输入6-12个字符的密码' }]}>
-            <Input.Password />
-          </Form.Item>
-
-          {/* 注册时确认密码项 */}
-          {!isLogin && (
-            <Form.Item<FieldType>
-              dependencies={['password']}
-              name="confirmPassword" label="确认密码" rules={[{ required: true, message: '请输入确认密码' },
+            dependencies={['password']}
+            name="confirmPassword" label="确认密码" rules={[{ required: true, message: '请输入确认密码' },
               ({ getFieldValue }) => ({
                 validator(_, val) {
                   if (!val || getFieldValue('password') === val) {
@@ -107,24 +105,23 @@ const Login = () => {
                   return Promise.reject('两次输入密码不一致')
                 }
               })
-              ]}>
-              <Input.Password />
-            </Form.Item>
-          )}
+            ]}>
+            <Input.Password />
+          </Form.Item>
+        )}
 
-          <div className="function-box">
-            <div className="toggle-btn" onClick={toggleLogin}>
-              {isLogin ? '切换到注册' : '切换到登录'}
-              <SwapOutlined />
-            </div>
-            <Form.Item<FieldType> label={null}>
-              <Button type="primary" htmlType="submit" className="login-btn">
-                {isLogin ? '登录' : '注册'}
-              </Button>
-            </Form.Item>
+        <div className="function-box">
+          <div className="toggle-btn" onClick={toggleLogin}>
+            {isLogin ? '切换到注册' : '切换到登录'}
+            <SwapOutlined />
           </div>
-        </Form>
-      </div>
+          <Form.Item<FieldType> label={null}>
+            <Button type="primary" htmlType="submit" className="login-btn">
+              {isLogin ? '登录' : '注册'}
+            </Button>
+          </Form.Item>
+        </div>
+      </Form>
     </div>
   )
 }
