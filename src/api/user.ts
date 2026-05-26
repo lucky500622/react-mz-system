@@ -4,7 +4,7 @@ import type { ApiResponse } from '@/api/type'
 
 // 用户注册
 type RegisterData = {
-  user_name: string;
+  isExist: boolean;
 }
 type RegisterResponse = ApiResponse<RegisterData>
 export const registerService = (data: {
@@ -12,17 +12,6 @@ export const registerService = (data: {
   user_password: string;
 }) => {
   return request.post('/user/register', data) as Promise<RegisterResponse>
-}
-
-// 用户名查重接口
-type CheckUsernameData = {
-  isExist: boolean;
-}
-type CheckUsernameResponse = ApiResponse<CheckUsernameData>
-export const checkUsernameService = (params: {
-  user_name: string;
-}) => {
-  return request.get('/user/register/checkUsername', { params }) as Promise<CheckUsernameResponse>
 }
 
 // 用户登录

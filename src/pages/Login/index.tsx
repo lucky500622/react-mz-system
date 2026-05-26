@@ -6,7 +6,7 @@ import type { FormProps } from 'antd'
 import { Button, Form, Input, message } from 'antd'
 import { SwapOutlined } from '@ant-design/icons'
 
-import { registerService, checkUsernameService, loginService } from '@/api/user'
+import { registerService, loginService } from '@/api/user'
 import { setStorage } from '@/utils/storage'
 
 const Login = () => {
@@ -33,17 +33,15 @@ const Login = () => {
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     // 注册处理
     if (!isLogin) {
-      // 检查用户名是否存在
-      const res = await checkUsernameService({ user_name: values.username })
-      if (res.data.isExist) {
-        return message.error('您输入的用户名已存在')
-      }
       // 注册用户
       const data = {
         user_name: values.username,
         user_password: values.password
       }
-      await registerService(data)
+      const res = await registerService(data)
+      if (res.data.isExist) {
+        return message.error('您输入的用户名已存在')
+      }
       message.success('注册成功')
       toggleLogin()
     }
@@ -83,12 +81,14 @@ const Login = () => {
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 18 }} >
         <Form.Item<FieldType>
-          name="username" label="用户名" rules={[{ required: true, min: 3, max: 20, message: '请输入3-20个字符的用户名' }]}>
+          name="username" label="用户名" rules={[{ required: true, min: 3, max: 20, message: '请输入3-20个字符的用户名' },
+            {pattern: /^[a-zA-Z0-9]+$/, message: '用户名只能包含字母和数字'}]}>
           <Input />
         </Form.Item>
 
         <Form.Item<FieldType>
-          name="password" label="密码" rules={[{ required: true, min: 6, max: 12, message: '请输入6-12个字符的密码' }]}>
+          name="password" label="密码" rules={[{ required: true, min: 6, max: 12, message: '请输入6-12个字符的密码' },
+            {pattern: /^[a-zA-Z0-9]+$/, message: '密码只能包含字母和数字'}]}>
           <Input.Password />
         </Form.Item>
 
