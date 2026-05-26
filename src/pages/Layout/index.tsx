@@ -59,6 +59,18 @@ const LayoutIndex = () => {
     if (item.key === '1') {
       navigate('/')
     }
+    if (item.key === '2') {
+      navigate('/per-manage')
+    }
+    if (item.key === '3') {
+      navigate('/sto-manage')
+    } 
+    if (item.key === '4') {
+      navigate('/pro-manage') 
+    }
+    if (item.key === '5') {
+      navigate('/act-info')
+    }
   }
 
   return (

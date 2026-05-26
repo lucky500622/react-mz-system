@@ -1,8 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom'
 import AuthRoute from '../components/AuthRoute'
+import Login from '@/pages/Login'
 import LayoutIndex from '@/pages/Layout/index'
-import Home from '@/pages/Layout/Home/Home'
-import Login from '@/pages/Login/index'
+import Home from '@/pages/Home'
+import StoManage from '@/pages/StoManage'
+import ProManage from '@/pages/ProManage'
+import PerManage from '@/pages/PerManage'
+import ActInfo from '@/pages/ActInfo'
+
 
 const router = createBrowserRouter([
   {
@@ -14,6 +19,22 @@ const router = createBrowserRouter([
         {
           index: true,
           element: <Home />
+        },
+        {
+          path: '/sto-manage',
+          element: <StoManage />
+        },
+        {
+          path: '/pro-manage',
+          element: <ProManage />
+        },
+        {
+          path: '/per-manage',
+          element: <PerManage />
+        },
+        {
+          path: '/act-info',
+          element: <ActInfo />
         }
       ]
     }]
