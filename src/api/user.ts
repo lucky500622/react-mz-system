@@ -19,10 +19,10 @@ type CheckUsernameData = {
   isExist: boolean;
 }
 type CheckUsernameResponse = ApiResponse<CheckUsernameData>
-export const checkUsernameService = (data: {
+export const checkUsernameService = (params: {
   user_name: string;
 }) => {
-  return request.get('/user/register/checkUsername', { params: data }) as Promise<CheckUsernameResponse>
+  return request.get('/user/register/checkUsername', { params }) as Promise<CheckUsernameResponse>
 }
 
 // 用户登录
@@ -38,4 +38,14 @@ export const loginService = (data: {
   user_password: string;
 }) => {
   return request.post('/user/login', data) as Promise<LoginResponse>
+}
+
+// 获取用户信息
+type UserInfoData = {
+  user_name: string;
+  user_role: string;
+}
+type UserInfoResponse = ApiResponse<UserInfoData>
+export const getUserInfoService = () => {
+  return request.get('/user/info') as Promise<UserInfoResponse>
 }

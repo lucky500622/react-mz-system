@@ -1,13 +1,13 @@
 .header {
-  margin: 0 8px 8px 8px;
-  height: 100px;
+  height: 70px;
   background-color: rgb(255, 255, 255);
+  border-bottom: 1px solid #e5e5e5;
 }
 .middle {
-  margin: 0 8px;
-  height: calc(100vh - 116px);
+  height: calc(100vh - 70px);
   background-color: transparent;
   .sider {
+    padding: 0 18px;
     height: 100%;
     .menu {
       margin-top: 8px;
@@ -17,7 +17,6 @@
     }
   }
   .content {
-    margin-left: 8px;
     padding: 8px;
     height: 100%;
     background-color: #ffffff;
