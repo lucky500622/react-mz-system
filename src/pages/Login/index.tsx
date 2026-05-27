@@ -8,6 +8,7 @@ import { SwapOutlined } from '@ant-design/icons'
 
 import { registerService, loginService } from '@/api/user'
 import { setStorage } from '@/utils/storage'
+import { useThrottleFn } from '@/hooks/useThrottle'
 
 const Login = () => {
   // 导航实例
@@ -30,7 +31,7 @@ const Login = () => {
   // 登录表单实例
   const [form] = Form.useForm<FieldType>()
   // 登录表单提交处理函数
-  const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+  const onFinish: FormProps<FieldType>['onFinish'] = useThrottleFn(async (values) => {
     // 注册处理
     if (!isLogin) {
       // 注册用户
@@ -58,7 +59,7 @@ const Login = () => {
         navigate('/', { replace: true })
       }
     }
-  }
+  }, 1000)
   // 登录表单提交失败处理函数
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (info) => {
     console.log(info)

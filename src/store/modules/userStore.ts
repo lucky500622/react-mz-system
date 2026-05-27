@@ -1,0 +1,31 @@
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
+
+import {getUserInfoService} from '@/api/user'
+
+type UserInfo = {
+  user_name: string
+  user_role: string
+}
+
+// 获取用户信息
+export const fetchUserInfo = createAsyncThunk('userStore/fetchUserInfo', async () => {
+  const res = await getUserInfoService()
+  return res.data
+})
+
+const userStore = createSlice({
+  name: 'userStore',
+  initialState: {
+    userInfo: {} as UserInfo
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      // 处理获取用户信息成功
+      .addCase(fetchUserInfo.fulfilled, (state, action) => {
+        state.userInfo = action.payload
+      })
+  }
+})
+
+export default userStore.reducer
