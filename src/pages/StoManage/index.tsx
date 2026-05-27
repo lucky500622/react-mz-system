@@ -1,7 +1,10 @@
+import '@/pages/StoManage/index.scss'
+import StoTable from './components/StoTable'
+
 const StoManage = () => {
   return (
     <div>
-      <h1>StoManage</h1>
+      <StoTable />
     </div>
   )
 }
