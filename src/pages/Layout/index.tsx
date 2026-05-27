@@ -1,5 +1,4 @@
-import { Outlet } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 
 import { Layout, Menu } from 'antd'
 import type { MenuProps } from 'antd'
@@ -53,6 +52,14 @@ const LayoutIndex = () => {
       navigate('/act-info')
     }
   }
+  const pathToKeyMap: Record<string, string> = {
+    '/': '1',
+    '/per-manage': '2',
+    '/sto-manage': '3',
+    '/pro-manage': '4',
+    '/act-info': '5'
+  }
+  const currentKey = pathToKeyMap[location.pathname] || '1'
 
   return (
     <div> 
@@ -60,7 +67,7 @@ const LayoutIndex = () => {
       <Layout className='middle'>
         <Layout.Sider theme='dark' className='sider' width={'260px'}>
           <Menu onClick={(item) => handleMenuClick(item)} theme='dark' mode='inline' className='menu'
-            defaultSelectedKeys={['1']} items={menuItems}>
+            defaultSelectedKeys={[currentKey]} items={menuItems}>
           </Menu>
         </Layout.Sider>
         <Layout.Content className='content'>
