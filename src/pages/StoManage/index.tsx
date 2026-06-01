@@ -1,5 +1,5 @@
 import '@/pages/StoManage/index.scss'
-import StoTable from './components/StoTable'
+import StoTable from '@/pages/StoManage/components/StoTable'
 
 const StoManage = () => {
   return (

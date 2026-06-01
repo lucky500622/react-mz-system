@@ -1,7 +1,10 @@
+import '@/pages/ProManage/index.scss'
+import ProTable from './components/ProTable'
+
 const ProManage = () => {
   return (
     <div>
-      <h1>ProManage</h1>
+      <ProTable />
     </div>
   )
 }
