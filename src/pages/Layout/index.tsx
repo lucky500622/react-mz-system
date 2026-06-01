@@ -64,7 +64,7 @@ const LayoutIndex = () => {
   return (
     <div> 
       <IndexHeader />
-      <Layout className='middle'>
+      <Layout className='Layout-middle'>
         <Layout.Sider theme='dark' className='sider' width={'260px'}>
           <Menu onClick={(item) => handleMenuClick(item)} theme='dark' mode='inline' className='menu'
             defaultSelectedKeys={[currentKey]} items={menuItems}>

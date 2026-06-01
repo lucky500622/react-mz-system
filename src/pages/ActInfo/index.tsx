@@ -1,6 +1,4 @@
-import '@/pages/ActInfo/index.scss'
-
-import ActTable from './components/ActTable'
+import ActTable from '@/pages/ActInfo/components/ActTabs'
 
 const ActInfo = () => {
   return (

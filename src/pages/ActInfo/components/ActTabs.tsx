@@ -1,0 +1,52 @@
+import { Tabs } from 'antd'
+
+import WarehouseTable from '@/pages/ActInfo/components/WareHouseTable'
+import ProductTable from '@/pages/ActInfo/components/ProductTable'
+import FunctionBar from '@/pages/ActInfo/components/FunctionBar'
+
+const ActTable = () => {
+  // FunctionBar配置
+  const warehouseConfig = {
+    name: '仓库名称',
+    operator: '操作人',
+    type: '操作类型'
+  }
+  const productConfig = {
+    name: '商品名称',
+    operator: '操作人',
+    type: '操作类型'
+  }
+
+  // 选项卡切换事件
+  const handleTabChange = (key: string) => {
+    console.log(key)
+  }
+  // 选项卡
+  const tabItems = [
+    {
+      label: '仓库操作记录',
+      key: 'warehouse',
+      children: 
+      <div>
+        <FunctionBar config={warehouseConfig} />
+        <WarehouseTable />
+      </div>
+    },
+    {
+      label: '商品操作记录',
+      key: 'product',
+      children: 
+      <div>
+        <FunctionBar config={productConfig} />
+        <ProductTable />
+      </div>
+    }
+  ]
+  return (
+    <div>
+      <Tabs items={tabItems} onChange={handleTabChange}/>
+    </div>
+  )
+}
+
+export default ActTable

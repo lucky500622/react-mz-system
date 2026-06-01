@@ -1,7 +1,11 @@
+import '@/pages/PerManage/index.scss'
+
 const PerManage = () => {
   return (
     <div>
-      <h1>PerManage</h1>
+      <div className="PerManage-top-bar">
+        <h2>人员管理</h2>
+      </div>
     </div>
   )
 }

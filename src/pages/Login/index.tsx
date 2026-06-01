@@ -66,7 +66,7 @@ const Login = () => {
   }
 
   return (
-    <div className="login-box">
+    <div className="Login-login-box">
       {/* 登录/注册标题 */}
       <div className='login-title'>
         <span className="title">{isLogin ? '用户登录' : '用户注册'}</span>

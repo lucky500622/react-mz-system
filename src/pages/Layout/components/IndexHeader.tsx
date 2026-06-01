@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { SolutionOutlined, UserOutlined, IdcardOutlined, RobotOutlined } from '@ant-design/icons'
 
-import './IndexHeader.scss'
+import '@/pages/Layout/components/styles/IndexHeader.scss'
 import { getInitial, turnRoleToChinese } from '@/utils/handleWord'
 import type { RootState, AppDispatch } from '@/store/index'
 import { fetchUserInfo } from '@/store/modules/userStore'
@@ -20,7 +20,7 @@ const IndexHeader = () => {
   }, [dispatch])
   
   return (
-    <div className="header">
+    <div className="IndexHeader-header">
       <div className="left">
         <div className="logo" onClick={() => navigate('/')}><RobotOutlined className="icon" />Mz System</div>
         <div className="request-info">

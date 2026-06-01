@@ -1,0 +1,78 @@
+import { useState, useEffect } from 'react'
+
+import { Table } from 'antd'
+
+import { getProductAction } from '@/api/action'
+
+// 商品记录表格配置项
+const productColumns = [
+  {
+    title: '序列号',
+    dataIndex: 'm_id',
+    key: 'm_id'
+  },
+  {
+    title: '操作对象',
+    dataIndex: 'issue_object',
+    key: 'issue_object'
+  },
+  {
+    title: '产品名称',
+    dataIndex: 'product_name',
+    key: 'product_name'
+  },  
+  {
+    title: '操作人',
+    dataIndex: 'creater',
+    key: 'creater'
+  },
+  {
+    title: '操作类型',
+    dataIndex: 'action_type',
+    key: 'action_type'
+  },
+  {
+    title: '操作数量',
+    dataIndex: 'action_num',
+    key: 'action_num'
+  },
+  {
+    title: '操作时间',
+    dataIndex: 'issue_create_time',
+    key: 'issue_create_time'
+  }
+]
+
+const WarehouseTable = () => {
+  // 商品操作记录表格数据
+  const [productRecordDataSource, setProductRecordDataSource] = useState([])
+  // 当前页
+  const [currentPage, setCurrentPage] = useState(1)
+  // 每页显示数量
+  const pageSize = 8
+  
+  useEffect(() => {
+    // 获取产品操作记录表格数据
+    const getProductRecord = async () => {
+      const res = await getProductAction()
+      setProductRecordDataSource(res.data.actionInfo)
+    }
+    getProductRecord()
+  }, [])
+
+  return (
+    <div>
+      <Table dataSource={productRecordDataSource} columns={productColumns} rowKey={(record) => record.m_id}
+        pagination={{
+          current: currentPage,
+          pageSize: pageSize,
+          total: productRecordDataSource.length,
+          onChange: (page) => {
+            setCurrentPage(page)
+          }
+        }} />
+    </div>
+  )
+}
+
+export default WarehouseTable

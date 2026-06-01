@@ -1,7 +1,11 @@
+import '@/pages/Home/index.scss'
+
 const Home = () => {
   return (
     <div>
-      <h1>Home</h1>
+      <div className="Home-top-bar">
+        <h2>首页</h2>
+      </div>
     </div>
   )
 }

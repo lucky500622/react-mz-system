@@ -1,11 +1,4 @@
-.StoManage-top-bar {
-  padding: 14px;
-  margin-bottom: 10px;
-  background-color: rgb(250, 250, 250);
-  color: rgb(44, 44, 44);
-}
-
-.StoManage-function-bar {
+.FunctionBar-function-bar {
   padding: 14px;
   margin-bottom: 10px;
   background-color: rgb(250, 250, 250);
@@ -24,13 +17,5 @@
     .ant-btn {
       margin-left: 10px;
     }
-  }
-  
-  .add-btn {
-    display: flex;
-    align-items: center;
-    padding-top: 10px;
-    margin-top: 10px;
-    border-top: 1px solid #d9d9d9;
   }
 }
