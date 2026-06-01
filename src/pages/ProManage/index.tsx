@@ -1,9 +1,11 @@
-import {useState} from 'react'
+import {useState, useCallback, useRef} from 'react'
 
 import { Button, Input } from 'antd'
 
 import '@/pages/ProManage/index.scss'
 import ProTable from '@/pages/ProManage/components/ProTable'
+import AddProductModal from '@/pages/ProManage/components/AddProductModal'
+import type { AddProductModalRef } from '@/pages/ProManage/components/AddProductModal'
 
 const ProManage = () => {
   // 查询参数
@@ -15,6 +17,25 @@ const ProManage = () => {
   const handleQuery = () => {
     console.log(queryParams)
   }
+
+  // 仓库弹窗变量
+  const [visible, setVisible] = useState(false)
+  // 新增仓库
+  const handleAdd = () => {
+    setVisible(true)
+  }
+  // 取消新增仓库弹窗
+  const handleCancel = useCallback(() => {
+    setVisible(false)
+    addModalRef.current?.resetFields()
+  }, [setVisible])
+  // 确认新增仓库弹窗
+  const handleOk = useCallback(() => {
+    setVisible(false)
+  }, [setVisible])
+
+  // 新增产品弹窗引用
+  const addModalRef = useRef<AddProductModalRef>(null)
 
   return (
     <div>
@@ -32,10 +53,11 @@ const ProManage = () => {
           <Button type="default" onClick={handleQuery}>查询</Button>
         </div>
         <div className="add-btn">
-          <Button type="default">新增产品</Button>
+          <Button type="default" onClick={handleAdd}>新增产品</Button>
         </div>
       </div>
       <ProTable />
+      <AddProductModal ref={addModalRef} visible={visible} handleCancel={handleCancel} handleOk={handleOk} />
     </div>
   )
 }
