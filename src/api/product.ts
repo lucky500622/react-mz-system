@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-import type { ApiResponse } from '@/api/type'
+import type { ApiResponse } from '@/types/apiResponseType'
 
-// 获取所有商品信息
+// 获取商品信息
 type ProductInfoData = {
   productInfo: {
     m_id: number;

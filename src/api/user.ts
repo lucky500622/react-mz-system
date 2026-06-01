@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-import type { ApiResponse } from '@/api/type'
+import type { ApiResponse } from '@/types/apiResponseType'
 
 // 用户注册
 type RegisterData = {

@@ -12,22 +12,22 @@ const ProTable = () => {
       key: 'm_id'
     },
     {
-      title: '商品名称',
+      title: '产品名称',
       dataIndex: 'product_name',
       key: 'product_name'
     },
     {
-      title: '商品类型',
+      title: '产品类型',
       dataIndex: 'product_type',
       key: 'product_type'
     },
     {
-      title: '商品数量',
+      title: '产品数量',
       dataIndex: 'product_num',
       key: 'product_num'
     },
     {
-      title: '商品描述',
+      title: '产品描述',
       key: 'product_description',
       width: 100,
       render: (_, record) => {
