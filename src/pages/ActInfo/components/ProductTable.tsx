@@ -23,8 +23,8 @@ const productColumns = [
   },  
   {
     title: '操作人',
-    dataIndex: 'creater',
-    key: 'creater'
+    dataIndex: 'user_name',
+    key: 'user_name'
   },
   {
     title: '操作类型',

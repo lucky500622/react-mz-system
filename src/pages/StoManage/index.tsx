@@ -26,14 +26,10 @@ const StoManage = () => {
   const handleAdd = () => {
     setVisible(true)
   }
-  // 取消新增仓库弹窗
-  const handleCancel = useCallback(() => {
+  // 新增仓库弹窗关闭
+  const handleClose = useCallback(() => {
     setVisible(false)
     addModalRef.current?.resetFields()
-  }, [setVisible])
-  // 确认新增仓库弹窗
-  const handleOk = useCallback(() => {
-    setVisible(false)
   }, [setVisible])
 
   // 新增仓库弹窗引用
@@ -65,7 +61,7 @@ const StoManage = () => {
         </div>
       </div>
       <StoTable />
-      <AddWarehouseModal visible={visible} handleCancel={handleCancel} handleOk={handleOk} ref={addModalRef} />
+      <AddWarehouseModal visible={visible} handleClose={handleClose} ref={addModalRef} />
     </div>
   )
 }

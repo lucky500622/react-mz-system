@@ -24,8 +24,8 @@ const StoTable = () => {
     },
     {
       title: '创建人',
-      dataIndex: 'warehouse_creater',
-      key: 'warehouse_creater'
+      dataIndex: 'user_name',
+      key: 'user_name'
     },
     {
       title: '创建时间',

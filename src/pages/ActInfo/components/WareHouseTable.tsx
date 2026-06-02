@@ -23,18 +23,31 @@ const warehouseColumns = [
   },
   {
     title: '操作人',
-    dataIndex: 'creater',
-    key: 'creater'
+    dataIndex: 'user_name',
+    key: 'user_name'
   },
   {
     title: '操作类型',
     dataIndex: 'action_type',
-    key: 'action_type'
+    key: 'action_type',
+    render: (val) => {
+      const map = {
+        1: '创建',
+        2: '删除',
+        3: '重命名'
+      }
+      return map[val] || val
+    }
   },
   {
     title: '仓库新名',
     dataIndex: 'warehouse_rename',
-    key: 'warehouse_rename'
+    key: 'warehouse_rename',
+    render: (val) => {
+      if (!val) {
+        return '/'
+      }
+    }
   },
   {
     title: '操作时间',
