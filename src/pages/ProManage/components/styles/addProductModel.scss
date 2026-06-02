@@ -1,5 +1,8 @@
 .AddProductModal-form {
   padding-top: 20px;
+  .type-select {
+    width: 142px;
+  }
   .submit-btn {
     display: flex;
     justify-content: flex-end;

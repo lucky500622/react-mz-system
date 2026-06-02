@@ -1,11 +1,12 @@
 import {useState, useCallback, useRef} from 'react'
 
-import { Button, Input, InputNumber } from 'antd'
+import { Button, Input, InputNumber, Select } from 'antd'
 
 import '@/pages/StoManage/index.scss'
 import StoTable from '@/pages/StoManage/components/StoTable'
 import AddWarehouseModal from '@/pages/StoManage/components/AddWarehouseModal'
 import type { AddWarehouseModalRef } from '@/pages/StoManage/components/AddWarehouseModal'
+import type { StoTableRef } from '@/pages/StoManage/components/StoTable'
 
 const StoManage = () => {
   // 查询参数
@@ -34,6 +35,12 @@ const StoManage = () => {
 
   // 新增仓库弹窗引用
   const addModalRef = useRef<AddWarehouseModalRef>(null)
+  // 仓库表格引用
+  const tableRef = useRef<StoTableRef>(null)
+  // 刷新仓库表格数据
+  const handleRefresh = useCallback(() => {
+    tableRef.current?.refreshData()
+  }, [tableRef])
 
   return (
     <div>
@@ -49,8 +56,19 @@ const StoManage = () => {
           <Input placeholder="请输入仓库名称"
             value={queryParams.name} onChange={(e) => setQueryParams({...queryParams, name: e.target.value})} />
           <span className="query-btn-span">仓库类型：</span>
-          <Input placeholder="请输入仓库类型"
-            value={queryParams.type} onChange={(e) => setQueryParams({...queryParams, type: e.target.value})} />
+          <Select placeholder="请选择仓库类型" className="type-select"
+            options={[
+              { value: '常温仓', label: '常温仓' },
+              { value: '冷藏仓', label: '冷藏仓' },
+              { value: '冷冻仓', label: '冷冻仓' },
+              { value: '干货仓', label: '干货仓' },
+              { value: '百货仓', label: '百货仓' },
+              { value: '家电仓', label: '家电仓' },
+              { value: '服装仓', label: '服装仓' },
+              { value: '其他仓储', label: '其他仓储' }
+            ]}
+            onChange={(e) => setQueryParams({...queryParams, type: e})}
+          />
           <span className="query-btn-span">创建人：</span>
           <Input placeholder="请输入创建人"
             value={queryParams.creator} onChange={(e) => setQueryParams({...queryParams, creator: e.target.value})} />
@@ -60,8 +78,9 @@ const StoManage = () => {
           <Button type="default" onClick={handleAdd}>新增仓库</Button>
         </div>
       </div>
-      <StoTable />
-      <AddWarehouseModal visible={visible} handleClose={handleClose} ref={addModalRef} />
+      <StoTable ref={tableRef} />
+      <AddWarehouseModal handleRefresh={handleRefresh}
+        visible={visible} handleClose={handleClose} ref={addModalRef} />
     </div>
   )
 }

@@ -1,6 +1,8 @@
+import dayjs from 'dayjs'
+
 import { useState, useEffect } from 'react'
 
-import { Table } from 'antd'
+import { Table, Tag } from 'antd'
 
 import { getProductAction } from '@/api/product'
 
@@ -29,7 +31,10 @@ const productColumns = [
   {
     title: '操作类型',
     dataIndex: 'action_type',
-    key: 'action_type'
+    key: 'action_type',
+    render: (val) => {
+      return <Tag color="blue">{val}</Tag>
+    }
   },
   {
     title: '操作数量',
@@ -39,7 +44,10 @@ const productColumns = [
   {
     title: '操作时间',
     dataIndex: 'issue_create_time',
-    key: 'issue_create_time'
+    key: 'issue_create_time',
+    render: (val) => {  
+      return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+    }
   }
 ]
 

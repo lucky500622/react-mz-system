@@ -1,6 +1,8 @@
+import dayjs from 'dayjs'
+
 import { useState, useEffect } from 'react'
 
-import { Table } from 'antd'
+import { Table, Tag } from 'antd'
 
 import { getWarehouseAction } from '@/api/warehouse'
 
@@ -34,9 +36,9 @@ const warehouseColumns = [
       const map = {
         1: '创建',
         2: '删除',
-        3: '重命名'
+        3: '修改数量'
       }
-      return map[val] || val
+      return <Tag color="blue">{map[val] || val}</Tag>
     }
   },
   {
@@ -52,7 +54,10 @@ const warehouseColumns = [
   {
     title: '操作时间',
     dataIndex: 'issue_create_time',
-    key: 'issue_create_time'
+    key: 'issue_create_time',
+    render: (val) => {
+      return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+    }
   }
 ]
 

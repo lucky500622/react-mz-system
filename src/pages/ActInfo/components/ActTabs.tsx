@@ -21,10 +21,6 @@ const ActTable = () => {
     type: '操作类型'
   }
 
-  // 选项卡切换事件
-  const handleTabChange = (key: string) => {
-    console.log(key)
-  }
   // 选项卡
   const tabItems = [
     {
@@ -48,7 +44,7 @@ const ActTable = () => {
   ]
   return (
     <div>
-      <Tabs items={tabItems} onChange={handleTabChange}/>
+      <Tabs items={tabItems}/>
     </div>
   )
 }

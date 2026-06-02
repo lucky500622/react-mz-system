@@ -1,9 +1,14 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useImperativeHandle} from 'react'
 
-import { Table, Button, Modal } from 'antd'
+import { Table, Button, Modal, Tag } from 'antd'
 
 import { getProductInfo } from '@/api/product'
-const ProTable = () => {
+
+// 产品表格引用类型
+export type ProTableRef = {
+  handleRefresh: () => void
+}
+const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
   // 表格列配置
   const columns = [
     {
@@ -24,7 +29,12 @@ const ProTable = () => {
     {
       title: '产品类型',
       dataIndex: 'product_type',
-      key: 'product_type'
+      key: 'product_type',
+      render: (_, record) => {
+        return (
+          <Tag color="blue">{record.product_type}</Tag>
+        )
+      }
     },
     {
       title: '产品数量',
@@ -77,13 +87,22 @@ const ProTable = () => {
     setIsModalOpen(false)
   }
 
+  // 刷新表格状态
+  const [refresh, setRefresh] = useState(false)
+  // 向外暴露刷新方法
+  useImperativeHandle(ref, () => ({
+    handleRefresh: () => {
+      setRefresh(!refresh)
+    }
+  }))
+
   useEffect(() => {
     const getInfo = async () => {
       const res = await getProductInfo()
       setDataSource(res.data.productInfo)
     }
     getInfo()
-  }, [])
+  }, [refresh])
 
 
   return (
@@ -98,7 +117,7 @@ const ProTable = () => {
           }
         }} />
       <Modal
-        title="商品详情弹窗"
+        title="商品描述"
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}

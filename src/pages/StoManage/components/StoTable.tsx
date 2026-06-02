@@ -1,10 +1,13 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useImperativeHandle} from 'react'
 
 import dayjs from 'dayjs'
-import { Table, Button, Modal } from 'antd'
+import { Table, Button, Modal, Tag } from 'antd'
 
+export type StoTableRef = {
+  refreshData: () => void
+}
 import { getWarehouseInfo } from '@/api/warehouse'
-const StoTable = () => {
+const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
   // 表格列配置
   const columns = [
     {
@@ -20,7 +23,12 @@ const StoTable = () => {
     {
       title: '仓库类型',
       dataIndex: 'warehouse_type',
-      key: 'warehouse_type'
+      key: 'warehouse_type',
+      render: (_, record) => {
+        return (
+          <Tag color={'blue'}>{record.warehouse_type}</Tag>
+        )
+      }
     },
     {
       title: '创建人',
@@ -30,7 +38,10 @@ const StoTable = () => {
     {
       title: '创建时间',
       dataIndex: 'warehouse_create_time',
-      key: 'warehouse_create_time'
+      key: 'warehouse_create_time',
+      render: (val) => {
+        return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+      }
     },
     {
       title: '仓库描述',
@@ -78,17 +89,22 @@ const StoTable = () => {
     setIsModalOpen(false)
   }
 
+  // 刷新表格状态
+  const [refresh, setRefresh] = useState(false)
+  // 向外暴露刷新表格数据方法
+  useImperativeHandle(ref, () => ({
+    refreshData: () => {
+      setRefresh(!refresh)
+    }
+  }))
+  
   useEffect(() => {
     const getInfo = async () => {
       const res = await getWarehouseInfo()
-      // 处理时间格式
-      res.data.warehouseInfo.forEach(item => {
-        item.warehouse_create_time = dayjs(item.warehouse_create_time).format('YYYY-MM-DD HH:mm:ss')
-      })
       setDataSource(res.data.warehouseInfo)
     }
     getInfo()
-  }, [])
+  }, [refresh])
 
 
   return (
@@ -102,12 +118,12 @@ const StoTable = () => {
         }
       }} />
       <Modal
-        title="仓库详情弹窗"
+        title="仓库描述"
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}
       >
-        <p>{detailContent}</p>
+        <p>{detailContent || '暂无仓库描述'}</p>
       </Modal>
     </div>
   )

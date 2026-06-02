@@ -1,24 +1,26 @@
 import { memo, useImperativeHandle } from 'react'
 
 import type { FormProps } from 'antd'
-import { Input, Modal, Form, Button, message } from 'antd'
+import { Input, Modal, Form, Button, message, Select } from 'antd'
 
+import { useThrottleFn } from '@/hooks/useThrottle'
 import '@/pages/StoManage/components/styles/addWarehouseModel.scss'
 import { addWarehouse } from '@/api/warehouse'
 
 // 新增仓库弹窗引用类型
 export type AddWarehouseModalRef = {
-  resetFields: () => void
+  resetFields: () => void,
 }
 // 新增仓库弹窗接收的属性
 type AddWarehouseModalProps = {
   visible: boolean,
   handleClose: () => void,
+  handleRefresh: () => void,
   ref: React.Ref<AddWarehouseModalRef>
 }
 
 // 新增仓库弹窗组件
-const AddWarehouseModal = memo(({visible, handleClose, ref}: AddWarehouseModalProps) => {
+const AddWarehouseModal = memo(({handleRefresh, visible, handleClose, ref}: AddWarehouseModalProps) => {
   // 仓库类型
   type FileType = {
     warehouse_name: string,
@@ -28,16 +30,17 @@ const AddWarehouseModal = memo(({visible, handleClose, ref}: AddWarehouseModalPr
   // 新增仓库表单
   const [form] = Form.useForm()
   // 新增仓库表单提交
-  const onFinish: FormProps<FileType>['onFinish'] = async (values) => {
+  const onFinish: FormProps<FileType>['onFinish'] = useThrottleFn(async (values) => {
     try {
       await addWarehouse(values)
-    } catch (err) {
-      message.error(err.message)
+      handleRefresh()
+    } catch {
+      message.error('新增仓库失败')
     } finally {
       handleClose()
       form.resetFields()
     }
-  }
+  }, 1000)
   // 新增仓库表单提交失败
   const onFinishFailed: FormProps<FileType>['onFinishFailed'] = (info) => {
     console.log(info)
@@ -65,9 +68,19 @@ const AddWarehouseModal = memo(({visible, handleClose, ref}: AddWarehouseModalPr
           rules={[{ required: true, min: 2, max: 20, message: '请输入2-20个字符的仓库名称' }]}>
           <Input placeholder="请输入仓库名称" maxLength={20} />
         </Form.Item>
-        <Form.Item label="仓库类型" name="warehouse_type"
-          rules={[{ min: 2, max: 8, message: '请输入2-8个字符的仓库类型' }]}>
-          <Input placeholder="请输入仓库类型" maxLength={8} />
+        <Form.Item label="仓库类型" name="warehouse_type" >
+          <Select placeholder="请选择仓库类型" className="type-select" 
+            options={[
+              { value: '常温仓', label: '常温仓' },
+              { value: '冷藏仓', label: '冷藏仓' },
+              { value: '冷冻仓', label: '冷冻仓' },
+              { value: '干货仓', label: '干货仓' },
+              { value: '百货仓', label: '百货仓' },
+              { value: '家电仓', label: '家电仓' },
+              { value: '服装仓', label: '服装仓' },
+              { value: '其他仓储', label: '其他仓储' }
+            ]}
+          />
         </Form.Item>
         <Form.Item label="仓库描述" name="warehouse_description"
           rules={[{ min: 0, max: 200, message: '请输入0-200个字符的仓库描述' }]}>

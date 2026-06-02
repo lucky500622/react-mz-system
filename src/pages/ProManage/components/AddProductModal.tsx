@@ -1,9 +1,10 @@
 import { memo, useImperativeHandle } from 'react'
 
 import type { FormProps } from 'antd'
-import { Input, Modal, Form, Button, InputNumber } from 'antd'
+import { Input, Modal, Form, Button, InputNumber, Select, message } from 'antd'
 
 import '@/pages/ProManage/components/styles/addProductModel.scss'
+import { useThrottleFn } from '@/hooks/useThrottle'
 
 // 新增产品弹窗引用类型
 export type AddProductModalRef = {
@@ -12,13 +13,13 @@ export type AddProductModalRef = {
 // 新增产品弹窗接收的属性
 type AddProductModalProps = {
   visible: boolean,
-  handleCancel: () => void,
-  handleOk: () => void,
+  handleClose: () => void,
+  handleRefresh: () => void,
   ref: React.Ref<AddProductModalRef>
 }
 
 // 新增产品弹窗组件
-const AddProductModal = memo(({visible, handleCancel, handleOk, ref}: AddProductModalProps) => {
+const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddProductModalProps) => {
   // 产品类型
   type FileType = {
     name: string,
@@ -27,19 +28,26 @@ const AddProductModal = memo(({visible, handleCancel, handleOk, ref}: AddProduct
     count: number,
     description: string
   }
-  // 新增仓库表单
+  // 新增产品表单
   const [form] = Form.useForm()
-  // 新增仓库表单提交
-  const onFinish: FormProps<FileType>['onFinish'] = (values) => {
-    console.log(values)
-    form.resetFields()
-  }
-  // 新增仓库表单提交失败
+  // 新增产品表单提交
+  const onFinish: FormProps<FileType>['onFinish'] = useThrottleFn((values) => {
+    try {
+      console.log(values)
+      handleRefresh()
+    } catch {
+      message.error('新增产品失败')
+    } finally {
+      handleClose()
+      form.resetFields()
+    }
+  }, 1000)
+  // 新增产品表单提交失败
   const onFinishFailed: FormProps<FileType>['onFinishFailed'] = (info) => {
     console.log(info)
   }
 
-  // 向外暴露新增仓库弹窗引用
+  // 向外暴露新增产品弹窗引用
   useImperativeHandle(ref, () => ({
     resetFields: () => form.resetFields()
   }))
@@ -47,7 +55,7 @@ const AddProductModal = memo(({visible, handleCancel, handleOk, ref}: AddProduct
   return(
     <Modal
       title="新增产品" footer={null} 
-      open={visible} onCancel={handleCancel} onOk={handleOk}
+      open={visible} onCancel={handleClose}
     >
       <Form
         labelCol={{ span: 6 }}
@@ -57,14 +65,29 @@ const AddProductModal = memo(({visible, handleCancel, handleOk, ref}: AddProduct
         onFinishFailed={onFinishFailed}
         autoComplete="off"
         form={form}>
-        <Form.Item label="产品名称" name="name" rules={[{ required: true, min: 2, max: 20, message: '请输入2-20个字符的产品名称' }]}>
-          <Input placeholder="请输入产品名称" maxLength={20} />
-        </Form.Item>
         <Form.Item label="仓库序列号" name="belong_id" rules={[{ required: true, type: 'number', message: '请输入有效的仓库序列号' }]}>
           <InputNumber placeholder="请输入仓库序列号" />
         </Form.Item>
-        <Form.Item label="产品类型" name="type" rules={[{ min: 2, max: 8, message: '请输入2-8个字符的产品类型' }]}>
-          <Input placeholder="请输入产品类型" maxLength={8} />
+        <Form.Item label="产品名称" name="name" rules={[{ required: true, min: 2, max: 20, message: '请输入2-20个字符的产品名称' }]}>
+          <Input placeholder="请输入产品名称" maxLength={20} />
+        </Form.Item>
+        <Form.Item label="产品类型" name="type">
+          <Select
+            placeholder="请选择产品类型"
+            className="type-select"
+            options={[
+              { value: '食品生鲜', label: '食品生鲜' },
+              { value: '日用百货', label: '日用百货' },
+              { value: '家电数码', label: '家电数码' },
+              { value: '服饰鞋帽', label: '服饰鞋帽' },
+              { value: '母婴用品', label: '母婴用品' },
+              { value: '美妆护肤', label: '美妆护肤' },
+              { value: '家居家纺', label: '家居家纺' },
+              { value: '文体玩具', label: '文体玩具' },
+              { value: '医疗器械', label: '医疗器械' },
+              { value: '其他商品', label: '其他商品' }
+            ]}
+          />
         </Form.Item>
         <Form.Item label="产品数量" name="count" rules={[{ required: true, type: 'number', message: '请输入有效的产品数量' }]}>
           <InputNumber placeholder="请输入产品数量" />
