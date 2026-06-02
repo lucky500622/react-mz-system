@@ -1,4 +1,4 @@
-import { memo, useImperativeHandle } from 'react'
+import { memo, useImperativeHandle, useEffect, useRef } from 'react'
 
 import type { FormProps } from 'antd'
 import { Input, Modal, Form, Button, InputNumber, Select, message } from 'antd'
@@ -30,18 +30,20 @@ const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddPro
   }
   // 新增产品表单
   const [form] = Form.useForm()
-  // 新增产品表单提交
-  const onFinish: FormProps<FileType>['onFinish'] = useThrottleFn((values) => {
+  // 节流函数
+  const throttleRef = useRef(useThrottleFn(async (values) => {
     try {
       console.log(values)
       handleRefresh()
     } catch {
       message.error('新增产品失败')
     } finally {
-      handleClose()
-      form.resetFields()
+      // handleClose()
+      // form.resetFields()
     }
-  }, 1000)
+  }, 1000))
+  // 新增产品表单提交
+  const onFinish: FormProps<FileType>['onFinish'] = (values) => throttleRef.current(values)
   // 新增产品表单提交失败
   const onFinishFailed: FormProps<FileType>['onFinishFailed'] = (info) => {
     console.log(info)
@@ -51,6 +53,14 @@ const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddPro
   useImperativeHandle(ref, () => ({
     resetFields: () => form.resetFields()
   }))
+
+  useEffect(() => {
+    const { cancel } = throttleRef.current
+    return () => {
+      // 组件卸载时取消节流函数
+      cancel()
+    }
+  }, [])
 
   return(
     <Modal

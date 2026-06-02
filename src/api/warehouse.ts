@@ -48,7 +48,7 @@ export const getWarehouseAction = (offset: number = 0, limit: number = 999) => {
 }
 
 // 新增仓库
-type AddWarehouseData = {
+export type AddWarehouseData = {
   warehouse_name: string;
   warehouse_type: string;
   warehouse_description?: string;

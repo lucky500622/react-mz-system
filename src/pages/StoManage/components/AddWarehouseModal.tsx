@@ -1,4 +1,4 @@
-import { memo, useImperativeHandle } from 'react'
+import { memo, useImperativeHandle, useEffect, useRef } from 'react'
 
 import type { FormProps } from 'antd'
 import { Input, Modal, Form, Button, message, Select } from 'antd'
@@ -6,6 +6,7 @@ import { Input, Modal, Form, Button, message, Select } from 'antd'
 import { useThrottleFn } from '@/hooks/useThrottle'
 import '@/pages/StoManage/components/styles/addWarehouseModel.scss'
 import { addWarehouse } from '@/api/warehouse'
+import type { AddWarehouseData } from '@/api/warehouse'
 
 // 新增仓库弹窗引用类型
 export type AddWarehouseModalRef = {
@@ -29,8 +30,8 @@ const AddWarehouseModal = memo(({handleRefresh, visible, handleClose, ref}: AddW
   }
   // 新增仓库表单
   const [form] = Form.useForm()
-  // 新增仓库表单提交
-  const onFinish: FormProps<FileType>['onFinish'] = useThrottleFn(async (values) => {
+  // 节流函数
+  const throttleRef = useRef(useThrottleFn(async (values: AddWarehouseData) => {
     try {
       await addWarehouse(values)
       handleRefresh()
@@ -40,7 +41,9 @@ const AddWarehouseModal = memo(({handleRefresh, visible, handleClose, ref}: AddW
       handleClose()
       form.resetFields()
     }
-  }, 1000)
+  }, 1000))
+  // 新增仓库表单提交
+  const onFinish: FormProps<FileType>['onFinish'] = (values) => throttleRef.current(values)
   // 新增仓库表单提交失败
   const onFinishFailed: FormProps<FileType>['onFinishFailed'] = (info) => {
     console.log(info)
@@ -50,6 +53,15 @@ const AddWarehouseModal = memo(({handleRefresh, visible, handleClose, ref}: AddW
   useImperativeHandle(ref, () => ({
     resetFields: () => form.resetFields()
   }))
+
+  useEffect(() => {
+    const cancel = throttleRef.current.cancel
+    return () => {
+      // 组件卸载时取消节流函数
+      cancel()
+    }
+    
+  }, [])
 
   return(
     <Modal
