@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 import { Table } from 'antd'
 
-import { getProductAction } from '@/api/action'
+import { getProductAction } from '@/api/product'
 
 // 商品记录表格配置项
 const productColumns = [
@@ -12,9 +12,9 @@ const productColumns = [
     key: 'm_id'
   },
   {
-    title: '操作对象',
-    dataIndex: 'issue_object',
-    key: 'issue_object'
+    title: '产品序列号',
+    dataIndex: 'product_m_id',
+    key: 'product_m_id'
   },
   {
     title: '产品名称',

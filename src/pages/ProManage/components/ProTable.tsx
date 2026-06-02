@@ -12,6 +12,11 @@ const ProTable = () => {
       key: 'm_id'
     },
     {
+      title: '所属仓库序列号',
+      dataIndex: 'product_belong_id',
+      key: 'product_belong_id'
+    },
+    {
       title: '产品名称',
       dataIndex: 'product_name',
       key: 'product_name'

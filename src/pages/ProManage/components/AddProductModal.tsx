@@ -22,6 +22,7 @@ const AddProductModal = memo(({visible, handleCancel, handleOk, ref}: AddProduct
   // 产品类型
   type FileType = {
     name: string,
+    belong_id: number,
     type: string,
     count: number,
     description: string
@@ -58,6 +59,9 @@ const AddProductModal = memo(({visible, handleCancel, handleOk, ref}: AddProduct
         form={form}>
         <Form.Item label="产品名称" name="name" rules={[{ required: true, min: 2, max: 20, message: '请输入2-20个字符的产品名称' }]}>
           <Input placeholder="请输入产品名称" maxLength={20} />
+        </Form.Item>
+        <Form.Item label="仓库序列号" name="belong_id" rules={[{ required: true, type: 'number', message: '请输入有效的仓库序列号' }]}>
+          <InputNumber placeholder="请输入仓库序列号" />
         </Form.Item>
         <Form.Item label="产品类型" name="type" rules={[{ min: 2, max: 8, message: '请输入2-8个字符的产品类型' }]}>
           <Input placeholder="请输入产品类型" maxLength={8} />

@@ -1,6 +1,6 @@
 import {useState, useCallback, useRef} from 'react'
 
-import { Button, Input } from 'antd'
+import { Button, Input, InputNumber } from 'antd'
 
 import '@/pages/StoManage/index.scss'
 import StoTable from '@/pages/StoManage/components/StoTable'
@@ -10,6 +10,7 @@ import type { AddWarehouseModalRef } from '@/pages/StoManage/components/AddWareh
 const StoManage = () => {
   // 查询参数
   const [queryParams, setQueryParams] = useState({
+    m_id: null,
     name: '',
     type: '',
     creator: ''
@@ -45,6 +46,9 @@ const StoManage = () => {
       </div>
       <div className="StoManage-function-bar">
         <div className="query-btn">
+          <span className="query-btn-span">仓库序列号：</span>
+          <InputNumber placeholder="请输入仓库序列号"
+            value={queryParams.m_id} onChange={(e) => setQueryParams({...queryParams, m_id: e})} />
           <span className="query-btn-span">仓库名称：</span>
           <Input placeholder="请输入仓库名称"
             value={queryParams.name} onChange={(e) => setQueryParams({...queryParams, name: e.target.value})} />

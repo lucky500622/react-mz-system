@@ -7,12 +7,16 @@ import FunctionBar from '@/pages/ActInfo/components/FunctionBar'
 const ActTable = () => {
   // FunctionBar配置
   const warehouseConfig = {
+    issue_m_id: '序列号',
+    m_id: '仓库序列号',
     name: '仓库名称',
     operator: '操作人',
     type: '操作类型'
   }
   const productConfig = {
-    name: '商品名称',
+    issue_m_id: '序列号',
+    m_id: '产品序列号',
+    name: '产品名称',
     operator: '操作人',
     type: '操作类型'
   }

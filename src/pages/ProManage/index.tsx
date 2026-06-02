@@ -1,6 +1,6 @@
 import {useState, useCallback, useRef} from 'react'
 
-import { Button, Input } from 'antd'
+import { Button, Input, InputNumber } from 'antd'
 
 import '@/pages/ProManage/index.scss'
 import ProTable from '@/pages/ProManage/components/ProTable'
@@ -10,6 +10,7 @@ import type { AddProductModalRef } from '@/pages/ProManage/components/AddProduct
 const ProManage = () => {
   // 查询参数
   const [queryParams, setQueryParams] = useState({
+    m_id: null,
     name: '',
     type: ''
   })
@@ -44,6 +45,9 @@ const ProManage = () => {
       </div>
       <div className="ProManage-function-bar">
         <div className="query-btn">
+          <span className="query-btn-span">产品序列号：</span>
+          <InputNumber placeholder="请输入产品序列号"
+            value={queryParams.m_id} onChange={(e) => setQueryParams({...queryParams, m_id: e})} />
           <span className="query-btn-span">产品名称：</span>
           <Input placeholder="请输入产品名称"
             value={queryParams.name} onChange={(e) => setQueryParams({...queryParams, name: e.target.value})} />

@@ -9,13 +9,14 @@
 
   .query-btn {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     .query-btn-span {
       margin-left: 10px;
       font-size: 14px;
     }
     .ant-btn {
-      margin-left: 10px;
+      margin-left: 20px;
     }
   }
 }

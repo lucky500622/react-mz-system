@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 import { Table } from 'antd'
 
-import { getWarehouseAction } from '@/api/action'
+import { getWarehouseAction } from '@/api/warehouse'
 
 // 仓库记录表格配置项
 const warehouseColumns = [
@@ -12,9 +12,9 @@ const warehouseColumns = [
     key: 'm_id'
   },
   {
-    title: '操作对象',
-    dataIndex: 'issue_object',
-    key: 'issue_object'
+    title: '仓库序列号',
+    dataIndex: 'warehouse_m_id',
+    key: 'warehouse_m_id'
   },
   {
     title: '仓库名称',
