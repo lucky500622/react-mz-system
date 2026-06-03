@@ -33,7 +33,12 @@ const productColumns = [
     dataIndex: 'action_type',
     key: 'action_type',
     render: (val) => {
-      return <Tag color="blue">{val}</Tag>
+      const map = {
+        1: '新增',
+        2: '删除',
+        3: '修改'
+      }
+      return <Tag color="blue">{map[val]}</Tag>
     }
   },
   {

@@ -33,7 +33,7 @@ const ActTable = () => {
       </div>
     },
     {
-      label: '商品操作记录',
+      label: '产品操作记录',
       key: 'product',
       children: 
       <div>
