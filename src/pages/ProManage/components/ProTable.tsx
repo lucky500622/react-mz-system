@@ -21,8 +21,8 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
     },
     {
       title: '所属仓库序列号',
-      dataIndex: 'product_belong_id',
-      key: 'product_belong_id',
+      dataIndex: 'warehouse_m_id',
+      key: 'warehouse_m_id',
       width: 150
     },
     {
