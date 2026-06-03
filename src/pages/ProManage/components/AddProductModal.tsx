@@ -36,7 +36,7 @@ const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddPro
   const throttleRef = useRef(useThrottleFn(async (values) => {
     try {
       const res = await addProduct(values as AddProductData)
-      if (res.code === 400) {
+      if (res.code === 4003) {
         message.error(res.message)
         return
       }
