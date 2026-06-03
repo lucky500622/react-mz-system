@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 import {useState, useEffect, useImperativeHandle} from 'react'
 
 import { Table, Button, Modal, Tag } from 'antd'
@@ -14,12 +16,14 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
     {
       title: '序列号',
       dataIndex: 'm_id',
-      key: 'm_id'
+      key: 'm_id',
+      width: 100
     },
     {
       title: '所属仓库序列号',
       dataIndex: 'product_belong_id',
-      key: 'product_belong_id'
+      key: 'product_belong_id',
+      width: 150
     },
     {
       title: '产品名称',
@@ -40,6 +44,14 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
       title: '产品数量',
       dataIndex: 'product_num',
       key: 'product_num'
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'product_create_time',
+      key: 'product_create_time',
+      render: (val) => {
+        return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+      }
     },
     {
       title: '产品描述',

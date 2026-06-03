@@ -13,7 +13,8 @@ const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
     {
       title: '序列号',
       dataIndex: 'm_id',
-      key: 'm_id'
+      key: 'm_id',
+      width: 100
     },
     {
       title: '仓库名称',
