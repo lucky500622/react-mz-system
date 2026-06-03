@@ -77,10 +77,12 @@ const AddWarehouseModal = memo(({handleRefresh, visible, handleClose, ref}: AddW
         autoComplete="off"
         form={form}>
         <Form.Item label="仓库名称" name="warehouse_name"
-          rules={[{ required: true, min: 2, max: 20, message: '请输入2-20个字符的仓库名称' }]}>
+          rules={[{ required: true, min: 2, max: 20, message: '请输入2-20个字符的仓库名称' },
+            {pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '仓库名称只能包含汉字、字母和数字'}]} >
           <Input placeholder="请输入仓库名称" maxLength={20} />
         </Form.Item>
-        <Form.Item label="仓库类型" name="warehouse_type" >
+        <Form.Item label="仓库类型" name="warehouse_type"
+          rules={[{ pattern: /^[\u4e00-\u9fa5]+$/, message: '仓库类型只能包含汉字'}]} >
           <Select placeholder="请选择仓库类型" className="type-select" 
             options={[
               { value: '常温仓', label: '常温仓' },
@@ -95,7 +97,7 @@ const AddWarehouseModal = memo(({handleRefresh, visible, handleClose, ref}: AddW
           />
         </Form.Item>
         <Form.Item label="仓库描述" name="warehouse_description"
-          rules={[{ min: 0, max: 200, message: '请输入0-200个字符的仓库描述' }]}>
+          rules={[{ min: 0, max: 200, message: '请输入0-200个字符的仓库描述' }]} >
           <Input.TextArea rows={3} placeholder="请输入仓库描述" maxLength={200} />
         </Form.Item>
         <Form.Item label={null} className="submit-btn">

@@ -122,7 +122,7 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
         onCancel={handleCancel}
         footer={null}
       >
-        <p>{detailContent}</p>
+        <p>{detailContent || '暂无商品描述'}</p>
       </Modal>
     </div>
   )
