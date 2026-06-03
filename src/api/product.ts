@@ -46,3 +46,16 @@ export const getProductAction = (offset: number = 0, limit: number = 999) => {
     }
   }) as Promise<ProductActionResponse>
 }
+
+// 添加商品
+export type AddProductData = {
+  m_id: number;
+  product_name: string;
+  product_type?: string;
+  product_num: number;
+  warehouse_description?: string;
+}
+type AddProductResponse = ApiResponse<AddProductData>
+export const addProduct = (data: AddProductData) => {
+  return request.post('/product/add', data) as Promise<AddProductResponse>
+}

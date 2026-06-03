@@ -5,6 +5,8 @@ import { Input, Modal, Form, Button, InputNumber, Select, message } from 'antd'
 
 import '@/pages/ProManage/components/styles/addProductModel.scss'
 import { useThrottleFn } from '@/hooks/useThrottle'
+import { addProduct } from '@/api/product'
+import type { AddProductData } from '@/api/product'
 
 // 新增产品弹窗引用类型
 export type AddProductModalRef = {
@@ -33,13 +35,18 @@ const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddPro
   // 节流函数
   const throttleRef = useRef(useThrottleFn(async (values) => {
     try {
-      console.log(values)
+      const res = await addProduct(values as AddProductData)
+      if (res.code === 400) {
+        message.error(res.message)
+        return
+      }
+      message.success('新增产品成功')
       handleRefresh()
     } catch {
       message.error('新增产品失败')
     } finally {
-      // handleClose()
-      // form.resetFields()
+      handleClose()
+      form.resetFields()
     }
   }, 1000))
   // 新增产品表单提交
@@ -75,13 +82,18 @@ const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddPro
         onFinishFailed={onFinishFailed}
         autoComplete="off"
         form={form}>
-        <Form.Item label="仓库序列号" name="belong_id" rules={[{ required: true, type: 'number', message: '请输入有效的仓库序列号' }]}>
+        <Form.Item label="仓库序列号" name="m_id"
+          rules={[{ required: true, type: 'number', message: '请输入有效的仓库序列号' }]}>
           <InputNumber placeholder="请输入仓库序列号" />
         </Form.Item>
-        <Form.Item label="产品名称" name="name" rules={[{ required: true, min: 2, max: 20, message: '请输入2-20个字符的产品名称' }]}>
+        <Form.Item label="产品名称" name="product_name"
+          rules={[{ required: true, min: 2, max: 20, message: '请输入2-20个字符的产品名称' },
+            {pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '产品名称只能包含中文、字母、数字'}
+          ]}>
           <Input placeholder="请输入产品名称" maxLength={20} />
         </Form.Item>
-        <Form.Item label="产品类型" name="type">
+        <Form.Item label="产品类型" name="product_type"
+          rules={[{pattern: /^[\u4e00-\u9fa5]+$/, message: '产品类型只能包含中文'}]}>
           <Select
             placeholder="请选择产品类型"
             className="type-select"
@@ -99,10 +111,11 @@ const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddPro
             ]}
           />
         </Form.Item>
-        <Form.Item label="产品数量" name="count" rules={[{ required: true, type: 'number', message: '请输入有效的产品数量' }]}>
+        <Form.Item label="产品数量" name="product_num" rules={[{ required: true, type: 'number', message: '请输入有效的产品数量' }]}>
           <InputNumber placeholder="请输入产品数量" />
         </Form.Item>
-        <Form.Item label="产品描述" name="description" rules={[{ min: 0, max: 200, message: '请输入0-200个字符的产品描述' }]}>
+        <Form.Item label="产品描述" name="product_description"
+          rules={[{ min: 0, max: 200, message: '请输入0-200个字符的产品描述' }]}>
           <Input.TextArea rows={3} placeholder="请输入产品描述" maxLength={200} />
         </Form.Item>
         <Form.Item label={null} className="submit-btn">
