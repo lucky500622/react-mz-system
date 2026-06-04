@@ -1,12 +1,11 @@
-import { memo, useImperativeHandle, useEffect, useRef } from 'react'
+import { memo, useImperativeHandle } from 'react'
 
 import type { FormProps } from 'antd'
 import { Input, Modal, Form, Button, InputNumber, Select, message } from 'antd'
 
 import '@/pages/ProManage/components/styles/addProductModel.scss'
-import { useThrottleFn } from '@/hooks/useThrottle'
+import { useLoading } from '@/hooks/useLoading'
 import { addProduct } from '@/api/product'
-import type { AddProductData } from '@/api/product'
 
 // 新增产品弹窗引用类型
 export type AddProductModalRef = {
@@ -32,10 +31,14 @@ const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddPro
   }
   // 新增产品表单
   const [form] = Form.useForm()
-  // 节流函数
-  const throttleRef = useRef(useThrottleFn(async (values) => {
+  // 新增产品loading状态
+  const { loading, run } = useLoading()
+  // 新增产品表单提交
+  const onFinish: FormProps<FileType>['onFinish'] = async (values) => {
     try {
-      const res = await addProduct(values as AddProductData)
+      const res = await run(() => {
+        return addProduct(values as FileType)
+      })
       if (res.code === 4003) {
         message.error(res.message)
         return
@@ -48,9 +51,7 @@ const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddPro
       handleClose()
       form.resetFields()
     }
-  }, 1000))
-  // 新增产品表单提交
-  const onFinish: FormProps<FileType>['onFinish'] = (values) => throttleRef.current(values)
+  }
   // 新增产品表单提交失败
   const onFinishFailed: FormProps<FileType>['onFinishFailed'] = (info) => {
     console.log(info)
@@ -60,14 +61,6 @@ const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddPro
   useImperativeHandle(ref, () => ({
     resetFields: () => form.resetFields()
   }))
-
-  useEffect(() => {
-    const { cancel } = throttleRef.current
-    return () => {
-      // 组件卸载时取消节流函数
-      cancel()
-    }
-  }, [])
 
   return(
     <Modal
@@ -81,6 +74,7 @@ const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddPro
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
+        disabled={loading}
         form={form}>
         <Form.Item label="仓库序列号" name="m_id"
           rules={[{ required: true, type: 'number', message: '请输入有效的仓库序列号' }]}>

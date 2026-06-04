@@ -5,6 +5,7 @@ import {useState, useEffect, useImperativeHandle} from 'react'
 import { Table, Button, Modal, Tag, message, InputNumber, Select } from 'antd'
 
 import '@/pages/ProManage/components/styles/protable.scss'
+import { useLoading } from '@/hooks/useLoading'
 import { getProductInfo, deleteProduct, adjustProduct } from '@/api/product'
 
 // 产品表格引用类型
@@ -100,6 +101,8 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
     setIsModalOpen(false)
   }
 
+  // 删除loading状态
+  const { loading: deleteLoading, run: deleteRun } = useLoading()
   // 删除点击事件
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [deleteMId, setDeleteMId] = useState(0)
@@ -109,7 +112,9 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
   }
   const handleDeleteConfirm = async () => {
     try {
-      await deleteProduct({m_id: deleteMId})
+      await deleteRun(() => {
+        return deleteProduct({m_id: deleteMId})
+      })
       message.success('删除成功')
       setRefresh(!refresh)
     } finally {
@@ -117,6 +122,8 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
     }
   }
 
+  // 调整数量loading状态
+  const { loading: adjustLoading, run: adjustRun } = useLoading()
   // 调整数量点击事件
   const [isAdjustModalOpen, setIsAdjustModalOpen] = useState(false)
   const [adjustMId, setAdjustMId] = useState(0)
@@ -128,7 +135,9 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
   }
   const handleAdjustConfirm = async () => {
     try {
-      const res = await adjustProduct({m_id: adjustMId, action_type: adjustType, product_num: adjustNum})
+      const res = await adjustRun(() => {
+        return adjustProduct({m_id: adjustMId, action_type: adjustType, product_num: adjustNum})
+      })
       message.success('调整成功')
       setRefresh(!refresh)
       if (res.data.endNum === 0) {
@@ -186,6 +195,9 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
         open={isDeleteModalOpen}
         onOk={handleDeleteConfirm}
         onCancel={() => setIsDeleteModalOpen(false)}
+        okButtonProps={{ 
+          disabled: deleteLoading
+        }}
       />
       <Modal
         className="Protable-adjust-modal"
@@ -217,7 +229,7 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
             value={adjustNum} onChange={(val) => setAdjustNum(val)} />
         </div>
         {/* 确认按钮 */}
-        <Button type="primary" onClick={handleAdjustConfirm}>确认</Button>
+        <Button type="primary" onClick={handleAdjustConfirm} disabled={adjustLoading}>确认</Button>
       </Modal>
     </div>
   )

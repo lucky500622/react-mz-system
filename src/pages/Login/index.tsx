@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import type { FormProps } from 'antd'
@@ -6,9 +6,9 @@ import { Button, Form, Input, message } from 'antd'
 import { SwapOutlined } from '@ant-design/icons'
 
 import '@/pages/Login/index.scss'
+import { useLoading } from '@/hooks/useLoading'
 import { registerService, loginService } from '@/api/user'
 import { setStorage } from '@/utils/storage'
-import { useThrottleFn } from '@/hooks/useThrottle'
 
 const Login = () => {
   // 导航实例
@@ -30,19 +30,22 @@ const Login = () => {
   }
   // 登录表单实例
   const [form] = Form.useForm<FieldType>()
-  // 节流函数
-  const throttleRef = useRef(useThrottleFn(async (values: {
+  
+  // 登录表单提交处理函数
+  const { loading, run } = useLoading()
+  // 登录表单提交处理函数
+  const onFinish: FormProps<FieldType>['onFinish'] =  async (values: {
     username: string,
     password: string
   }) => {
     // 注册处理
+    const data = {
+      user_name: values.username,
+      user_password: values.password
+    }
     if (!isLogin) {
       // 注册用户
-      const data = {
-        user_name: values.username,
-        user_password: values.password
-      }
-      const res = await registerService(data)
+      const res = await run(() => registerService(data))
       if (res.data.isExist) {
         return message.error('您输入的用户名已存在')
       }
@@ -51,7 +54,7 @@ const Login = () => {
     }
     // 登录处理
     else {
-      const res = await loginService({ user_name: values.username, user_password: values.password })
+      const res = await run(() => loginService(data))
       if (res.code === 4001) {
         return message.error('用户名或密码错误')
       } else if (res.code === 200) {
@@ -62,22 +65,11 @@ const Login = () => {
         navigate('/', { replace: true })
       }
     }
-  }, 1000))
-  
-  // 登录表单提交处理函数
-  const onFinish: FormProps<FieldType>['onFinish'] = (values) => throttleRef.current(values)
+  }
   // 登录表单提交失败处理函数
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (info) => {
     console.log(info)
   }
-
-  useEffect(() => {
-    const cancel = throttleRef.current.cancel
-    return () => {
-      // 组件卸载时取消节流函数
-      cancel()
-    }
-  }, [])
 
   return (
     <div className="Login-login-box">
@@ -94,7 +86,8 @@ const Login = () => {
         autoComplete="off"
         className="login-form"
         labelCol={{ span: 6 }}
-        wrapperCol={{ span: 18 }} >
+        wrapperCol={{ span: 18 }}
+        disabled={loading} >
         <Form.Item<FieldType>
           name="username" label="用户名" rules={[{ required: true, min: 3, max: 20, message: '请输入3-20个字符的用户名' },
             {pattern: /^[a-zA-Z0-9]+$/, message: '用户名只能包含字母和数字'}]}>

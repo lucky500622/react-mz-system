@@ -1,12 +1,11 @@
-import { memo, useImperativeHandle, useEffect, useRef } from 'react'
+import { memo, useImperativeHandle } from 'react'
 
 import type { FormProps } from 'antd'
 import { Input, Modal, Form, Button, message, Select } from 'antd'
 
-import { useThrottleFn } from '@/hooks/useThrottle'
 import '@/pages/StoManage/components/styles/addWarehouseModel.scss'
+import { useLoading } from '@/hooks/useLoading'
 import { addWarehouse } from '@/api/warehouse'
-import type { AddWarehouseData } from '@/api/warehouse'
 
 // 新增仓库弹窗引用类型
 export type AddWarehouseModalRef = {
@@ -30,10 +29,14 @@ const AddWarehouseModal = memo(({handleRefresh, visible, handleClose, ref}: AddW
   }
   // 新增仓库表单
   const [form] = Form.useForm()
-  // 节流函数
-  const throttleRef = useRef(useThrottleFn(async (values: AddWarehouseData) => {
+  // 新增仓库loading状态
+  const { loading, run } = useLoading()
+  // 新增仓库表单提交
+  const onFinish: FormProps<FileType>['onFinish'] = async (values) => {
     try {
-      const res = await addWarehouse(values)
+      const res = await run(() => {
+        return addWarehouse(values as FileType)
+      })
       if (res.code === 4002) {
         message.error(res.message)
         return
@@ -46,9 +49,7 @@ const AddWarehouseModal = memo(({handleRefresh, visible, handleClose, ref}: AddW
       handleClose()
       form.resetFields()
     }
-  }, 1000))
-  // 新增仓库表单提交
-  const onFinish: FormProps<FileType>['onFinish'] = (values) => throttleRef.current(values)
+  }
   // 新增仓库表单提交失败
   const onFinishFailed: FormProps<FileType>['onFinishFailed'] = (info) => {
     console.log(info)
@@ -58,15 +59,6 @@ const AddWarehouseModal = memo(({handleRefresh, visible, handleClose, ref}: AddW
   useImperativeHandle(ref, () => ({
     resetFields: () => form.resetFields()
   }))
-
-  useEffect(() => {
-    const cancel = throttleRef.current.cancel
-    return () => {
-      // 组件卸载时取消节流函数
-      cancel()
-    }
-    
-  }, [])
 
   return(
     <Modal
@@ -80,6 +72,7 @@ const AddWarehouseModal = memo(({handleRefresh, visible, handleClose, ref}: AddW
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
+        disabled={loading}
         form={form}>
         <Form.Item label="仓库名称" name="warehouse_name"
           rules={[{ required: true, min: 2, max: 20, message: '请输入2-20个字符的仓库名称' },
