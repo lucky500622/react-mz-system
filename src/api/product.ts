@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 import type { ApiResponse } from '@/types/apiResponseType'
 
-// 获取商品信息
+// 获取产品信息
 type ProductInfoData = {
   productInfo: {
     m_id: number;
@@ -25,7 +25,7 @@ export const getProductInfo = (offset: number = 0, limit: number = 999) => {
   }) as Promise<ProductInfoResponse>
 }
 
-// 获取商品操作记录
+// 获取产品操作记录
 type ProductActionData = {  
   actionInfo: {
     m_id: number;
@@ -47,24 +47,29 @@ export const getProductAction = (offset: number = 0, limit: number = 999) => {
   }) as Promise<ProductActionResponse>
 }
 
-// 添加商品
-export type AddProductData = {
+// 添加产品
+export const addProduct = (data: {
   m_id: number;
   product_name: string;
   product_type?: string;
   product_num: number;
   warehouse_description?: string;
-}
-type AddProductResponse = ApiResponse<AddProductData>
-export const addProduct = (data: AddProductData) => {
-  return request.post('/product/add', data) as Promise<AddProductResponse>
+}) => {
+  return request.post('/product/add', data) as Promise<ApiResponse<null>>
 }
 
-// 删除商品
-export type DeleteProductData = {
+// 删除产品
+export const deleteProduct = (data: {
   m_id: number;
+}) => {
+  return request.post('/product/delete', data) as Promise<ApiResponse<null>>
 }
-type DeleteProductResponse = ApiResponse<DeleteProductData>
-export const deleteProduct = (data: DeleteProductData) => {
-  return request.post('/product/delete', data) as Promise<DeleteProductResponse>
+
+// 调整产品数量
+export type AdjustProductData = {
+  endNum: number;
+}
+type AdjustProductResponse = ApiResponse<AdjustProductData>
+export const adjustProduct = (data: {m_id: number, action_type: number, product_num: number}) => {
+  return request.post('/product/update', data) as Promise<AdjustProductResponse>
 }

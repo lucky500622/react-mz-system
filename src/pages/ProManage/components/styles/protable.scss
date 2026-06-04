@@ -1,0 +1,26 @@
+.Protable-adjust-modal {
+  .ant-modal-container {
+    width: 400px;
+  }
+  .type-input {
+    margin-top: 20px;
+    .label {
+      margin-right: 10px;
+    }
+    .ant-select {
+      width: 140px;
+    }
+  }
+  .number-input {
+    margin-top: 20px;
+    .label {
+      margin-right: 10px;
+    }
+    .ant-input-number {
+      width: 140px;
+    }
+  }
+  .ant-btn {
+    margin: 20px 0 0 146px;
+  }
+}

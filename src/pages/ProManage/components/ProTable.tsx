@@ -2,9 +2,10 @@ import dayjs from 'dayjs'
 
 import {useState, useEffect, useImperativeHandle} from 'react'
 
-import { Table, Button, Modal, Tag, message } from 'antd'
+import { Table, Button, Modal, Tag, message, InputNumber, Select } from 'antd'
 
-import { getProductInfo, deleteProduct } from '@/api/product'
+import '@/pages/ProManage/components/styles/protable.scss'
+import { getProductInfo, deleteProduct, adjustProduct } from '@/api/product'
 
 // 产品表格引用类型
 export type ProTableRef = {
@@ -72,7 +73,7 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
       render: (_, record) => {
         return (
           <div>
-            <Button type="link" size="small">调整</Button>
+            <Button type="link" size="small" onClick={() => handleAdjust(record.m_id)}>调整</Button>
             <Button type="link" size="small" onClick={() => handleDelete(record.m_id)}>删除</Button>
           </div>
         )
@@ -113,6 +114,31 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
       setRefresh(!refresh)
     } finally {
       setIsDeleteModalOpen(false)
+    }
+  }
+
+  // 调整数量点击事件
+  const [isAdjustModalOpen, setIsAdjustModalOpen] = useState(false)
+  const [adjustMId, setAdjustMId] = useState(0)
+  const [adjustNum, setAdjustNum] = useState<number>()
+  const [adjustType, setAdjustType] = useState<number>()
+  const handleAdjust =  (m_id: number) => {
+    setAdjustMId(m_id)
+    setIsAdjustModalOpen(true)
+  }
+  const handleAdjustConfirm = async () => {
+    try {
+      const res = await adjustProduct({m_id: adjustMId, action_type: adjustType, product_num: adjustNum})
+      message.success('调整成功')
+      setRefresh(!refresh)
+      if (res.data.endNum === 0) {
+        // 后期做删除商品逻辑
+        console.log('调整数量为0 是否删除商品')
+      }
+    } finally {
+      setAdjustNum(null)
+      setAdjustType(null)
+      setIsAdjustModalOpen(false)
     }
   }
   
@@ -161,6 +187,38 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
         onOk={handleDeleteConfirm}
         onCancel={() => setIsDeleteModalOpen(false)}
       />
+      <Modal
+        className="Protable-adjust-modal"
+        title="调整商品数量"
+        open={isAdjustModalOpen}
+        onCancel={() => setIsAdjustModalOpen(false)}
+        footer={null}
+      >
+        {/* 调整类型选择 */}
+        <div className="type-input">
+          <span className="label">调整类型:</span>
+          <Select placeholder="请选择调整类型"
+            options={[
+              {
+                label: '上调',
+                value: 3
+              },
+              {
+                label: '下调',
+                value: 4
+              }
+            ]} 
+            value={adjustType} onChange={(val) => setAdjustType(val)} />
+        </div>
+        {/* 调整数量输入 */}
+        <div className="number-input"> 
+          <span className="label">调整数量:</span>
+          <InputNumber placeholder="请输入调整数量" 
+            value={adjustNum} onChange={(val) => setAdjustNum(val)} />
+        </div>
+        {/* 确认按钮 */}
+        <Button type="primary" onClick={handleAdjustConfirm}>确认</Button>
+      </Modal>
     </div>
   )
 }

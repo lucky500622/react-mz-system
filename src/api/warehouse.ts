@@ -48,12 +48,10 @@ export const getWarehouseAction = (offset: number = 0, limit: number = 999) => {
 }
 
 // 新增仓库
-export type AddWarehouseData = {
+export const addWarehouse = (data: {
   warehouse_name: string;
   warehouse_type: string;
   warehouse_description?: string;
-}
-type AddWarehouseResponse = ApiResponse<AddWarehouseData>
-export const addWarehouse = (data: AddWarehouseData) => {
-  return request.post('/warehouse/add', data) as Promise<AddWarehouseResponse>
+}) => {
+  return request.post('/warehouse/add', data) as Promise<ApiResponse<null>>
 }
