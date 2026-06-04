@@ -39,7 +39,7 @@ const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddPro
       const res = await run(() => {
         return addProduct(values as FileType)
       })
-      if (res.code === 4003) {
+      if (res.code === 4021) {
         message.error(res.message)
         return
       }

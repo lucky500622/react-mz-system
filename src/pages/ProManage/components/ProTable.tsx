@@ -138,6 +138,10 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
       const res = await adjustRun(() => {
         return adjustProduct({m_id: adjustMId, action_type: adjustType, product_num: adjustNum})
       })
+      if (res.code === 4022) {
+        message.error(res.message)
+        return
+      }
       message.success('调整成功')
       setRefresh(!refresh)
       if (res.data.endNum === 0) {

@@ -46,8 +46,8 @@ const Login = () => {
     if (!isLogin) {
       // 注册用户
       const res = await run(() => registerService(data))
-      if (res.data.isExist) {
-        return message.error('您输入的用户名已存在')
+      if (res.code === 4002) {
+        return message.error(res.message)
       }
       message.success('注册成功')
       toggleLogin()
@@ -56,7 +56,7 @@ const Login = () => {
     else {
       const res = await run(() => loginService(data))
       if (res.code === 4001) {
-        return message.error('用户名或密码错误')
+        return message.error(res.message)
       } else if (res.code === 200) {
         message.success('登录成功')
         // 存储唯一会话标识

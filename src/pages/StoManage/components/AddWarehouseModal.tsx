@@ -37,7 +37,7 @@ const AddWarehouseModal = memo(({handleRefresh, visible, handleClose, ref}: AddW
       const res = await run(() => {
         return addWarehouse(values as FileType)
       })
-      if (res.code === 4002) {
+      if (res.code === 4011) {
         message.error(res.message)
         return
       }
