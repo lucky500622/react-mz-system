@@ -2,9 +2,9 @@ import dayjs from 'dayjs'
 
 import {useState, useEffect, useImperativeHandle} from 'react'
 
-import { Table, Button, Modal, Tag } from 'antd'
+import { Table, Button, Modal, Tag, message } from 'antd'
 
-import { getProductInfo } from '@/api/product'
+import { getProductInfo, deleteProduct } from '@/api/product'
 
 // 产品表格引用类型
 export type ProTableRef = {
@@ -69,11 +69,11 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
       title: '操作',
       key: 'action',
       width: 160,
-      render: () => {
+      render: (_, record) => {
         return (
           <div>
-            <Button type="link" size="small">编辑</Button>
-            <Button type="link" size="small">删除</Button>
+            <Button type="link" size="small">调整</Button>
+            <Button type="link" size="small" onClick={() => handleDelete(record.m_id)}>删除</Button>
           </div>
         )
       } 
@@ -99,6 +99,23 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
     setIsModalOpen(false)
   }
 
+  // 删除点击事件
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [deleteMId, setDeleteMId] = useState(0)
+  const handleDelete =  (m_id: number) => {
+    setDeleteMId(m_id)
+    setIsDeleteModalOpen(true)
+  }
+  const handleDeleteConfirm = async () => {
+    try {
+      await deleteProduct({m_id: deleteMId})
+      message.success('删除成功')
+      setRefresh(!refresh)
+    } finally {
+      setIsDeleteModalOpen(false)
+    }
+  }
+  
   // 刷新表格状态
   const [refresh, setRefresh] = useState(false)
   // 向外暴露刷新方法
@@ -136,6 +153,14 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
       >
         <p>{detailContent || '暂无商品描述'}</p>
       </Modal>
+      <Modal
+        title="确认删除吗？"
+        okText="确认"
+        cancelText="取消"
+        open={isDeleteModalOpen}
+        onOk={handleDeleteConfirm}
+        onCancel={() => setIsDeleteModalOpen(false)}
+      />
     </div>
   )
 }

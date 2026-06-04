@@ -59,3 +59,12 @@ type AddProductResponse = ApiResponse<AddProductData>
 export const addProduct = (data: AddProductData) => {
   return request.post('/product/add', data) as Promise<AddProductResponse>
 }
+
+// 删除商品
+export type DeleteProductData = {
+  m_id: number;
+}
+type DeleteProductResponse = ApiResponse<DeleteProductData>
+export const deleteProduct = (data: DeleteProductData) => {
+  return request.post('/product/delete', data) as Promise<DeleteProductResponse>
+}

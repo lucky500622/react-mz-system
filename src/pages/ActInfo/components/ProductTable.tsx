@@ -36,7 +36,8 @@ const productColumns = [
       const map = {
         1: '新增',
         2: '删除',
-        3: '修改'
+        3: '上调',
+        4: '下调'
       }
       return <Tag color="blue">{map[val]}</Tag>
     }
