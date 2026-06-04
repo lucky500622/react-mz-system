@@ -39,7 +39,11 @@ const productColumns = [
         3: '上调',
         4: '下调'
       }
-      return <Tag color="blue">{map[val]}</Tag>
+      return ( 
+        <Tag color={val === 1 ? 'green' : val === 2 ? 'red' : 'blue'}>
+          {map[val] || val}
+        </Tag>
+      )
     }
   },
   {

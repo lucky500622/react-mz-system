@@ -38,7 +38,7 @@ const warehouseColumns = [
         2: '删除',
         3: '修改数量'
       }
-      return <Tag color="blue">{map[val] || val}</Tag>
+      return <Tag color={val === 1 ? 'green' : val === 2 ? 'red' : 'blue'}>{map[val] || val}</Tag>
     }
   },
   {
