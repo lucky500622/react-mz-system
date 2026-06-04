@@ -33,7 +33,12 @@ const AddWarehouseModal = memo(({handleRefresh, visible, handleClose, ref}: AddW
   // 节流函数
   const throttleRef = useRef(useThrottleFn(async (values: AddWarehouseData) => {
     try {
-      await addWarehouse(values)
+      const res = await addWarehouse(values)
+      if (res.code === 4002) {
+        message.error(res.message)
+        return
+      }
+      message.success('新增仓库成功')
       handleRefresh()
     } catch {
       message.error('新增仓库失败')
