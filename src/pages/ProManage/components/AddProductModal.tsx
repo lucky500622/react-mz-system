@@ -101,11 +101,12 @@ const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddPro
               { value: '家居家纺', label: '家居家纺' },
               { value: '文体玩具', label: '文体玩具' },
               { value: '医疗器械', label: '医疗器械' },
-              { value: '其他商品', label: '其他商品' }
+              { value: '其他产品', label: '其他产品' }
             ]}
           />
         </Form.Item>
-        <Form.Item label="产品数量" name="product_num" rules={[{ required: true, type: 'number', message: '请输入有效的产品数量' }]}>
+        <Form.Item label="产品数量" name="product_num" rules={[{ required: true, min: 1,
+          type: 'number', message: '请输入有效的产品数量' }]}>
           <InputNumber placeholder="请输入产品数量" />
         </Form.Item>
         <Form.Item label="产品描述" name="product_description"

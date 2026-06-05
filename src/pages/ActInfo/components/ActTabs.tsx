@@ -24,21 +24,21 @@ const ActTable = () => {
   // 选项卡
   const tabItems = [
     {
-      label: '仓库操作记录',
-      key: 'warehouse',
-      children: 
-      <div>
-        <FunctionBar config={warehouseConfig} />
-        <WarehouseTable />
-      </div>
-    },
-    {
       label: '产品操作记录',
       key: 'product',
       children: 
       <div>
         <FunctionBar config={productConfig} />
         <ProductTable />
+      </div>
+    },
+    {
+      label: '仓库操作记录',
+      key: 'warehouse',
+      children: 
+      <div>
+        <FunctionBar config={warehouseConfig} />
+        <WarehouseTable />
       </div>
     }
   ]

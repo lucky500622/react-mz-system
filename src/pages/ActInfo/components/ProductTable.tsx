@@ -6,7 +6,7 @@ import { Table, Tag } from 'antd'
 
 import { getProductAction } from '@/api/product'
 
-// 商品记录表格配置项
+// 产品记录表格配置项
 const productColumns = [
   {
     title: '序列号',
@@ -62,7 +62,7 @@ const productColumns = [
 ]
 
 const WarehouseTable = () => {
-  // 商品操作记录表格数据
+  // 产品操作记录表格数据
   const [productRecordDataSource, setProductRecordDataSource] = useState([])
   // 当前页
   const [currentPage, setCurrentPage] = useState(1)

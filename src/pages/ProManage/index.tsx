@@ -65,7 +65,7 @@ const ProManage = () => {
               { value: '家居家纺', label: '家居家纺' },
               { value: '文体玩具', label: '文体玩具' },
               { value: '医疗器械', label: '医疗器械' },
-              { value: '其他商品', label: '其他商品' }
+              { value: '其他产品', label: '其他产品' }
             ]}
             onChange={(e) => setQueryParams({...queryParams, type: e})}
           />
