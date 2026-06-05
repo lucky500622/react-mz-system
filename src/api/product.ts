@@ -62,7 +62,7 @@ export const addProduct = (data: {
 export const deleteProduct = (data: {
   m_id: number;
 }) => {
-  return request.post('/product/delete', data) as Promise<ApiResponse<null>>
+  return request.delete('/product/delete', { params: data }) as Promise<ApiResponse<null>>
 }
 
 // 调整产品数量
@@ -71,5 +71,5 @@ export type AdjustProductData = {
 }
 type AdjustProductResponse = ApiResponse<AdjustProductData>
 export const adjustProduct = (data: {m_id: number, action_type: number, product_num: number}) => {
-  return request.post('/product/update', data) as Promise<AdjustProductResponse>
+  return request.patch('/product/update', data) as Promise<AdjustProductResponse>
 }

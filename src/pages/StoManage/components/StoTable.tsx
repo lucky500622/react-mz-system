@@ -1,7 +1,12 @@
 import {useState, useEffect, useImperativeHandle} from 'react'
 
 import dayjs from 'dayjs'
-import { Table, Button, Modal, Tag } from 'antd'
+import { Table, Button, Modal, Tag, Form, Input, message } from 'antd'
+import type { FormProps } from 'antd'
+
+import '@/pages/StoManage/components/styles/stoTable.scss'
+import { editWarehouse } from '@/api/warehouse'
+import { useLoading } from '@/hooks/useLoading'
 
 export type StoTableRef = {
   refreshData: () => void
@@ -60,11 +65,11 @@ const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
       title: '操作',
       key: 'action',
       width: 160,
-      render: () => {
+      render: (_, record) => {
         return (
           <div>
-            <Button type="link" size="small">编辑</Button>
-            <Button type="link" size="small">删除</Button>
+            <Button type="link" size="small" onClick={() => handleEdit(record.m_id)}>编辑</Button>
+            <Button type="link" size="small" onClick={() => handleDelete(record.m_id)}>删除</Button>
           </div>
         )
       } 
@@ -88,6 +93,48 @@ const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const handleCancel = () => {
     setIsModalOpen(false)
+  }
+
+  // 编辑点击事件
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [editId, setEditId] = useState(0)
+  const handleEdit = (id: number) => {
+    setEditId(id)
+    setEditModalOpen(true)
+  }
+  // 编辑表单loading状态
+  const {loading: editLoading, run: editRun} = useLoading()
+  // 编辑表单提交事件
+  type FieldType = {
+    warehouse_name: string
+  }
+  const [form] = Form.useForm()
+  const onEditFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    const data = {
+      m_id: editId,
+      warehouse_name: values.warehouse_name
+    }
+    try {
+      const res = await editRun(() => editWarehouse(data))
+      if (res.code === 4011) {
+        message.error(res.message)
+        return
+      }
+      message.success('编辑成功')
+      setRefresh(!refresh)
+    } finally {
+      setEditId(null)
+      form.resetFields()
+      setEditModalOpen(false)
+    }
+  }
+  const onEditFinishFailed: FormProps<FieldType>['onFinishFailed'] = (values) => {
+    console.log(values)
+  }
+
+  // 删除点击事件
+  const handleDelete = (id: number) => {
+    console.log(id)
   }
 
   // 刷新表格状态
@@ -125,6 +172,34 @@ const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
         footer={null}
       >
         <p>{detailContent || '暂无仓库描述'}</p>
+      </Modal>
+      <Modal 
+        className="StoTable-modal"
+        title="仓库编辑"
+        open={editModalOpen}
+        onCancel={() => setEditModalOpen(false)}
+        footer={null}
+      >
+        <Form
+          form={form}
+          className="form"
+          labelCol={{ span: 5 }}
+          wrapperCol={{ span: 14 }}
+          style={{ maxWidth: 600 }}
+          onFinish={onEditFinish}
+          onFinishFailed={onEditFinishFailed}
+          disabled={editLoading}
+          autoComplete="off"
+        >
+          <Form.Item name="warehouse_name" label="仓库重命名"
+            rules={[{ required: true, min: 2, max: 20, message: '请输入2-20个字符的仓库名称' },
+              {pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '仓库名称只能包含汉字、字母和数字'}]}>
+            <Input placeholder="请输入仓库名称" />
+          </Form.Item>
+          <Form.Item label={null}>
+            <Button type="primary" htmlType="submit">提交</Button>
+          </Form.Item>
+        </Form>
       </Modal>
     </div>
   )

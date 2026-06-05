@@ -55,3 +55,11 @@ export const addWarehouse = (data: {
 }) => {
   return request.post('/warehouse/add', data) as Promise<ApiResponse<null>>
 }
+
+// 编辑仓库
+export const editWarehouse = (data: {
+  m_id: number,
+  warehouse_name: string
+}) => {
+  return request.patch('/warehouse/edit', data) as Promise<ApiResponse<null>>
+}

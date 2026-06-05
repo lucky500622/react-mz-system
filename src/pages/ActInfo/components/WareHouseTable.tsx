@@ -46,9 +46,8 @@ const warehouseColumns = [
     dataIndex: 'warehouse_rename',
     key: 'warehouse_rename',
     render: (val) => {
-      if (!val) {
-        return '/'
-      }
+      if (!val) return '/'
+      return val
     }
   },
   {
