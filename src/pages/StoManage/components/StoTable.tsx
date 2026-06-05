@@ -22,6 +22,15 @@ const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
       width: 100
     },
     {
+      title: '仓库原名',
+      dataIndex: 'warehouse_name_ed',
+      key: 'warehouse_name_ed',
+      render: (val) => {
+        if (!val) return '/'
+        return val
+      }
+    },
+    {
       title: '仓库名称',
       dataIndex: 'warehouse_name',
       key: 'warehouse_name'
@@ -116,7 +125,13 @@ const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
     }
     try {
       const res = await editRun(() => editWarehouse(data))
+      // 仓库名已存在
       if (res.code === 4011) {
+        message.error(res.message)
+        return
+      }
+      // 仓库名已被编辑过
+      if (res.code === 4012) {
         message.error(res.message)
         return
       }
@@ -193,6 +208,7 @@ const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
         onCancel={() => setEditModalOpen(false)}
         footer={null}
       >
+        <p className="warning-name-edit">**注：仓库名仅可修改一次**</p>
         <Form
           form={form}
           className="form"
@@ -224,7 +240,7 @@ const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
         onCancel={() => setDeleteModalOpen(false)}
         loading={deleteLoading}
       >
-        <p>确认删除仓库吗，删除后该仓库下的所有产品也将被删除，且无法恢复！</p>
+        <p>**注：删除后该仓库下的所有产品也将被删除，且无法恢复!**</p>
       </Modal>
     </div>
   )

@@ -42,15 +42,6 @@ const warehouseColumns = [
     }
   },
   {
-    title: '仓库原名',
-    dataIndex: 'warehouse_name_ed',
-    key: 'warehouse_name_ed',
-    render: (val) => {
-      if (!val) return '/'
-      return val
-    }
-  },
-  {
     title: '操作时间',
     dataIndex: 'issue_create_time',
     key: 'issue_create_time',

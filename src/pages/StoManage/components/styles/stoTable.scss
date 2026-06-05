@@ -1,12 +1,16 @@
 .StoTable-edit-modal {
   .ant-modal-container {
+    padding-top: 20px;
     width: 500px;
   }
   .form {
-    padding-top: 20px;
+    margin-top: 10px;
     .ant-btn {
       margin-left: 200px;
     }
+  }
+  .warning-name-edit {
+    color: rgb(255, 75, 75);
   }
 }
 
