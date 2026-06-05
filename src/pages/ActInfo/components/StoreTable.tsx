@@ -36,15 +36,15 @@ const warehouseColumns = [
       const map = {
         1: '创建',
         2: '删除',
-        3: '修改数量'
+        3: '重命名'
       }
       return <Tag color={val === 1 ? 'green' : val === 2 ? 'red' : 'blue'}>{map[val] || val}</Tag>
     }
   },
   {
-    title: '仓库新名',
-    dataIndex: 'warehouse_rename',
-    key: 'warehouse_rename',
+    title: '仓库原名',
+    dataIndex: 'warehouse_name_ed',
+    key: 'warehouse_name_ed',
     render: (val) => {
       if (!val) return '/'
       return val

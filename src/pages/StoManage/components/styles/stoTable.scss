@@ -1,4 +1,4 @@
-.StoTable-modal {
+.StoTable-edit-modal {
   .ant-modal-container {
     width: 500px;
   }
@@ -7,5 +7,11 @@
     .ant-btn {
       margin-left: 200px;
     }
+  }
+}
+
+.StoTable-delete-modal {
+  p {
+    color: rgb(255, 75, 75);
   }
 }

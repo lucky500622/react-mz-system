@@ -11,7 +11,7 @@ import { useLoading } from '@/hooks/useLoading'
 export type StoTableRef = {
   refreshData: () => void
 }
-import { getWarehouseInfo } from '@/api/warehouse'
+import { getWarehouseInfo, deleteWarehouse } from '@/api/warehouse'
 const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
   // 表格列配置
   const columns = [
@@ -133,8 +133,21 @@ const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
   }
 
   // 删除点击事件
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [deleteId, setDeleteId] = useState(0)
   const handleDelete = (id: number) => {
-    console.log(id)
+    setDeleteModalOpen(true)
+    setDeleteId(id)
+  }
+  // 删除确认事件
+  const {loading: deleteLoading, run: deleteRun} = useLoading()
+  const handleDeleteConfirm = async () => {
+    // 提交删除请求
+    await deleteRun(() => deleteWarehouse({m_id: deleteId}))
+    message.success('删除成功')
+    setRefresh(!refresh)
+    setDeleteModalOpen(false)
+    setDeleteId(null)
   }
 
   // 刷新表格状态
@@ -174,7 +187,7 @@ const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
         <p>{detailContent || '暂无仓库描述'}</p>
       </Modal>
       <Modal 
-        className="StoTable-modal"
+        className="StoTable-edit-modal"
         title="仓库编辑"
         open={editModalOpen}
         onCancel={() => setEditModalOpen(false)}
@@ -200,6 +213,18 @@ const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
             <Button type="primary" htmlType="submit">提交</Button>
           </Form.Item>
         </Form>
+      </Modal>
+      <Modal 
+        className="StoTable-delete-modal"
+        title="删除仓库"
+        okText="确认删除"
+        cancelText="取消"
+        open={deleteModalOpen}
+        onOk={() => handleDeleteConfirm()}
+        onCancel={() => setDeleteModalOpen(false)}
+        loading={deleteLoading}
+      >
+        <p>确认删除仓库吗，删除后该仓库下的所有产品也将被删除，且无法恢复！</p>
       </Modal>
     </div>
   )

@@ -1,6 +1,6 @@
 import { Tabs } from 'antd'
 
-import WarehouseTable from '@/pages/ActInfo/components/WareHouseTable'
+import WarehouseTable from '@/pages/ActInfo/components/StoreTable'
 import ProductTable from '@/pages/ActInfo/components/ProductTable'
 import FunctionBar from '@/pages/ActInfo/components/FunctionBar'
 

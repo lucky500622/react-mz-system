@@ -63,3 +63,12 @@ export const editWarehouse = (data: {
 }) => {
   return request.patch('/warehouse/edit', data) as Promise<ApiResponse<null>>
 }
+
+// 删除仓库
+export const deleteWarehouse = (data: {
+  m_id: number
+}) => {
+  return request.delete('/warehouse/delete', {
+    params: data
+  }) as Promise<ApiResponse<null>>
+}
