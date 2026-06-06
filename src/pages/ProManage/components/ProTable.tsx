@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 
-import {useState, useEffect, useImperativeHandle} from 'react'
+import { useState, useEffect, useImperativeHandle, memo } from 'react'
 
 import { Table, Button, Modal, Tag, message, InputNumber, Select, Form } from 'antd'
 import type { FormProps } from 'antd/es/form'
@@ -8,12 +8,13 @@ import type { FormProps } from 'antd/es/form'
 import '@/pages/ProManage/components/styles/protable.scss'
 import { useLoading } from '@/hooks/useLoading'
 import { getProductInfo, deleteProduct, adjustProduct } from '@/api/product'
+import type { ProductInfoData } from '@/api/product'
 
 // 产品表格引用类型
 export type ProTableRef = {
   handleRefresh: () => void
 }
-const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
+const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, querySource: ProductInfoData[]}) => {
   // 表格列配置
   const columns = [
     {
@@ -189,6 +190,12 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
     getInfo()
   }, [refresh])
 
+  useEffect(() => {
+    if (querySource) {
+      setDataSource(querySource)
+    }
+  }, [querySource])
+
 
   return (
     <div>
@@ -275,6 +282,6 @@ const ProTable = ({ref} : {ref: React.Ref<ProTableRef>}) => {
       </Modal>
     </div>
   )
-}
+})
 
 export default ProTable

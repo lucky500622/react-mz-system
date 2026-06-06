@@ -8,17 +8,25 @@ import ProTable from '@/pages/ProManage/components/ProTable'
 import AddProductModal from '@/pages/ProManage/components/AddProductModal'
 import type { AddProductModalRef } from '@/pages/ProManage/components/AddProductModal'
 import type { ProTableRef } from '@/pages/ProManage/components/ProTable'
+import { useLoading } from '@/hooks/useLoading'
+import { getProductInfo } from '@/api/product'
+import type { ProductInfoData } from '@/api/product'
 
 const ProManage = () => {
+  const {loading, run} = useLoading()
   // 新增产品表单字段类型
   type FieldType = {
     m_id?: number;
+    warehouse_m_id?: number;
     product_name?: string;
     product_type?: string;
   }
+  const [form] = Form.useForm()
+  const [querySource, setQuerySource] = useState<ProductInfoData[]>()
   // 新增产品表单提交
-  const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values)
+  const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    const res = await run(() => getProductInfo(0, 999, values))
+    setQuerySource(res.data.productInfo)
   }
   // 新增产品表单提交失败
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
@@ -52,13 +60,19 @@ const ProManage = () => {
       </div>
       <div className="ProManage-function-bar">
         <Form
+          form={form}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
-          layout="inline">
+          layout="inline"
+          disabled={loading}>
           <Form.Item label="产品序列号" name="m_id"
             rules={[{ type: 'number', min: 1, message: '请输入有效的产品序列号' }]}>
             <InputNumber placeholder="请输入产品序列号"/>
+          </Form.Item>
+          <Form.Item label="所属仓库序列号" name="warehouse_m_id"
+            rules={[{ type: 'number', min: 1, message: '请输入所属仓库序列号' }]}>
+            <InputNumber placeholder="请输入所属仓库序列号"/>
           </Form.Item>
           <Form.Item label="产品名称" name="product_name" 
             rules={[{pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '产品名称只能包含汉字、字母和数字'}]}>
@@ -84,12 +98,15 @@ const ProManage = () => {
           <Form.Item label={null}>
             <Button type="default" htmlType="submit">查询</Button>
           </Form.Item>
+          <Form.Item label={null}>
+            <Button type="default" onClick={() => form.resetFields()}>重置</Button>
+          </Form.Item>
         </Form>
         <div className="add-btn">
           <Button type="default" onClick={handleAdd}>新增产品</Button>
         </div>
       </div>
-      <ProTable ref={tableRef} />
+      <ProTable ref={tableRef} querySource={querySource} />
       <AddProductModal ref={addModalRef} visible={visible} handleClose={handleClose} handleRefresh={handleRefresh} />
     </div>
   )

@@ -3,24 +3,31 @@ import request from '@/utils/request'
 import type { ApiResponse } from '@/types/apiResponseType'
 
 // 获取产品信息
-type ProductInfoData = {
-  productInfo: {
-    m_id: number;
-    product_belong_id: number;
-    product_name: string;
-    product_type: string;
-    product_num: number;
-    warehouse_description: string;
-  }[]
+export type ProductInfoData = {
+  m_id: number;
+  product_belong_id: number;
+  product_name: string;
+  product_type: string;
+  product_num: number;
+  warehouse_description: string;
 }
-type ProductInfoResponse = ApiResponse<ProductInfoData>
-export const getProductInfo = (offset: number = 0, limit: number = 999) => {
+type ProductData = {
+  productInfo: ProductInfoData[]
+}
+type ProductInfoResponse = ApiResponse<ProductData>
+export const getProductInfo = (offset: number = 0, limit: number = 999, values?: {
+  m_id?: number;
+  warehouse_m_id?: number;
+  product_name?: string;
+  product_type?: string;
+}) => {
   return request({
     url: '/product',
     method: 'get',
     params: {
       offset,
-      limit
+      limit,
+      ...values
     }
   }) as Promise<ProductInfoResponse>
 }
