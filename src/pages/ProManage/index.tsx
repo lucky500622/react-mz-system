@@ -96,10 +96,8 @@ const ProManage = () => {
             />
           </Form.Item>
           <Form.Item label={null}>
-            <Button type="default" htmlType="submit">查询</Button>
-          </Form.Item>
-          <Form.Item label={null}>
-            <Button type="default" onClick={() => form.resetFields()}>重置</Button>
+            <Button type="default" htmlType="submit" className="search-btn">查询</Button>
+            <Button type="default" onClick={() => form.resetFields()} className="reset-btn">重置</Button>
           </Form.Item>
         </Form>
         <div className="add-btn">

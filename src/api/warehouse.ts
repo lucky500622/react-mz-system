@@ -34,23 +34,26 @@ export const getWarehouseInfo = (offset: number = 0, limit: number = 999, values
 }
 
 // 获取仓库操作记录
+export type WarehouseActionInfoData = {
+  m_id: number;
+  issue_object: number;
+  issue_create_time: string;
+  creater: string;
+  warehouse_name: string;
+  action_type: string;
+  warehouse_rename: string;
+}
 type WarehouseActionData = {
-  actionInfo: {
-    m_id: number;
-    issue_object: number;
-    issue_create_time: string;
-    creater: string;
-    warehouse_name: string;
-    action_type: string;
-    warehouse_rename: string;
-  }[]
+  actionInfo: WarehouseActionInfoData[]
 }
 type WarehouseActionResponse = ApiResponse<WarehouseActionData>
-export const getWarehouseAction = (offset: number = 0, limit: number = 999) => {
+import type { warehouseConfig } from '@/pages/ActInfo/components/ActTabs'
+export const getWarehouseAction = (offset: number = 0, limit: number = 999, values?: warehouseConfig) => {
   return request.get('/warehouse/action', {
     params: {
       offset,
-      limit
+      limit,
+      ...values
     }
   }) as Promise<WarehouseActionResponse>
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from 'react'
+import { useState, useEffect } from 'react'
 
 import { Tabs } from 'antd'
 
@@ -8,6 +8,8 @@ import FunctionBar from '@/pages/ActInfo/components/FunctionBar'
 import { useLoading } from '@/hooks/useLoading'
 import { getProductAction } from '@/api/product'
 import type { ProductActionInfoData } from '@/api/product'
+import { getWarehouseAction } from '@/api/warehouse'
+import type { WarehouseActionInfoData } from '@/api/warehouse'
 
 export type warehouseConfig = {
   m_id: number,
@@ -40,10 +42,15 @@ const ActTable = () => {
   const {loading: warehouseLoading, run: runWarehouseSearch} = useLoading()
   // 产品操作记录数据源
   const [queryProductRecordDataSource, setQueryProductRecordDataSource] = useState<ProductActionInfoData[]>([])
+  // 仓库操作记录数据源
+  const [queryWarehouseRecordDataSource, setQueryWarehouseRecordDataSource] = useState<WarehouseActionInfoData[]>([])
   // 查询事件
   const onSearch = async (values: warehouseConfig | productConfig, config_type: string) => {
     if (config_type === 'warehouse') {
-      console.log('仓库查询')
+      const res = await runWarehouseSearch(() => {
+        return getWarehouseAction(0, 999, values as warehouseConfig)
+      })
+      setQueryWarehouseRecordDataSource(res.data.actionInfo)
     } else {
       const res = await runProductSearch(() => {
         return getProductAction(0, 999, values as productConfig)
@@ -53,11 +60,18 @@ const ActTable = () => {
   }
 
   useEffect(() => {
+    // 获取产品操作记录表格数据
     const getProductInfo = async () => {
       const res = await getProductAction()
       setQueryProductRecordDataSource(res.data.actionInfo)
     }
     getProductInfo()
+    // 获取仓库操作记录表格数据
+    const getWarehouseRecord = async () => {
+      const res = await getWarehouseAction()
+      setQueryWarehouseRecordDataSource(res.data.actionInfo)
+    }
+    getWarehouseRecord()
   }, [])
 
   // 选项卡
@@ -79,7 +93,7 @@ const ActTable = () => {
       <div>
         <FunctionBar labelConfig={warehouseLabelConfig}
           options={warehouseOptions} onSearch={onSearch} loading={warehouseLoading} />
-        <StoreTable />
+        <StoreTable queryWarehouseRecordDataSource={queryWarehouseRecordDataSource} />
       </div>
     }
   ]
