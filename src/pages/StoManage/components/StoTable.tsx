@@ -1,4 +1,4 @@
-import {useState, useEffect, useImperativeHandle} from 'react'
+import {useState, useEffect, useImperativeHandle, memo} from 'react'
 
 import dayjs from 'dayjs'
 import { Table, Button, Modal, Tag, Form, Input, message } from 'antd'
@@ -7,12 +7,14 @@ import type { FormProps } from 'antd'
 import '@/pages/StoManage/components/styles/stoTable.scss'
 import { editWarehouse } from '@/api/warehouse'
 import { useLoading } from '@/hooks/useLoading'
+import type { WarehouseInfoData } from '@/api/warehouse'
 
 export type StoTableRef = {
   refreshData: () => void
 }
 import { getWarehouseInfo, deleteWarehouse } from '@/api/warehouse'
-const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
+
+const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, queryDataSource: WarehouseInfoData[]}) => {
   // 表格列配置
   const columns = [
     {
@@ -89,7 +91,7 @@ const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
   const pageSize = 8
 
   // 表格数据
-  const [dataSource, setDataSource] = useState([])
+  const [dataSource, setDataSource] = useState<WarehouseInfoData[]>([])
 
   // 详情弹窗内容
   const [detailContent, setDetailContent] = useState('')
@@ -182,7 +184,11 @@ const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
     getInfo()
   }, [refresh])
 
-
+  useEffect(() => {
+    if (queryDataSource) {
+      setDataSource(queryDataSource)
+    }
+  }, [queryDataSource])
   return (
     <div>
       <Table dataSource={dataSource} columns={columns} rowKey={(record) => record.m_id} pagination={{
@@ -244,6 +250,6 @@ const StoTable = ({ref}: {ref: React.Ref<StoTableRef>}) => {
       </Modal>
     </div>
   )
-}
+})
 
 export default StoTable

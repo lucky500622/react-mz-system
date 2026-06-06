@@ -3,24 +3,32 @@ import request from '@/utils/request'
 import type { ApiResponse } from '@/types/apiResponseType'
 
 // 获取仓库信息
-type WarehouseInfoData = {
-  warehouseInfo: {
-    m_id: number;
-    warehouse_name: string;
-    warehouse_type: string;
-    warehouse_creater: string;
-    warehouse_create_time: string;
-    warehouse_description: string;
-  }[]
+export type WarehouseInfoData = {
+  m_id: number;
+  warehouse_name_ed: string | null;
+  warehouse_name: string;
+  warehouse_type: string;
+  user_name: string;
+  warehouse_create_time: string;
+  warehouse_description: string;
 }
-type WarehouseInfoResponse = ApiResponse<WarehouseInfoData>
-export const getWarehouseInfo = (offset: number = 0, limit: number = 999) => {
+type WarehouseData = {
+  warehouseInfo: WarehouseInfoData[]
+ }
+type WarehouseInfoResponse = ApiResponse<WarehouseData>
+export const getWarehouseInfo = (offset: number = 0, limit: number = 999, values?: {
+    m_id?: number;
+    warehouse_name?: string;
+    warehouse_type?: string;
+    user_name?: string;
+  }) => {
   return request({
     url: '/warehouse',
     method: 'get',
     params: {
       offset,
-      limit
+      limit,
+      ...values
     }
   }) as Promise<WarehouseInfoResponse>
 }

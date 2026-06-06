@@ -8,8 +8,14 @@ import StoTable from '@/pages/StoManage/components/StoTable'
 import AddWarehouseModal from '@/pages/StoManage/components/AddWarehouseModal'
 import type { AddWarehouseModalRef } from '@/pages/StoManage/components/AddWarehouseModal'
 import type { StoTableRef } from '@/pages/StoManage/components/StoTable'
+import { useLoading } from '@/hooks/useLoading'
+import { getWarehouseInfo } from '@/api/warehouse'
+import type { WarehouseInfoData } from '@/api/warehouse'
 
 const StoManage = () => {
+  const [form] = Form.useForm()
+  // 新增仓库表单提交loading状态
+  const { loading, run } = useLoading()
   // 新增仓库表单字段类型
   type FieldType = {
     m_id?: number;
@@ -17,9 +23,14 @@ const StoManage = () => {
     warehouse_type?: string;
     user_name?: string;
   }
+  // 新增仓库表单字段列表
+  const [formList, setFormList] = useState<WarehouseInfoData[]>()
   // 新增仓库表单提交
-  const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values)
+  const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    const res = await run(() => {
+      return getWarehouseInfo(0, 999, values)
+    })
+    setFormList(res.data.warehouseInfo)
   }
   // 新增仓库表单提交失败
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
@@ -54,10 +65,12 @@ const StoManage = () => {
       </div>
       <div className="StoManage-function-bar">
         <Form
+          form={form}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
-          layout="inline">
+          layout="inline"
+          disabled={loading}>
           <Form.Item label="仓库序列号" name="m_id"
             rules={[{ type: 'number', min: 1, message: '请输入有效的仓库序列号' }]}>
             <InputNumber placeholder="请输入仓库序列号"/>
@@ -88,12 +101,15 @@ const StoManage = () => {
           <Form.Item label={null}>
             <Button type="default" htmlType="submit">查询</Button>
           </Form.Item>
+          <Form.Item label={null}>
+            <Button type="default" onClick={() => form.resetFields()}>重置</Button>
+          </Form.Item>
         </Form>
         <div className="add-btn">
           <Button type="default" onClick={handleAdd}>新增仓库</Button>
         </div>
       </div>
-      <StoTable ref={tableRef} />
+      <StoTable ref={tableRef} queryDataSource={formList} />
       <AddWarehouseModal handleRefresh={handleRefresh}
         visible={visible} handleClose={handleClose} ref={addModalRef} />
     </div>
