@@ -1,22 +1,17 @@
 .FunctionBar-function-bar {
   padding: 14px;
+  padding-bottom: 4px;
   margin-bottom: 10px;
   background-color: rgb(250, 250, 250);
 
-  .ant-input {
-    width: 160px;
+  .ant-form-item {
+    margin-bottom: 10px;
   }
 
-  .query-btn {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    .query-btn-span {
-      margin-left: 10px;
-      font-size: 14px;
-    }
-    .ant-btn {
-      margin-left: 20px;
-    }
+  .word-input {
+    width: 160px;
+  }
+  .type-select {
+    width: 116px;
   }
 }

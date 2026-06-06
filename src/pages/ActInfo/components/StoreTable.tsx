@@ -19,7 +19,7 @@ const warehouseColumns = [
     key: 'warehouse_m_id'
   },
   {
-    title: '仓库名称',
+    title: '操作仓库',
     dataIndex: 'warehouse_name',
     key: 'warehouse_name'
   },

@@ -19,7 +19,7 @@ const productColumns = [
     key: 'product_m_id'
   },
   {
-    title: '产品名称',
+    title: '操作产品',
     dataIndex: 'product_name',
     key: 'product_name'
   },  

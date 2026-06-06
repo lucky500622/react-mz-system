@@ -1,6 +1,7 @@
 import {useState, useCallback, useRef} from 'react'
 
-import { Button, Input, InputNumber, Select } from 'antd'
+import { Button, Input, InputNumber, Select, Form } from 'antd'
+import type { FormProps } from 'antd/es/form'
 
 import '@/pages/ProManage/index.scss'
 import ProTable from '@/pages/ProManage/components/ProTable'
@@ -9,15 +10,19 @@ import type { AddProductModalRef } from '@/pages/ProManage/components/AddProduct
 import type { ProTableRef } from '@/pages/ProManage/components/ProTable'
 
 const ProManage = () => {
-  // 查询参数
-  const [queryParams, setQueryParams] = useState({
-    m_id: null,
-    name: '',
-    type: ''
-  })
-  // 查询
-  const handleQuery = () => {
-    console.log(queryParams)
+  // 新增产品表单字段类型
+  type FieldType = {
+    m_id?: number;
+    product_name?: string;
+    product_type?: string;
+  }
+  // 新增产品表单提交
+  const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+    console.log('Success:', values)
+  }
+  // 新增产品表单提交失败
+  const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+    console.log('Failed:', errorInfo)
   }
 
   // 产品弹窗状态
@@ -46,31 +51,40 @@ const ProManage = () => {
         <h2>产品管理</h2>
       </div>
       <div className="ProManage-function-bar">
-        <div className="query-btn">
-          <span className="query-btn-span">产品序列号：</span>
-          <InputNumber placeholder="请输入产品序列号"
-            value={queryParams.m_id} onChange={(e) => setQueryParams({...queryParams, m_id: e})} />
-          <span className="query-btn-span">产品名称：</span>
-          <Input placeholder="请输入产品名称"
-            value={queryParams.name} onChange={(e) => setQueryParams({...queryParams, name: e.target.value})} />
-          <span className="query-btn-span">产品类型：</span>
-          <Select placeholder="请选择产品类型" className="type-select"
-            options={[
-              { value: '食品生鲜', label: '食品生鲜' },
-              { value: '日用百货', label: '日用百货' },
-              { value: '家电数码', label: '家电数码' },
-              { value: '服饰鞋帽', label: '服饰鞋帽' },
-              { value: '母婴用品', label: '母婴用品' },
-              { value: '美妆护肤', label: '美妆护肤' },
-              { value: '家居家纺', label: '家居家纺' },
-              { value: '文体玩具', label: '文体玩具' },
-              { value: '医疗器械', label: '医疗器械' },
-              { value: '其他产品', label: '其他产品' }
-            ]}
-            onChange={(e) => setQueryParams({...queryParams, type: e})}
-          />
-          <Button type="default" onClick={handleQuery}>查询</Button>
-        </div>
+        <Form
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+          layout="inline">
+          <Form.Item label="产品序列号" name="m_id"
+            rules={[{ type: 'number', min: 1, message: '请输入有效的产品序列号' }]}>
+            <InputNumber placeholder="请输入产品序列号"/>
+          </Form.Item>
+          <Form.Item label="产品名称" name="product_name" 
+            rules={[{pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '产品名称只能包含汉字、字母和数字'}]}>
+            <Input placeholder="请输入产品名称" className="word-input" />
+          </Form.Item>
+          <Form.Item label="产品类型" name="product_type" 
+            rules={[{ pattern: /^[\u4e00-\u9fa5]+$/, message: '产品类型只能包含汉字'}]}>
+            <Select placeholder="请选择产品类型" className="type-select"
+              options={[
+                { value: '食品生鲜', label: '食品生鲜' },
+                { value: '日用百货', label: '日用百货' },
+                { value: '家电数码', label: '家电数码' },
+                { value: '服饰鞋帽', label: '服饰鞋帽' },
+                { value: '母婴用品', label: '母婴用品' },
+                { value: '美妆护肤', label: '美妆护肤' },
+                { value: '家居家纺', label: '家居家纺' },
+                { value: '文体玩具', label: '文体玩具' },
+                { value: '医疗器械', label: '医疗器械' },
+                { value: '其他产品', label: '其他产品' }
+              ]}
+            />
+          </Form.Item>
+          <Form.Item label={null}>
+            <Button type="default" htmlType="submit">查询</Button>
+          </Form.Item>
+        </Form>
         <div className="add-btn">
           <Button type="default" onClick={handleAdd}>新增产品</Button>
         </div>

@@ -77,7 +77,7 @@ const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddPro
         disabled={loading}
         form={form}>
         <Form.Item label="仓库序列号" name="m_id"
-          rules={[{ required: true, type: 'number', message: '请输入有效的仓库序列号' }]}>
+          rules={[{ required: true, type: 'number', min: 1, message: '请输入有效的仓库序列号' }]}>
           <InputNumber placeholder="请输入仓库序列号" />
         </Form.Item>
         <Form.Item label="产品名称" name="product_name"
