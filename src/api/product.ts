@@ -33,23 +33,26 @@ export const getProductInfo = (offset: number = 0, limit: number = 999, values?:
 }
 
 // 获取产品操作记录
-type ProductActionData = {  
-  actionInfo: {
-    m_id: number;
-    issue_object: number;
-    issue_create_time: string;
-    creater: string;
-    product_name: string;
-    action_type: string;
-    action_num: number;
-  }[]
+export type ProductActionInfoData = {  
+  m_id: number;
+  issue_object: number;
+  issue_create_time: string;
+  creater: string;
+  product_name: string;
+  action_type: string;
+  action_num: number;
+}
+type ProductActionData = {
+  actionInfo: ProductActionInfoData[]
 }
 type ProductActionResponse = ApiResponse<ProductActionData>
-export const getProductAction = (offset: number = 0, limit: number = 999) => { 
+import type { productConfig } from '@/pages/ActInfo/components/ActTabs'
+export const getProductAction = (offset: number = 0, limit: number = 999, values?: productConfig) => { 
   return request.get('/product/action', {
     params: {
       offset,
-      limit
+      limit,
+      ...values
     }
   }) as Promise<ProductActionResponse>
 }

@@ -51,7 +51,7 @@ const warehouseColumns = [
   }
 ]
 
-const WarehouseTable = () => {
+const StoreTable = () => {
   // 仓库操作记录表格数据
   const [warehouseDataSource, setWarehouseDataSource] = useState([])
   // 当前页
@@ -83,4 +83,4 @@ const WarehouseTable = () => {
   )
 }
 
-export default WarehouseTable
+export default StoreTable

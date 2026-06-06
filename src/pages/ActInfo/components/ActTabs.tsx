@@ -1,27 +1,64 @@
+import { useState, useEffect, use } from 'react'
+
 import { Tabs } from 'antd'
 
-import WarehouseTable from '@/pages/ActInfo/components/StoreTable'
+import StoreTable from '@/pages/ActInfo/components/StoreTable'
 import ProductTable from '@/pages/ActInfo/components/ProductTable'
 import FunctionBar from '@/pages/ActInfo/components/FunctionBar'
+import { useLoading } from '@/hooks/useLoading'
+import { getProductAction } from '@/api/product'
+import type { ProductActionInfoData } from '@/api/product'
+
+export type warehouseConfig = {
+  m_id: number,
+  warehouse_m_id: number,
+  warehouse_name: string,
+  user_name: string,
+  action_type: number
+}
+export type productConfig = {
+  m_id: number,
+  product_m_id: number,
+  product_name: string,
+  user_name: string,
+  action_type: number
+}
 
 const ActTable = () => {
   // FunctionBar配置
-  const warehouseConfig = {
-    issue_m_id: '序列号',
-    m_id: '仓库序列号',
-    name: '仓库名称',
-    user_name: '操作人',
-    type: '操作类型'
+  const warehouseLabelConfig = {
+    config_type: 'warehouse'
   }
   const warehouseOptions = ['新增', '删除', '重命名']
-  const productConfig = {
-    issue_m_id: '序列号',
-    m_id: '产品序列号',
-    name: '产品名称',
-    user_name: '操作人',
-    type: '操作类型'
+  const productLabelConfig = {
+    config_type: 'product'
   }
   const productOptions = ['新增', '删除', '上调', '下调']
+
+  // 加载状态
+  const {loading: productLoading, run: runProductSearch} = useLoading()
+  const {loading: warehouseLoading, run: runWarehouseSearch} = useLoading()
+  // 产品操作记录数据源
+  const [queryProductRecordDataSource, setQueryProductRecordDataSource] = useState<ProductActionInfoData[]>([])
+  // 查询事件
+  const onSearch = async (values: warehouseConfig | productConfig, config_type: string) => {
+    if (config_type === 'warehouse') {
+      console.log('仓库查询')
+    } else {
+      const res = await runProductSearch(() => {
+        return getProductAction(0, 999, values as productConfig)
+      })
+      setQueryProductRecordDataSource(res.data.actionInfo)
+    }
+  }
+
+  useEffect(() => {
+    const getProductInfo = async () => {
+      const res = await getProductAction()
+      setQueryProductRecordDataSource(res.data.actionInfo)
+    }
+    getProductInfo()
+  }, [])
 
   // 选项卡
   const tabItems = [
@@ -30,8 +67,9 @@ const ActTable = () => {
       key: 'product',
       children: 
       <div>
-        <FunctionBar config={productConfig} options={productOptions} />
-        <ProductTable />
+        <FunctionBar labelConfig={productLabelConfig}
+          options={productOptions} onSearch={onSearch} loading={productLoading} />
+        <ProductTable queryProductRecordDataSource={queryProductRecordDataSource} />
       </div>
     },
     {
@@ -39,8 +77,9 @@ const ActTable = () => {
       key: 'warehouse',
       children: 
       <div>
-        <FunctionBar config={warehouseConfig} options={warehouseOptions} />
-        <WarehouseTable />
+        <FunctionBar labelConfig={warehouseLabelConfig}
+          options={warehouseOptions} onSearch={onSearch} loading={warehouseLoading} />
+        <StoreTable />
       </div>
     }
   ]

@@ -1,10 +1,10 @@
 import dayjs from 'dayjs'
 
-import { useState, useEffect } from 'react'
+import { useState, memo } from 'react'
 
 import { Table, Tag } from 'antd'
 
-import { getProductAction } from '@/api/product'
+import type { ProductActionInfoData } from '@/api/product'
 
 // 产品记录表格配置项
 const productColumns = [
@@ -61,36 +61,26 @@ const productColumns = [
   }
 ]
 
-const WarehouseTable = () => {
-  // 产品操作记录表格数据
-  const [productRecordDataSource, setProductRecordDataSource] = useState([])
+const ProductTable = memo(( { queryProductRecordDataSource }: 
+  { queryProductRecordDataSource: ProductActionInfoData[] } ) => {
   // 当前页
   const [currentPage, setCurrentPage] = useState(1)
   // 每页显示数量
   const pageSize = 8
-  
-  useEffect(() => {
-    // 获取产品操作记录表格数据
-    const getProductRecord = async () => {
-      const res = await getProductAction()
-      setProductRecordDataSource(res.data.actionInfo)
-    }
-    getProductRecord()
-  }, [])
 
   return (
     <div>
-      <Table dataSource={productRecordDataSource} columns={productColumns} rowKey={(record) => record.m_id}
+      <Table dataSource={queryProductRecordDataSource} columns={productColumns} rowKey={(record) => record.m_id}
         pagination={{
           current: currentPage,
           pageSize: pageSize,
-          total: productRecordDataSource.length,
+          total: queryProductRecordDataSource.length,
           onChange: (page) => {
             setCurrentPage(page)
           }
         }} />
     </div>
   )
-}
+})
 
-export default WarehouseTable
+export default ProductTable
