@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect, use } from 'react'
 
 import { AutoComplete } from 'antd'
 
@@ -28,6 +28,13 @@ const SelectNameAssociation = ({ value, onChange, placeholder, SelectFn, id = 's
   }
   // 防抖刷新事件
   const debounceRef = useRef(useDebounceFn(handleChange, 500))
+
+  useEffect(() => {
+    const cancel = debounceRef.current.cancel
+    return () => {
+      cancel()
+    }
+  }, [])
 
   return (
     <AutoComplete
