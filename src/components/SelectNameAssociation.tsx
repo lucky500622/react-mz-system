@@ -5,12 +5,14 @@ import { AutoComplete } from 'antd'
 import type { ApiResponse } from '@/types/apiResponseType'
 import { useDebounceFn } from '@/hooks/useDebounce'
 
-const SelectNameAssociation = ({ value, onChange, placeholder, SelectFn} :
+// 若该组件外层为ant的form.Item，需要设置id属性，故添加id属性
+const SelectNameAssociation = ({ value, onChange, placeholder, SelectFn, id = 'select'} :
   {
     value?: string, 
     onChange?: (text: string) => void, 
     placeholder: string ,
     SelectFn: (text: string) => Promise<ApiResponse<{name: {name: string}[]}>>
+    id?: string
   }) => {
   const [open, setOpen] = useState(false)
   const [options, setOptions] = useState<{ label: string, value: string }[]>([])
@@ -29,6 +31,7 @@ const SelectNameAssociation = ({ value, onChange, placeholder, SelectFn} :
 
   return (
     <AutoComplete
+      id={id}
       style={{ width: '130px' }}
       value={value}
       onChange={onChange}
