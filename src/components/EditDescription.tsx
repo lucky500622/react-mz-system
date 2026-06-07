@@ -60,18 +60,19 @@ const EditDescription = ({ref ,editFn, successCallback, title } :
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         footer={null}
-        className="Protable-detail-modal"
+        className="EditDescription-detail-modal"
       >
         <p>{detailContent || `暂无${title}描述`}
           <Button size="small" type="dashed" className="edit-btn"
-            onClick={handleEditDescriptionClick}>编辑描述</Button></p>
+            onClick={handleEditDescriptionClick}>编辑描述</Button>
+        </p>
       </Modal>
       <Modal
         title={`编辑${title}描述`}
         open={editDescriptionModalOpen}
         onCancel={() => setEditDescriptionModalOpen(false)}
         footer={null}
-        className="Protable-edit-modal"
+        className="EditDescription-edit-modal"
       >
         <Input.TextArea value={editDetailContent} onChange={(e) => setEditDetailContent(e.target.value)}
           rows={3} placeholder={`请输入${title}描述`} maxLength={200} disabled={editDescriptionLoading} />

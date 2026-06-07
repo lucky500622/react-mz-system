@@ -9,8 +9,9 @@ import AddProductModal from '@/pages/ProManage/components/AddProductModal'
 import type { AddProductModalRef } from '@/pages/ProManage/components/AddProductModal'
 import type { ProTableRef } from '@/pages/ProManage/components/ProTable'
 import { useLoading } from '@/hooks/useLoading'
-import { getProductInfo } from '@/api/product'
+import { getProductInfo, getProductName } from '@/api/product'
 import type { ProductInfoData } from '@/api/product'
+import SelectNameAssociation from '@/components/SelectNameAssociation'
 
 const ProManage = () => {
   const {loading, run} = useLoading()
@@ -76,7 +77,7 @@ const ProManage = () => {
           </Form.Item>
           <Form.Item label="产品名称" name="product_name" 
             rules={[{pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '产品名称只能包含汉字、字母和数字'}]}>
-            <Input placeholder="请输入产品名称" className="word-input" />
+            <SelectNameAssociation placeholder="请输入产品名称" SelectFn={getProductName} />
           </Form.Item>
           <Form.Item label="产品类型" name="product_type" 
             rules={[{ pattern: /^[\u4e00-\u9fa5]+$/, message: '产品类型只能包含汉字'}]}>

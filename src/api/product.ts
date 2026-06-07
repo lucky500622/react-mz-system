@@ -90,3 +90,15 @@ export const adjustProduct = (data: {m_id: number, action_type: number, product_
 export const editProductDescription = (data: {m_id: number, description: string}) => {
   return request.patch('/product/editDescription', data) as Promise<ApiResponse<null>>
 }
+
+type ProductNameData = {
+  name: {name: string }[]
+}
+// 获取产品名称
+export const getProductName = (text: string) => {
+  return request.get('/product/name', {
+    params: {
+      text
+    }
+  }) as Promise<ApiResponse<ProductNameData>>
+}

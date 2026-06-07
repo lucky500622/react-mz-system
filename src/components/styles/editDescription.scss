@@ -1,5 +1,9 @@
-.Protable-detail-modal {
+.EditDescription-detail-modal {
   .ant-modal-body {
+    p {
+      height: 32px;
+      line-height: 32px;
+    }
     .edit-btn {
       margin-left: 10px;
       font-size: 11px;
@@ -7,7 +11,7 @@
   }
 }
 
-.Protable-edit-modal {
+.EditDescription-edit-modal {
   .ant-modal-container {
     width: 520px;
   }

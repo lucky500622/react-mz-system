@@ -3,6 +3,9 @@ import type { FormProps } from 'antd/es/form'
 
 import '@/pages/ActInfo/components/styles/functionBar.scss'
 import type { warehouseConfig, productConfig } from '@/pages/ActInfo/components/ActTabs'
+import SelectNameAssociation from '@/components/SelectNameAssociation'
+import { getWarehouseName } from '@/api/warehouse'
+import { getProductName } from '@/api/product'
 
 type LabelConfig = {
   config_type: string
@@ -43,7 +46,10 @@ const FunctionBar = ({labelConfig, options, onSearch, loading} : {labelConfig: L
           <Form.Item label={labelConfig.config_type === 'warehouse' ? '仓库名称' : '产品名称'}
             name={labelConfig.config_type === 'warehouse' ? 'warehouse_name' : 'product_name'}
             rules={[{pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '名称只能包含汉字、字母和数字' }]}>
-            <Input placeholder="请输入名称" className="word-input" />
+            <SelectNameAssociation
+              placeholder={labelConfig.config_type === 'warehouse' ? '请输入仓库名称' : '请输入产品名称'}
+              SelectFn={labelConfig.config_type === 'warehouse' ? getWarehouseName : getProductName}
+            />
           </Form.Item>
 
           <Form.Item label={labelConfig.config_type === 'warehouse' ? '仓库操作类型' : '产品操作类型'} name="action_type">

@@ -9,8 +9,9 @@ import AddWarehouseModal from '@/pages/StoManage/components/AddWarehouseModal'
 import type { AddWarehouseModalRef } from '@/pages/StoManage/components/AddWarehouseModal'
 import type { StoTableRef } from '@/pages/StoManage/components/StoTable'
 import { useLoading } from '@/hooks/useLoading'
-import { getWarehouseInfo } from '@/api/warehouse'
+import { getWarehouseInfo, getWarehouseName } from '@/api/warehouse'
 import type { WarehouseInfoData } from '@/api/warehouse'
+import SelectNameAssociation from '@/components/SelectNameAssociation'
 
 const StoManage = () => {
   const [form] = Form.useForm()
@@ -77,7 +78,10 @@ const StoManage = () => {
           </Form.Item>
           <Form.Item label="仓库名称" name="warehouse_name" 
             rules={[{pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '仓库名称只能包含汉字、字母和数字'}]}>
-            <Input placeholder="请输入仓库名称" className="word-input" />
+            <SelectNameAssociation
+              placeholder="请输入仓库名称"
+              SelectFn={getWarehouseName}
+            />
           </Form.Item>
           <Form.Item label="仓库类型" name="warehouse_type" 
             rules={[{ pattern: /^[\u4e00-\u9fa5]+$/, message: '仓库类型只能包含汉字'}]}>
