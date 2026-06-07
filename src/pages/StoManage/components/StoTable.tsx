@@ -5,7 +5,7 @@ import { Table, Button, Modal, Tag, Form, Input, message } from 'antd'
 import type { FormProps } from 'antd'
 
 import '@/pages/StoManage/components/styles/stoTable.scss'
-import { editWarehouse } from '@/api/warehouse'
+import { editWarehouse, editWarehouseDescription } from '@/api/warehouse'
 import { useLoading } from '@/hooks/useLoading'
 import type { WarehouseInfoData } from '@/api/warehouse'
 
@@ -79,7 +79,8 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
       render: (_, record) => {
         return (
           <div>
-            <Button type="link" size="small" onClick={() => handleDetail(record.warehouse_description)}>详情</Button>
+            <Button type="link" size="small" 
+              onClick={() => handleDetail(record.warehouse_description, record.m_id)}>详情</Button>
           </div>
         )
       } 
@@ -106,19 +107,41 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
   // 表格数据
   const [dataSource, setDataSource] = useState<WarehouseInfoData[]>([])
 
+  // 详情弹窗配置
+  const [isModalOpen, setIsModalOpen] = useState(false)
   // 详情弹窗内容
   const [detailContent, setDetailContent] = useState('')
   // 详情点击事件
-  const handleDetail = (item: string) => {
+  const handleDetail = (item: string, id: number) => {
     setDetailContent(item)
+    setDetailId(id)
     setIsModalOpen(true)
   }
-  // 详情弹窗配置
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const handleCancel = () => {
-    setIsModalOpen(false)
-  }
 
+  // 编辑描述弹窗配置
+  const [editDescriptionModalOpen, setEditDescriptionModalOpen] = useState(false)
+  const [detailId, setDetailId] = useState(0)
+  const handleEditDescriptionClick = async () => {
+    setEditDescriptionModalOpen(true)
+  }
+  // 编辑描述弹窗内容
+  const [editDetailContent, setEditDetailContent] = useState('')
+  // 编辑描述弹窗提交事件
+  const {loading: editDescriptionLoading, run: editDescriptionRun} = useLoading()
+  const handleEditDescriptionSubmit = async () => {
+    try {
+      await editDescriptionRun(() => {
+        return editWarehouseDescription({m_id: detailId, warehouse_description: editDetailContent})
+      })
+      message.success('编辑成功')
+      setRefresh(!refresh)
+    } finally {
+      setEditDetailContent('')
+      setEditDescriptionModalOpen(false)
+      setIsModalOpen(false)
+    }
+  }
+  
   // 编辑点击事件
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [editId, setEditId] = useState(0)
@@ -222,10 +245,25 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
       <Modal
         title="仓库描述"
         open={isModalOpen}
-        onCancel={handleCancel}
+        onCancel={() => setIsModalOpen(false)}
         footer={null}
+        className="StoTable-detail-modal"
       >
-        <p>{detailContent || '暂无仓库描述'}</p>
+        <p>{detailContent || '暂无仓库描述'}
+          <Button size="small" type="dashed" className="edit-btn"
+            onClick={handleEditDescriptionClick}>编辑描述</Button>
+        </p>
+      </Modal>
+      <Modal
+        title="编辑仓库描述"
+        open={editDescriptionModalOpen}
+        onCancel={() => setEditDescriptionModalOpen(false)}
+        footer={null}
+        className="StoTable-edit-modal"
+      >
+        <Input.TextArea value={editDetailContent} onChange={(e) => setEditDetailContent(e.target.value)}
+          rows={3} placeholder="请输入仓库描述" maxLength={200} disabled={editDescriptionLoading} />
+        <Button type="primary" onClick={() => handleEditDescriptionSubmit()}>提交</Button>
       </Modal>
       <Modal 
         className="StoTable-edit-modal"

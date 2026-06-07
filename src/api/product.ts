@@ -85,3 +85,8 @@ type AdjustProductResponse = ApiResponse<AdjustProductData>
 export const adjustProduct = (data: {m_id: number, action_type: number, product_num: number}) => {
   return request.patch('/product/update', data) as Promise<AdjustProductResponse>
 }
+
+// 编辑产品描述
+export const editProductDescription = (data: {m_id: number, product_description: string}) => {
+  return request.patch('/product/editDescription', data) as Promise<ApiResponse<null>>
+}

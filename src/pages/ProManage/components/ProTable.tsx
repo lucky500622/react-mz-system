@@ -2,12 +2,12 @@ import dayjs from 'dayjs'
 
 import { useState, useEffect, useImperativeHandle, memo } from 'react'
 
-import { Table, Button, Modal, Tag, message, InputNumber, Select, Form } from 'antd'
+import { Table, Button, Modal, Tag, message, InputNumber, Select, Form, Input } from 'antd'
 import type { FormProps } from 'antd/es/form'
 
 import '@/pages/ProManage/components/styles/protable.scss'
 import { useLoading } from '@/hooks/useLoading'
-import { getProductInfo, deleteProduct, adjustProduct } from '@/api/product'
+import { getProductInfo, deleteProduct, adjustProduct, editProductDescription } from '@/api/product'
 import type { ProductInfoData } from '@/api/product'
 
 // 产品表格引用类型
@@ -74,7 +74,8 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
       render: (_, record) => {
         return (
           <div>
-            <Button type="link" size="small" onClick={() => handleDetail(record.product_description)}>详情</Button>
+            <Button type="link" size="small"
+              onClick={() => handleDetail(record.product_description, record.m_id)}>详情</Button>
           </div>
         )
       } 
@@ -104,14 +105,36 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
   // 详情弹窗内容
   const [detailContent, setDetailContent] = useState('')
   // 详情点击事件
-  const handleDetail = (item: string) => {
+  const handleDetail = (item: string, m_id: number) => {
     setDetailContent(item)
+    setDetailId(m_id)
     setIsModalOpen(true)
   }
   // 详情弹窗配置
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const handleCancel = () => {
-    setIsModalOpen(false)
+
+  // 编辑描述弹窗配置
+  const [editDescriptionModalOpen, setEditDescriptionModalOpen] = useState(false)
+  const [detailId, setDetailId] = useState(0)
+  const handleEditDescriptionClick = async () => {
+    setEditDescriptionModalOpen(true)
+  }
+  // 编辑描述弹窗内容
+  const [editDetailContent, setEditDetailContent] = useState('')
+  // 编辑描述弹窗提交事件
+  const {loading: editDescriptionLoading, run: editDescriptionRun} = useLoading()
+  const handleEditDescriptionSubmit = async () => {
+    try {
+      await editDescriptionRun(() => {
+        return editProductDescription({m_id: detailId, product_description: editDetailContent})
+      })
+      message.success('编辑成功')
+      setRefresh(!refresh)
+    } finally {
+      setEditDetailContent('')
+      setEditDescriptionModalOpen(false)
+      setIsModalOpen(false)
+    }
   }
 
   // 删除loading状态
@@ -226,10 +249,24 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
       <Modal
         title="产品描述"
         open={isModalOpen}
-        onCancel={handleCancel}
+        onCancel={() => setIsModalOpen(false)}
         footer={null}
+        className="Protable-detail-modal"
       >
-        <p>{detailContent || '暂无产品描述'}</p>
+        <p>{detailContent || '暂无产品描述'}
+          <Button size="small" type="dashed" className="edit-btn"
+            onClick={handleEditDescriptionClick}>编辑描述</Button></p>
+      </Modal>
+      <Modal
+        title="编辑产品描述"
+        open={editDescriptionModalOpen}
+        onCancel={() => setEditDescriptionModalOpen(false)}
+        footer={null}
+        className="Protable-edit-modal"
+      >
+        <Input.TextArea value={editDetailContent} onChange={(e) => setEditDetailContent(e.target.value)}
+          rows={3} placeholder="请输入产品描述" maxLength={200} disabled={editDescriptionLoading} />
+        <Button type="primary" onClick={() => handleEditDescriptionSubmit()}>提交</Button>
       </Modal>
       <Modal
         title="确认删除吗？"

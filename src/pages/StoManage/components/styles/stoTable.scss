@@ -19,3 +19,22 @@
     color: rgb(255, 75, 75);
   }
 }
+
+.StoTable-detail-modal {
+  .ant-modal-body {
+    .edit-btn {
+      margin-left: 10px;
+      font-size: 11px;
+    }
+  }
+}
+
+.StoTable-edit-modal {
+  .ant-modal-container {
+    width: 520px;
+  }
+  .ant-btn {
+    margin-left: 410px;
+    margin-top: 10px;
+  }
+}
