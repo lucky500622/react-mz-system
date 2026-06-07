@@ -8,6 +8,7 @@ export type WarehouseInfoData = {
   warehouse_name_ed: string | null;
   warehouse_name: string;
   warehouse_type: string;
+  exists_list_product: number;
   user_name: string;
   warehouse_create_time: string;
   warehouse_description: string;
@@ -82,4 +83,26 @@ export const deleteWarehouse = (data: {
   return request.delete('/warehouse/delete', {
     params: data
   }) as Promise<ApiResponse<null>>
+}
+
+// 获取仓库详情
+type WarehouseDetailDataList = {
+  exists_list_product: number;
+  m_id: number;
+  product_num: number;
+  warehouse_create_time: string;
+  warehouse_id: number;
+  warehouse_name: string;
+  warehouse_name_ed: string | null;
+}
+type WarehouseDetailData = {
+  warehouseInfo: WarehouseDetailDataList[]
+}
+type WarehouseDetailResponse = ApiResponse<WarehouseDetailData>
+export const getWarehouseDetail = (data: {
+  m_id: number
+}) => {
+  return request.get('/warehouse/info', {
+    params: data
+  }) as Promise<WarehouseDetailResponse>
 }

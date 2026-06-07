@@ -1,6 +1,12 @@
+import { useEffect } from 'react'
+
 import '@/pages/Home/index.scss'
 
 const Home = () => {
+  useEffect(() => {
+
+  }, [])
+
   return (
     <div>
       <div className="Home-top-bar">

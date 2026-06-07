@@ -48,6 +48,18 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
       }
     },
     {
+      title: '仓库状态',
+      dataIndex: 'exists_list_product',
+      key: 'exists_list_product',
+      render: (_, record) => {
+        return (
+          <Tag color={record.exists_list_product? 'black' : 'gray'}>
+            {record.exists_list_product? '存在上架产品' : '不存在上架产品'}
+          </Tag>
+        )
+      }
+    },
+    {
       title: '创建人',
       dataIndex: 'user_name',
       key: 'user_name'
@@ -80,7 +92,8 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
         return (
           <div>
             <Button type="link" size="small" onClick={() => handleEdit(record.m_id)}>编辑</Button>
-            <Button type="link" size="small" onClick={() => handleDelete(record.m_id)}>删除</Button>
+            <Button type="link" size="small" disabled={record.exists_list_product}
+              onClick={() => handleDelete(record.m_id)}>删除</Button>
           </div>
         )
       } 
@@ -160,11 +173,18 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
   const {loading: deleteLoading, run: deleteRun} = useLoading()
   const handleDeleteConfirm = async () => {
     // 提交删除请求
-    await deleteRun(() => deleteWarehouse({m_id: deleteId}))
-    message.success('删除成功')
-    setRefresh(!refresh)
-    setDeleteModalOpen(false)
-    setDeleteId(null)
+    try {
+      const res = await deleteRun(() => deleteWarehouse({m_id: deleteId}))
+      if (res.code == 4013) {
+        message.error(res.message)
+        return
+      }
+      message.success('删除成功')
+    } finally {
+      setRefresh(!refresh)
+      setDeleteModalOpen(false)
+      setDeleteId(null)
+    }
   }
 
   // 刷新表格状态

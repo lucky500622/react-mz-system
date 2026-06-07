@@ -50,6 +50,16 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
       key: 'product_num'
     },
     {
+      title: '上架数量',
+      dataIndex: 'product_list_num',
+      key: 'product_list_num'
+    },
+    {
+      title: '可用数量',
+      dataIndex: 'product_diff_num',
+      key: 'product_diff_num'
+    },
+    {
       title: '创建时间',
       dataIndex: 'product_create_time',
       key: 'product_create_time',
@@ -77,7 +87,8 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
         return (
           <div>
             <Button type="link" size="small" onClick={() => handleAdjust(record.m_id)}>调整</Button>
-            <Button type="link" size="small" onClick={() => handleDelete(record.m_id)}>删除</Button>
+            <Button type="link" size="small"  disabled={record.product_list_num !== 0}
+              onClick={() => handleDelete(record.m_id)}>删除</Button>
           </div>
         )
       } 
@@ -115,9 +126,13 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
   // 删除确认事件
   const handleDeleteConfirm = async () => {
     try {
-      await deleteRun(() => {
+      const res = await deleteRun(() => {
         return deleteProduct({m_id: deleteMId})
       })
+      if (res.code === 4023) {
+        message.error(res.message)
+        return
+      }
       message.success('删除成功')
       setRefresh(!refresh)
     } finally {

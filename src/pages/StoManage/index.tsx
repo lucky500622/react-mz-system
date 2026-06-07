@@ -14,25 +14,25 @@ import type { WarehouseInfoData } from '@/api/warehouse'
 
 const StoManage = () => {
   const [form] = Form.useForm()
-  // 新增仓库表单提交loading状态
+  // 查询仓库表单提交loading状态
   const { loading, run } = useLoading()
-  // 新增仓库表单字段类型
+  // 查询仓库表单字段类型
   type FieldType = {
     m_id?: number;
     warehouse_name?: string;
     warehouse_type?: string;
     user_name?: string;
   }
-  // 新增仓库表单字段列表
+  // 查询仓库表单字段列表
   const [formList, setFormList] = useState<WarehouseInfoData[]>()
-  // 新增仓库表单提交
+  // 查询仓库表单提交
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     const res = await run(() => {
       return getWarehouseInfo(0, 999, values)
     })
     setFormList(res.data.warehouseInfo)
   }
-  // 新增仓库表单提交失败
+  // 查询仓库表单提交失败
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
     console.log('Failed:', errorInfo)
   }

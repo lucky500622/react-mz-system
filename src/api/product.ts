@@ -9,6 +9,8 @@ export type ProductInfoData = {
   product_name: string;
   product_type: string;
   product_num: number;
+  product_list_num: number;
+  product_diff_num: number;
   warehouse_description: string;
 }
 type ProductData = {

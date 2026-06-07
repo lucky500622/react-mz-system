@@ -39,7 +39,10 @@ const ProductTable = memo(( { queryProductRecordDataSource }:
           1: '新增',
           2: '删除',
           3: '上调',
-          4: '下调'
+          4: '下调',
+          5: '上架',
+          6: '下架',
+          7: '售出'
         }
         return ( 
           <Tag color={val === 1 ? 'green' : val === 2 ? 'red' : 'blue'}>
