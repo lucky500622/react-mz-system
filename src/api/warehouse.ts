@@ -79,7 +79,7 @@ export const editWarehouse = (data: {
 // 编辑仓库描述
 export const editWarehouseDescription = (data: {
   m_id: number,
-  warehouse_description: string
+  description: string
 }) => {
   return request.patch('/warehouse/editDescription', data) as Promise<ApiResponse<null>>
 }

@@ -87,6 +87,6 @@ export const adjustProduct = (data: {m_id: number, action_type: number, product_
 }
 
 // 编辑产品描述
-export const editProductDescription = (data: {m_id: number, product_description: string}) => {
+export const editProductDescription = (data: {m_id: number, description: string}) => {
   return request.patch('/product/editDescription', data) as Promise<ApiResponse<null>>
 }

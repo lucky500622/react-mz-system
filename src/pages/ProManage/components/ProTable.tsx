@@ -1,11 +1,13 @@
 import dayjs from 'dayjs'
 
-import { useState, useEffect, useImperativeHandle, memo } from 'react'
+import { useState, useEffect, useImperativeHandle, memo, useRef } from 'react'
 
-import { Table, Button, Modal, Tag, message, InputNumber, Select, Form, Input } from 'antd'
+import { Table, Button, Modal, Tag, message, InputNumber, Select, Form } from 'antd'
 import type { FormProps } from 'antd/es/form'
 
 import '@/pages/ProManage/components/styles/protable.scss'
+import EditDescription from '@/components/EditDescription'
+import type { EditDescriptionRef } from '@/components/EditDescription'
 import { useLoading } from '@/hooks/useLoading'
 import { getProductInfo, deleteProduct, adjustProduct, editProductDescription } from '@/api/product'
 import type { ProductInfoData } from '@/api/product'
@@ -102,39 +104,16 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
   // 表格数据
   const [dataSource, setDataSource] = useState([])
 
-  // 详情弹窗内容
-  const [detailContent, setDetailContent] = useState('')
-  // 详情点击事件
-  const handleDetail = (item: string, m_id: number) => {
-    setDetailContent(item)
-    setDetailId(m_id)
-    setIsModalOpen(true)
+  // 编辑描述弹窗引用
+  const editRef = useRef<EditDescriptionRef>(null)
+  // 编辑描述弹窗成功事件
+  const handleEditSuccess = () => {
+    message.success('编辑成功')
+    setRefresh(!refresh)
   }
-  // 详情弹窗配置
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
-  // 编辑描述弹窗配置
-  const [editDescriptionModalOpen, setEditDescriptionModalOpen] = useState(false)
-  const [detailId, setDetailId] = useState(0)
-  const handleEditDescriptionClick = async () => {
-    setEditDescriptionModalOpen(true)
-  }
-  // 编辑描述弹窗内容
-  const [editDetailContent, setEditDetailContent] = useState('')
-  // 编辑描述弹窗提交事件
-  const {loading: editDescriptionLoading, run: editDescriptionRun} = useLoading()
-  const handleEditDescriptionSubmit = async () => {
-    try {
-      await editDescriptionRun(() => {
-        return editProductDescription({m_id: detailId, product_description: editDetailContent})
-      })
-      message.success('编辑成功')
-      setRefresh(!refresh)
-    } finally {
-      setEditDetailContent('')
-      setEditDescriptionModalOpen(false)
-      setIsModalOpen(false)
-    }
+  // 产品详情点击事件
+  const handleDetail = (detailContent: string, m_id: number) => {
+    editRef.current?.open(detailContent, m_id)
   }
 
   // 删除loading状态
@@ -207,7 +186,6 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
     console.log('Failed:', errorInfo)
   }
 
-
   // 调整数量后删除产品删除弹窗
   const [adjustAndDeleteModalOpen, setAdjustAndDeleteModalOpen] = useState(false)
   
@@ -246,28 +224,7 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
             setCurrentPage(page)
           }
         }} />
-      <Modal
-        title="产品描述"
-        open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
-        footer={null}
-        className="Protable-detail-modal"
-      >
-        <p>{detailContent || '暂无产品描述'}
-          <Button size="small" type="dashed" className="edit-btn"
-            onClick={handleEditDescriptionClick}>编辑描述</Button></p>
-      </Modal>
-      <Modal
-        title="编辑产品描述"
-        open={editDescriptionModalOpen}
-        onCancel={() => setEditDescriptionModalOpen(false)}
-        footer={null}
-        className="Protable-edit-modal"
-      >
-        <Input.TextArea value={editDetailContent} onChange={(e) => setEditDetailContent(e.target.value)}
-          rows={3} placeholder="请输入产品描述" maxLength={200} disabled={editDescriptionLoading} />
-        <Button type="primary" onClick={() => handleEditDescriptionSubmit()}>提交</Button>
-      </Modal>
+      <EditDescription ref={editRef} editFn={editProductDescription} successCallback={handleEditSuccess} title="产品" />
       <Modal
         title="确认删除吗？"
         okText="确认"
