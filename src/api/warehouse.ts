@@ -11,7 +11,6 @@ export type WarehouseInfoData = {
   exists_list_product: number;
   exists_user_handle: number;
   user_name: string;
-  warehouse_user_id: string;
   warehouse_create_time: string;
   warehouse_description: string;
 }
@@ -88,9 +87,9 @@ export const editWarehouseDescription = (data: {
 
 // 删除仓库
 export const deleteWarehouse = (data: {
-  m_id: number
+  m_id: number;
 }) => {
-  return request.delete('/warehouse/delete', {
+  return request.patch('/warehouse/delete', null, {
     params: data
   }) as Promise<ApiResponse<null>>
 }
@@ -141,4 +140,11 @@ type HandleWarehouseInfoData = {
 }
 export const getHandleWarehouseInfo = () => {
   return request.get('/warehouse/handle') as Promise<ApiResponse<HandleWarehouseInfoData>>
+}
+
+// 新增经手仓库
+export const addHandleWarehouse = (data: {
+  m_id: number;
+}) => {
+  return request.patch('/warehouse/addHandle', data) as Promise<ApiResponse<null>>
 }

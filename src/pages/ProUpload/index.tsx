@@ -1,20 +1,44 @@
 import { useState, useEffect } from 'react'
 
-import { Card, Modal, List, Typography, Tag } from 'antd'
+import { Card, Modal, List, Typography, Tag, InputNumber, message } from 'antd'
 import { PlusCircleOutlined } from '@ant-design/icons'
 
 import '@/pages/ProUpload/index.scss'
-import { getWarehouseInfo, getHandleWarehouseInfo } from '@/api/warehouse'
+import { getWarehouseInfo, getHandleWarehouseInfo, addHandleWarehouse } from '@/api/warehouse'
 import type { WarehouseInfoData, HandleWarehouseInfo } from '@/api/warehouse'
 
 const ProUpload = () => {
-  const [visible, setVisible] = useState(false)
+  // 刷新页面状态
+  const [refresh, setRefresh] = useState(false)
+
+  // 仓库列表
   const [warehouseList, setWarehouseList] = useState<WarehouseInfoData[]>([])
+  // 经手仓库列表
   const [myWarehouseList, setMyWarehouseList] = useState<HandleWarehouseInfo[]>([])
 
+  // 仓库序列号
+  const [warehouseId, setWarehouseId] = useState<number>()
+  // 添加经手仓库弹窗
+  const [visible, setVisible] = useState(false)
   // 添加经手仓库
-  const handleAdd = () => {
-
+  const handleAdd = async () => {
+    setVisible(true)
+  }
+  // 确认添加经手仓库
+  const handleAddConfirm = async () => {
+    try {
+      const res = await addHandleWarehouse({
+        m_id: warehouseId
+      })
+      if (res.code === 4015 || res.code === 4014) {
+        message.error(res.message)
+        return
+      }
+      message.success('添加成功')
+      setRefresh(!refresh)
+    } finally {
+      setVisible(false)
+    }
   }
 
   // 点击进入仓库事件
@@ -27,11 +51,11 @@ const ProUpload = () => {
     const getInfo = async () => {
       const res = await getWarehouseInfo()
       const handleRes = await getHandleWarehouseInfo()
-      setWarehouseList(res.data.warehouseInfo.filter(item => !item.warehouse_user_id) || [])
+      setWarehouseList(res.data.warehouseInfo.filter(item => !item.exists_user_handle) || [])
       setMyWarehouseList(handleRes.data.handleWarehouseInfo || [])
     }
     getInfo()
-  }, [])
+  }, [refresh])
   
   return (
     <div className='ProUpload'>
@@ -43,14 +67,14 @@ const ProUpload = () => {
         <List
           className="warehouse-ant-list"
           pagination={{ position: 'bottom', pageSize: 4 }}
-          header={<div>仓库列表</div>}
+          header={<div>未经手仓库列表</div>}
           bordered
           dataSource={warehouseList}
           renderItem={(item) => (
             <List.Item>
-              <Typography.Text mark>[序列号:{item.m_id}]</Typography.Text>
-              <Typography.Text mark>[仓库名:{item.warehouse_name}]</Typography.Text>
-              <Typography.Text mark>[仓库类型:{item.warehouse_type}]</Typography.Text>
+              <Typography.Text mark>[序列号：{item.m_id}]</Typography.Text>
+              <Typography.Text mark>[仓库名：{item.warehouse_name}]</Typography.Text>
+              <Typography.Text mark>[仓库类型：{item.warehouse_type}]</Typography.Text>
             </List.Item>
           )}
         />
@@ -62,9 +86,9 @@ const ProUpload = () => {
           dataSource={myWarehouseList}
           renderItem={(item) => (
             <List.Item>
-              <Typography.Text mark>[序列号:{item.m_id}]</Typography.Text>
-              <Typography.Text mark>[仓库名:{item.warehouse_name}]</Typography.Text>
-              <Typography.Text mark>[仓库类型:{item.warehouse_type}]</Typography.Text>
+              <Typography.Text mark>[序列号：{item.m_id}]</Typography.Text>
+              <Typography.Text mark>[仓库名：{item.warehouse_name}]</Typography.Text>
+              <Typography.Text mark>[仓库类型：{item.warehouse_type}]</Typography.Text>
             </List.Item>
           )}
         />
@@ -88,11 +112,18 @@ const ProUpload = () => {
       </div>
 
       <Modal
-        title="添加仓库"
+        className="ProUpload-modal"
+        title="添加经手仓库"
         open={visible}
         onCancel={() => setVisible(false)}
-        onOk={() => setVisible(false)}
+        onOk={handleAddConfirm}
+        okText="确认"
+        cancelText="取消"
       >
+        <div className="modal-item">
+          <span>仓库序列号：</span>
+          <InputNumber placeholder="请输入仓库的序列号" value={warehouseId} onChange={(value) => setWarehouseId(value)} />
+        </div>
       </Modal>
     </div>
   )

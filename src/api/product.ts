@@ -74,7 +74,9 @@ export const addProduct = (data: {
 export const deleteProduct = (data: {
   m_id: number;
 }) => {
-  return request.delete('/product/delete', { params: data }) as Promise<ApiResponse<null>>
+  return request.patch('/product/delete', null, {
+    params: data
+  }) as Promise<ApiResponse<null>>
 }
 
 // 调整产品数量

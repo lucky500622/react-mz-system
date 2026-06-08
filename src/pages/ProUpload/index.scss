@@ -7,7 +7,7 @@
   }
 
   .list {
-  display: flex; 
+    display: flex; 
     .warehouse-ant-list {
       flex: 0.5;
       .ant-spin-container {
@@ -56,6 +56,18 @@
         font-size: 34px;
         color: #747474;
       }
+    }
+  }
+}
+
+.ProUpload-modal {
+  display: flex;
+  .ant-modal-container {
+    transform: translateX(100px);
+    width: 400px;
+    .ant-input-number {
+      margin: 16px 0 10px 0;
+      width: 150px;
     }
   }
 }
