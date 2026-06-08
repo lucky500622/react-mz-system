@@ -100,7 +100,7 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
         return (
           <div>
             <Button type="link" size="small" onClick={() => handleEdit(record.m_id)}>编辑</Button>
-            <Button type="link" size="small" disabled={record.exists_list_product}
+            <Button type="link" size="small" disabled={record.exists_list_product || record.exists_user_handle}
               onClick={() => handleDelete(record.m_id)}>删除</Button>
           </div>
         )
