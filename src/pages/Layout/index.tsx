@@ -19,7 +19,7 @@ const LayoutIndex = () => {
     },
     {
       key: '2',
-      label: '人员管理'
+      label: '成员信息'
     },  
     {
       key: '3',
@@ -32,6 +32,14 @@ const LayoutIndex = () => {
     {
       key: '5',
       label: '操作信息'
+    },
+    {
+      key: '6',
+      label: '产品上架'
+    },
+    {
+      key: '7',
+      label: '个人中心'
     }
   ]
   // 菜单点击事件
@@ -51,13 +59,21 @@ const LayoutIndex = () => {
     if (item.key === '5') {
       navigate('/act-info')
     }
+    if (item.key === '6') {
+      navigate('/pro-upload')
+    }
+    if (item.key === '7') {
+      navigate('/user-center')
+    }
   }
   const pathToKeyMap: Record<string, string> = {
     '/': '1',
     '/per-manage': '2',
     '/sto-manage': '3',
     '/pro-manage': '4',
-    '/act-info': '5'
+    '/act-info': '5',
+    '/pro-upload': '6',
+    '/user-center': '7'
   }
   const currentKey = pathToKeyMap[location.pathname] || '1'
 

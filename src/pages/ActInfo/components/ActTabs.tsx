@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 
 import { Tabs } from 'antd'
 
+import '@/pages/ActInfo/components/styles/actTabs.scss'
 import StoreTable from '@/pages/ActInfo/components/StoreTable'
 import ProductTable from '@/pages/ActInfo/components/ProductTable'
 import FunctionBar from '@/pages/ActInfo/components/FunctionBar'
@@ -99,7 +100,7 @@ const ActTable = () => {
   ]
   return (
     <div>
-      <Tabs items={tabItems}/>
+      <Tabs items={tabItems} className="ActTabs" />
     </div>
   )
 }

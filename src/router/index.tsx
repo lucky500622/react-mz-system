@@ -7,7 +7,8 @@ import StoManage from '@/pages/StoManage'
 import ProManage from '@/pages/ProManage'
 import PerManage from '@/pages/PerManage'
 import ActInfo from '@/pages/ActInfo'
-
+import ProUpload from '@/pages/ProUpload'
+import UserCenter from '@/pages/UserCenter'
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,14 @@ const router = createBrowserRouter([
         {
           path: '/act-info',
           element: <ActInfo />
+        },
+        {
+          path: '/pro-upload',
+          element: <ProUpload />
+        },
+        {
+          path: '/user-center',
+          element: <UserCenter />
         }
       ]
     }]
