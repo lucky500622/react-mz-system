@@ -55,9 +55,14 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
       key: 'exists_list_product',
       render: (_, record) => {
         return (
-          <Tag color={record.exists_list_product? 'black' : 'gray'}>
-            {record.exists_list_product? '存在上架产品' : '不存在上架产品'}
-          </Tag>
+          <div>
+            <Tag style={{marginBottom: 5}} color={record.exists_list_product? 'black' : 'gray'}>
+              {record.exists_list_product? '存在上架产品' : '不存在上架产品'}
+            </Tag>
+            <Tag color={record.exists_user_handle? 'black' : 'gray'}>
+              {record.exists_user_handle? '存在经手成员' : '不存在经手成员'}
+            </Tag>
+          </div>
         )
       }
     },
@@ -178,6 +183,10 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
     try {
       const res = await deleteRun(() => deleteWarehouse({m_id: deleteId}))
       if (res.code == 4013) {
+        message.error(res.message)
+        return
+      }
+      if (res.code == 4014) {
         message.error(res.message)
         return
       }
