@@ -37,7 +37,9 @@ const StoreTable = memo(({queryWarehouseRecordDataSource} :
         const map = {
           1: '创建',
           2: '删除',
-          3: '重命名'
+          3: '重命名',
+          4: '成员经手',
+          5: '成员退出'
         }
         return <Tag color={val === 1 ? 'green' : val === 2 ? 'red' : 'blue'}>{map[val] || val}</Tag>
       }
