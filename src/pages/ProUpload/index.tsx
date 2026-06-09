@@ -1,12 +1,13 @@
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
-import { Table, Input, Button, Form, InputNumber, Select } from 'antd'
+import { Table, Input, Button, Form, InputNumber, Select, Tag } from 'antd'
 import type { FormProps } from 'antd'
 
 import '@/pages/ProUpload/index.scss'
 import { getWarehouseProduct } from '@/api/product'
 import type { WarehouseProductData } from '@/api/product'
+import MessageBoard from '@/pages/ProUpload/components/MessageBoard'
 
 const ProUpload = () => {
   // 从路由参数中获取仓库序列号
@@ -15,24 +16,64 @@ const ProUpload = () => {
   // 表格配置
   const columns = [
     {
+      title: '序列号',
+      dataIndex: 'm_id',
+      key: 'm_id'
+    },
+    {
       title: '产品名称',
-      dataIndex: 'p_name',
-      key: 'p_name'
+      dataIndex: 'product_name',
+      key: 'product_name'
     },
     {
       title: '产品类型',
-      dataIndex: 'p_type',
-      key: 'p_type'
+      dataIndex: 'product_type',
+      key: 'product_type',
+      render: (_, record) => {
+        return (
+          <Tag color="blue">{record.product_type}</Tag>
+        )
+      }
     },
     {
-      title: '产品库存',
-      dataIndex: 'p_stock',
-      key: 'p_stock'
+      title: '产品数量',
+      dataIndex: 'product_num',
+      key: 'product_num'
+    },
+    {
+      title: '上架数量',
+      dataIndex: 'product_list_num',
+      key: 'product_list_num'
+    },
+    {
+      title: '可用数量',
+      dataIndex: 'product_diff_num',
+      key: 'product_diff_num'
+    },
+    {
+      title: '产品描述',
+      key: 'product_description',
+      width: 100,
+      render: (_, record) => {
+        return (
+          <div>
+            <Button type="link" size="small">详情</Button>
+          </div>
+        )
+      } 
     },
     {
       title: '操作',
-      dataIndex: 'operation',
-      key: 'operation'
+      key: 'action',
+      width: 160,
+      render: (_, record) => {
+        return (
+          <div>
+            <Button type="link" size="small">调整</Button>
+            <Button type="link" size="small">售出</Button>
+          </div>
+        )
+      } 
     }
   ]
   // 分页
@@ -89,55 +130,61 @@ const ProUpload = () => {
       </div>
 
       <div className="main">
-        <div className="query-bar">
-          <Form 
-            layout="inline"
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off">
-            <Form.Item name="p_stock" label="产品序列号" rules={[{ pattern: /^\d+$/, min: 1, message: '请输入有效的产品序列号' }]}>
-              <InputNumber min={1} placeholder="请输入产品序列号" />
-            </Form.Item>
-
-            <Form.Item name="p_name" label="产品名称"
-              rules={[{pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '产品名称只能包含汉字、字母和数字'}]}>
-              <Input placeholder="请输入产品名称" />
-            </Form.Item>
-            
-            <Form.Item label="产品类型" name="product_type" 
-              rules={[{ pattern: /^[\u4e00-\u9fa5]+$/, message: '产品类型只能包含汉字'}]}>
-              <Select placeholder="请选择产品类型" className="type-select"
-                options={[
-                  { value: '食品生鲜', label: '食品生鲜' },
-                  { value: '日用百货', label: '日用百货' },
-                  { value: '家电数码', label: '家电数码' },
-                  { value: '服饰鞋帽', label: '服饰鞋帽' },
-                  { value: '母婴用品', label: '母婴用品' },
-                  { value: '美妆护肤', label: '美妆护肤' },
-                  { value: '家居家纺', label: '家居家纺' },
-                  { value: '文体玩具', label: '文体玩具' },
-                  { value: '医疗器械', label: '医疗器械' },
-                  { value: '其他产品', label: '其他产品' }
-                ]}
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button type="default" htmlType="submit">查询</Button>
-              <Button type="default" htmlType="reset">重置</Button>
-            </Form.Item>
-          </Form>
+        <div className="left">
+          <MessageBoard id={Number(id)} />
         </div>
+
+        <div className="right">
+          <div className="query-bar">
+            <Form 
+              layout="inline"
+              initialValues={{ remember: true }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off">
+              <Form.Item name="p_stock" label="产品序列号" rules={[{ pattern: /^\d+$/, min: 1, message: '请输入有效的产品序列号' }]}>
+                <InputNumber min={1} placeholder="请输入产品序列号" />
+              </Form.Item>
+
+              <Form.Item name="p_name" label="产品名称"
+                rules={[{pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '产品名称只能包含汉字、字母和数字'}]}>
+                <Input placeholder="请输入产品名称" />
+              </Form.Item>
+            
+              <Form.Item label="产品类型" name="product_type" 
+                rules={[{ pattern: /^[\u4e00-\u9fa5]+$/, message: '产品类型只能包含汉字'}]}>
+                <Select placeholder="请选择产品类型" className="type-select"
+                  options={[
+                    { value: '食品生鲜', label: '食品生鲜' },
+                    { value: '日用百货', label: '日用百货' },
+                    { value: '家电数码', label: '家电数码' },
+                    { value: '服饰鞋帽', label: '服饰鞋帽' },
+                    { value: '母婴用品', label: '母婴用品' },
+                    { value: '美妆护肤', label: '美妆护肤' },
+                    { value: '家居家纺', label: '家居家纺' },
+                    { value: '文体玩具', label: '文体玩具' },
+                    { value: '医疗器械', label: '医疗器械' },
+                    { value: '其他产品', label: '其他产品' }
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item>
+                <Button type="default" htmlType="submit">查询</Button>
+                <Button type="default" htmlType="reset">重置</Button>
+              </Form.Item>
+            </Form>
+          </div>
       
-        <Table dataSource={product.warehouseProduct} columns={columns} rowKey={(record) => record.m_id}
-          pagination={{
-            current: currentPage,
-            pageSize: pageSize,
-            total: product.warehouseProduct.length,
-            onChange: (page) => {
-              setCurrentPage(page)
-            }
-          }} />
+          <Table dataSource={product.warehouseProduct} columns={columns} rowKey={(record) => record.m_id}
+            pagination={{
+              current: currentPage,
+              pageSize: pageSize,
+              total: product.warehouseProduct.length,
+              onChange: (page) => {
+                setCurrentPage(page)
+              }
+            }} />
+        </div>
       </div>
     </div>
   )

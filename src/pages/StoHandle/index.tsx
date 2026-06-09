@@ -44,6 +44,7 @@ const StoHandle = () => {
       setRefresh(!refresh)
     } finally {
       setVisible(false)
+      setWarehouseId(undefined)
     }
   }
 

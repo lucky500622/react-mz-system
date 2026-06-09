@@ -121,10 +121,10 @@ export type WarehouseProductData = {
   warehouse_type: string;
   warehouseProduct: WarehouseProduct[]
 }
-export const getWarehouseProduct = (m_id: number) => {
+export const getWarehouseProduct = (warehouse_m_id: number) => {
   return request.get('/product/infoOfWarehouse', {
     params: {
-      m_id
+      warehouse_m_id
     }
   }) as Promise<ApiResponse<WarehouseProductData>>
 }
