@@ -104,3 +104,27 @@ export const getProductName = (text: string) => {
     }
   }) as Promise<ApiResponse<ProductNameData>>
 }
+
+type WarehouseProduct = {
+  listed_product_num: number;
+  m_id: number;
+  product_count: number;
+  product_description: string;    
+  product_diff_num: number;
+  product_list_num: number;
+  product_name: string;
+  product_num: number; 
+  product_type: string;
+}
+export type WarehouseProductData = {
+  warehouse_name: string;
+  warehouse_type: string;
+  warehouseProduct: WarehouseProduct[]
+}
+export const getWarehouseProduct = (m_id: number) => {
+  return request.get('/product/infoOfWarehouse', {
+    params: {
+      m_id
+    }
+  }) as Promise<ApiResponse<WarehouseProductData>>
+}

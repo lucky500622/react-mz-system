@@ -54,7 +54,7 @@ const router = createBrowserRouter([
     element: <Login />
   },
   {
-    path: '/pro-upload/:m_id',
+    path: '/pro-upload/:id',
     element: <ProUpload />
   }
 ])

@@ -1,0 +1,59 @@
+.ProUpload {
+  height: 100%;
+  .ProUpload-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0 10px 4vw;
+    background-color: #fff;
+    color: rgb(44, 44, 44);
+    border-bottom: 1px solid #e5e5e5;
+    .warehouse-info {
+      display: flex;
+      margin-right: 5vw;
+      border-radius: 5px;
+      div:nth-child(2) {
+        margin-left: 20px;
+      }
+      div {
+        padding: 4px 20px;
+        border-radius: 5px;
+        border: 1px solid #e5e5e5;
+        background-color: #f4f4f4;
+        color: #444444;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+      }
+      div:hover {
+        background-color: #e5e5e5;
+        transform: translateY(-3px);
+      }
+    }
+  }
+
+  .main {
+    height: calc(100vh - 67px);
+    background-color: #fff;
+    overflow: hidden;
+    padding: 10px;
+    .query-bar {
+      padding: 10px;
+      padding-bottom: 0;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      background-color: #fafafa;
+      .ant-form-item {
+        margin-bottom: 10px;
+        .ant-input,
+        .ant-input-number {
+          width: 130px;
+        }
+        .ant-btn {
+          margin-right: 20px;
+        }
+      }
+    }
+  }
+}
