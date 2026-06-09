@@ -7,6 +7,7 @@ import { PlusCircleOutlined } from '@ant-design/icons'
 import '@/pages/StoHandle/index.scss'
 import { getWarehouseInfo, getHandleWarehouseInfo, addHandleWarehouse } from '@/api/warehouse'
 import type { WarehouseInfoData, HandleWarehouseInfo } from '@/api/warehouse'
+import { useLoading } from '@/hooks/useLoading'
 
 const StoHandle = () => {
   // 路由实例
@@ -27,12 +28,14 @@ const StoHandle = () => {
   const handleAdd = async () => {
     setVisible(true)
   }
+  // 加载状态
+  const {loading, run} = useLoading()
   // 确认添加经手仓库
   const handleAddConfirm = async () => {
     try {
-      const res = await addHandleWarehouse({
+      const res = await run(() => addHandleWarehouse({
         m_id: warehouseId
-      })
+      }))
       if (res.code === 4015 || res.code === 4014) {
         message.error(res.message)
         return
@@ -122,6 +125,9 @@ const StoHandle = () => {
         onOk={handleAddConfirm}
         okText="确认"
         cancelText="取消"
+        okButtonProps={{ 
+          disabled: loading
+        }}
       >
         <div className="modal-item">
           <span>仓库序列号：</span>
