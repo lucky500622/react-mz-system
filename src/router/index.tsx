@@ -7,6 +7,7 @@ import StoManage from '@/pages/StoManage'
 import ProManage from '@/pages/ProManage'
 import PerManage from '@/pages/PerManage'
 import ActInfo from '@/pages/ActInfo'
+import StoHandle from '@/pages/StoHandle' 
 import ProUpload from '@/pages/ProUpload'
 import UserCenter from '@/pages/UserCenter'
 
@@ -38,8 +39,8 @@ const router = createBrowserRouter([
           element: <ActInfo />
         },
         {
-          path: '/pro-upload',
-          element: <ProUpload />
+          path: '/sto-handle',
+          element: <StoHandle />
         },
         {
           path: '/user-center',
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />
+  },
+  {
+    path: '/pro-upload/:m_id',
+    element: <ProUpload />
   }
 ])
 

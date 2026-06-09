@@ -60,7 +60,7 @@ const LayoutIndex = () => {
       navigate('/act-info')
     }
     if (item.key === '6') {
-      navigate('/pro-upload')
+      navigate('/sto-handle')
     }
     if (item.key === '7') {
       navigate('/user-center')
@@ -72,7 +72,7 @@ const LayoutIndex = () => {
     '/sto-manage': '3',
     '/pro-manage': '4',
     '/act-info': '5',
-    '/pro-upload': '6',
+    '/sto-handle': '6',
     '/user-center': '7'
   }
   const currentKey = pathToKeyMap[location.pathname] || '1'
