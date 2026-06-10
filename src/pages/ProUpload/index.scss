@@ -12,10 +12,11 @@
       display: flex;
       margin-right: 50px;
       border-radius: 5px;
-      div:nth-child(2) {
-        margin-left: 20px;
+      div:nth-child(1) {
+        margin-left: 0;
       }
       div {
+        margin-left: 20px;
         padding: 4px 20px;
         border-radius: 5px;
         border: 1px solid #e5e5e5;
@@ -75,10 +76,10 @@
     .ant-form {
       margin-top: 20px;
       .type-select {
-        width: 190px;
+        width: 180px;
       }
       .ant-input-number {
-        width: 190px;
+        width: 180px;
       }
       .ant-btn {
         margin-right: 10px;
@@ -94,5 +95,11 @@
     .ant-input-number {
       width: 130px;
     }
+  }
+}
+
+.ProUpload-exit-modal {
+  p {
+    color: red;
   }
 }

@@ -1,11 +1,12 @@
 import { useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect, useState ,useRef} from 'react'
 
 import { Table, Input, Button, Form, InputNumber, Select, Tag, Modal, message } from 'antd'
 import type { FormProps } from 'antd'
 
 import '@/pages/ProUpload/index.scss'
 import { getWarehouseProduct, upDownProduct, saleProduct } from '@/api/product'
+import { exitHandleWarehouse } from '@/api/warehouse'
 import type { WarehouseProductData } from '@/api/product'
 import MessageBoard from '@/pages/ProUpload/components/MessageBoard'
 import { useLoading } from '@/hooks/useLoading'
@@ -230,6 +231,31 @@ const ProUpload = () => {
     }
   }
 
+  // 退出仓库弹窗加载状态
+  const {loading: exitLoading, run: exitRun} = useLoading()
+  // 退出仓库弹窗
+  const [exitModalOpen, setExitModalOpen] = useState(false)
+  // 退出仓库按钮点击事件
+  const handleExit = async () => {
+    setExitModalOpen(true)
+  }
+  // 退出仓库弹窗定时器
+  const timer = useRef<number>(null)
+  // 退出仓库弹窗提交事件
+  const handleExitSubmit = async () => {
+    await exitRun(() => exitHandleWarehouse(Number(id)))
+    setExitModalOpen(false)
+    message.success('退出仓库成功')
+    // 发送消息到其他窗口
+    const channel = new BroadcastChannel('channel-pro-upload')
+    channel.postMessage('exit-success')
+    channel.close()
+    // 退出仓库成功后，定时器过期
+    timer.current = setTimeout(() => {
+      window.location.href = '/sto-handle'
+    }, 1000)
+  }
+
   useEffect(() => {
     const getInfo = async () => {
       const res = await getWarehouseProduct(Number(id))
@@ -246,12 +272,20 @@ const ProUpload = () => {
     getInfo()
   }, [id, refresh])
 
+  // 组件卸载时清除定时器
+  useEffect(() => {
+    return () => {
+      clearTimeout(timer.current)
+    }
+  }, [])
+
   return (
     <div className="ProUpload">
       <div className="ProUpload-title">
         <h1>产品上架</h1>
 
         <div className="warehouse-info">
+          <Button type="default" onClick={handleExit}>退出仓库</Button>
           <div>仓库序列号：{id}</div>
           <div>仓库名：{product.warehouse_name || '无'}</div>
         </div>
@@ -325,7 +359,8 @@ const ProUpload = () => {
               autoComplete="off"
               className="adjust-form"
               disabled={adjustLoading}>
-              <Form.Item label="操作类型" name="action_type" >
+              <Form.Item label="操作类型" name="action_type" 
+                rules={[{ required: true, message: '请选择操作类型' }]}>
                 <Select placeholder="请选择操作类型" className="type-select"
                   options={[
                     {value: 5, label: '上架'},
@@ -335,7 +370,7 @@ const ProUpload = () => {
               </Form.Item>
 
               <Form.Item name="product_num" label="操作数量" 
-                rules={[{ pattern: /^\d+$/, min: 1, message: '请输入有效的操作数量' }]}>
+                rules={[{ required: true, pattern: /^\d+$/, min: 1, message: '请输入有效的操作数量' }]}>
                 <InputNumber min={1} placeholder="请输入操作数量" />
               </Form.Item>
               <Form.Item label={null} >
@@ -369,6 +404,20 @@ const ProUpload = () => {
             <span>售出数量：</span>
             <InputNumber value={saleNum} onChange={(v) => setSaleNum(v)}
               required min={1} placeholder="请输入售出数量" />
+          </Modal>
+          <Modal
+            title="退出仓库"
+            open={exitModalOpen}
+            onCancel={() => setExitModalOpen(false)}
+            onOk={handleExitSubmit}
+            className="ProUpload-exit-modal"
+            okText="确认"
+            cancelText="取消"
+            okButtonProps={{
+              disabled: exitLoading
+            }}
+          >
+            <p>**注：确认退出仓库吗？这将下架所有仓库中的产品，以及仓库中与你相关的待办事项!**</p>
           </Modal>
         </div>
       </div>

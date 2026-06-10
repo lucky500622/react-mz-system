@@ -36,6 +36,9 @@ request.interceptors.response.use(function (response) {
     console.log('登录过期')
     message.error('登录过期，请重新登录')
   }
+  if (error.response.status === 403) {
+    window.location.href = '/sto-handle'
+  }
   if (error.response.status === 404) {
     // 接口资源不存在
     console.log('资源不存在')

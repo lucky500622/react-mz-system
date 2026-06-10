@@ -148,3 +148,12 @@ export const addHandleWarehouse = (data: {
 }) => {
   return request.patch('/warehouse/addHandle', data) as Promise<ApiResponse<null>>
 }
+
+// 退出经手仓库
+export const exitHandleWarehouse = (warehouse_m_id: number) => {
+  return request.patch('/warehouse/exitHandle', null, {
+    params: {
+      warehouse_m_id
+    }
+  }) as Promise<ApiResponse<null>>
+}

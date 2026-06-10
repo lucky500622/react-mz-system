@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 import { Card, Modal, List, Typography, Tag, InputNumber, message } from 'antd'
 import { PlusCircleOutlined } from '@ant-design/icons'
@@ -64,6 +63,17 @@ const StoHandle = () => {
       setMyWarehouseList(handleRes.data.handleWarehouseInfo || [])
     }
     getInfo()
+    // 实例化广播通道
+    const channel = new BroadcastChannel('channel-pro-upload')
+    // 监听广播通道消息
+    channel.onmessage = (event) => {
+      if (event.data === 'exit-success') {
+        setRefresh(!refresh)
+      }
+    }
+    return () => {
+      channel.close()
+    }
   }, [refresh])
   
   return (
