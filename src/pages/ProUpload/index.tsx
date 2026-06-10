@@ -60,7 +60,7 @@ const ProUpload = () => {
       render: (_, record) => {
         return (
           <div>
-            <Button type="link" size="small">详情</Button>
+            <Button type="link" size="small" onClick={() => handleDetailClick(record.m_id)}>详情</Button>
           </div>
         )
       } 
@@ -189,6 +189,15 @@ const ProUpload = () => {
     }
   }
 
+  // 产品描述弹窗
+  const [detailModalOpen, setDetailModalOpen] = useState(false)
+  // 产品描述弹窗内容
+  const [detailContent, setDetailContent] = useState('')
+  const handleDetailClick = (m_id: number) => {
+    setDetailModalOpen(true)
+    setDetailContent(product.warehouseProduct.find(item => item.m_id === m_id)?.product_description)
+  }
+
   useEffect(() => {
     const getInfo = async () => {
       const res = await getWarehouseProduct(Number(id))
@@ -303,6 +312,15 @@ const ProUpload = () => {
                 <Button type="primary" htmlType="submit" className="confirm-btn">确认</Button>
               </Form.Item>
             </Form>
+          </Modal>
+          <Modal
+            title="产品描述"
+            open={detailModalOpen}
+            onCancel={() => setDetailModalOpen(false)}
+            footer={null}
+            className="EditDescription-detail-modal"
+          >
+            <p>{detailContent || '暂无产品描述'}</p>
           </Modal>
         </div>
       </div>
