@@ -45,7 +45,8 @@ const ProductTable = memo(( { queryProductRecordDataSource }:
           7: '售出'
         }
         return ( 
-          <Tag color={val === 1 ? 'green' : val === 2 ? 'red' : 'blue'}>
+          <Tag color={val === 1 ? 'green' : val === 2 ? 'red' 
+            : val === 3 || val === 4 ? 'orange' : val === 5 || val === 6 ? 'blue' : 'yellow'}>
             {map[val] || val}
           </Tag>
         )

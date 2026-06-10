@@ -10,8 +10,6 @@ import type { WarehouseInfoData, HandleWarehouseInfo } from '@/api/warehouse'
 import { useLoading } from '@/hooks/useLoading'
 
 const StoHandle = () => {
-  // 路由实例
-  const navigate = useNavigate()
   // 刷新页面状态
   const [refresh, setRefresh] = useState(false)
 
@@ -50,7 +48,11 @@ const StoHandle = () => {
 
   // 点击进入仓库事件
   const handleClick = (item: HandleWarehouseInfo) => {
-    navigate(`/pro-upload/${item.m_id}`)
+    window.open(
+      `/pro-upload/${item.m_id}`,
+      '_blank',
+      'noopener,noreferrer'
+    )
   }
 
   useEffect(() => {
@@ -74,7 +76,7 @@ const StoHandle = () => {
         <List
           className="warehouse-ant-list"
           pagination={{ position: 'bottom', pageSize: 4 }}
-          header={<div>未经手仓库列表</div>}
+          header={<div>无成员经手仓库列表</div>}
           bordered
           dataSource={warehouseList}
           renderItem={(item) => (

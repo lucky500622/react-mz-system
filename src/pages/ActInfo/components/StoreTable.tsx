@@ -41,7 +41,10 @@ const StoreTable = memo(({queryWarehouseRecordDataSource} :
           4: '成员经手',
           5: '成员退出'
         }
-        return <Tag color={val === 1 ? 'green' : val === 2 ? 'red' : 'blue'}>{map[val] || val}</Tag>
+        return <Tag color={val === 1 ? 'green' : val === 2 ? 'red' 
+          : val === 4 || val === 5 ? 'orange' : 'blue'}>
+          {map[val] || val}
+        </Tag>
       }
     },
     {

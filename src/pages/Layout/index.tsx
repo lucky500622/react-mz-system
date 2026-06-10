@@ -31,11 +31,11 @@ const LayoutIndex = () => {
     },
     {
       key: '5',
-      label: '操作信息'
+      label: '产品上架'
     },
     {
       key: '6',
-      label: '产品上架'
+      label: '操作信息'
     },
     {
       key: '7',
@@ -57,10 +57,10 @@ const LayoutIndex = () => {
       navigate('/pro-manage') 
     }
     if (item.key === '5') {
-      navigate('/act-info')
+      navigate('/sto-handle')
     }
     if (item.key === '6') {
-      navigate('/sto-handle')
+      navigate('/act-info')
     }
     if (item.key === '7') {
       navigate('/user-center')
@@ -71,8 +71,8 @@ const LayoutIndex = () => {
     '/per-manage': '2',
     '/sto-manage': '3',
     '/pro-manage': '4',
-    '/act-info': '5',
-    '/sto-handle': '6',
+    '/sto-handle': '5',
+    '/act-info': '6',
     '/user-center': '7'
   }
   const currentKey = pathToKeyMap[location.pathname] || '1'

@@ -32,11 +32,11 @@ const ActTable = () => {
   const warehouseLabelConfig = {
     config_type: 'warehouse'
   }
-  const warehouseOptions = ['新增', '删除', '重命名']
+  const warehouseOptions = ['新增', '删除', '重命名', '成员经手', '成员退出']
   const productLabelConfig = {
     config_type: 'product'
   }
-  const productOptions = ['新增', '删除', '上调', '下调']
+  const productOptions = ['新增', '删除', '上调', '下调', '上架', '下架']
 
   // 加载状态
   const {loading: productLoading, run: runProductSearch} = useLoading()
