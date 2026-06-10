@@ -5,7 +5,7 @@ import { Table, Input, Button, Form, InputNumber, Select, Tag, Modal, message } 
 import type { FormProps } from 'antd'
 
 import '@/pages/ProUpload/index.scss'
-import { getWarehouseProduct, upDownProduct } from '@/api/product'
+import { getWarehouseProduct, upDownProduct, saleProduct } from '@/api/product'
 import type { WarehouseProductData } from '@/api/product'
 import MessageBoard from '@/pages/ProUpload/components/MessageBoard'
 import { useLoading } from '@/hooks/useLoading'
@@ -73,7 +73,7 @@ const ProUpload = () => {
         return (
           <div>
             <Button type="link" size="small" onClick={() => handleAdjust(record.m_id)}>调整</Button>
-            <Button type="link" size="small">售出</Button>
+            <Button type="link" size="small" onClick={() => handleSale(record.m_id)}>售出</Button>
           </div>
         )
       } 
@@ -198,6 +198,38 @@ const ProUpload = () => {
     setDetailContent(product.warehouseProduct.find(item => item.m_id === m_id)?.product_description)
   }
 
+  // 售出产品弹窗
+  const [saleModalOpen, setSaleModalOpen] = useState(false)
+  // 售出产品数量
+  const [saleNum, setSaleNum] = useState<number>(1)
+  // 售出产品弹窗加载状态
+  const {loading: saleLoading, run: saleRun} = useLoading()
+  // 售出产品序列号
+  const [saleMId, setSaleMId] = useState<number>()
+  const handleSale = (m_id: number) => {
+    setSaleMId(m_id)
+    setSaleModalOpen(true)
+  }
+  // 售出产品弹窗提交事件
+  const handleSaleSubmit = async () => {
+    try {
+      const res = await saleRun(() => saleProduct({
+        m_id: saleMId,
+        product_num: saleNum
+      }, Number(id)))
+      if (res.code === 4024) {
+        message.error(res.message)
+        return
+      }
+      message.success('售出成功')
+      setRefresh(!refresh)
+    } finally {
+      setSaleMId(undefined)
+      setSaleNum(1)
+      setSaleModalOpen(false)
+    }
+  }
+
   useEffect(() => {
     const getInfo = async () => {
       const res = await getWarehouseProduct(Number(id))
@@ -318,9 +350,25 @@ const ProUpload = () => {
             open={detailModalOpen}
             onCancel={() => setDetailModalOpen(false)}
             footer={null}
-            className="EditDescription-detail-modal"
+            className="ProUpload-detail-modal"
           >
             <p>{detailContent || '暂无产品描述'}</p>
+          </Modal>
+          <Modal
+            title="售出产品"
+            open={saleModalOpen}
+            onCancel={() => setSaleModalOpen(false)}
+            onOk={handleSaleSubmit}
+            className="ProUpload-sale-modal"
+            okText="确认"
+            cancelText="取消"
+            okButtonProps={{
+              disabled: saleLoading
+            }}
+          >
+            <span>售出数量：</span>
+            <InputNumber value={saleNum} onChange={(v) => setSaleNum(v)}
+              required min={1} placeholder="请输入售出数量" />
           </Modal>
         </div>
       </div>

@@ -138,3 +138,12 @@ export const upDownProduct = (data: {m_id: number, action_type: number, product_
     }
   }) as Promise<ApiResponse<null>>
 }
+
+// 售出产品
+export const saleProduct = (data: {m_id: number, product_num: number}, warehouse_m_id: number) => {
+  return request.patch('/product/sale', data, {
+    params: {
+      warehouse_m_id
+    }
+  }) as Promise<ApiResponse<null>>
+}

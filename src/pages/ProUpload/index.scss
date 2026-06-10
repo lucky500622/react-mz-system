@@ -86,3 +86,13 @@
     }
   }
 }
+
+.ProUpload-sale-modal {
+  .ant-modal-container {
+    transform: translateX(75px);
+    width: 370px;
+    .ant-input-number {
+      width: 130px;
+    }
+  }
+}
