@@ -1,17 +1,20 @@
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
-import { Table, Input, Button, Form, InputNumber, Select, Tag } from 'antd'
+import { Table, Input, Button, Form, InputNumber, Select, Tag, Modal, message } from 'antd'
 import type { FormProps } from 'antd'
 
 import '@/pages/ProUpload/index.scss'
-import { getWarehouseProduct } from '@/api/product'
+import { getWarehouseProduct, upDownProduct } from '@/api/product'
 import type { WarehouseProductData } from '@/api/product'
 import MessageBoard from '@/pages/ProUpload/components/MessageBoard'
+import { useLoading } from '@/hooks/useLoading'
 
 const ProUpload = () => {
   // 从路由参数中获取仓库序列号
   const { id } = useParams()
+  // 刷新状态
+  const [refresh, setRefresh] = useState(false)
 
   // 表格配置
   const columns = [
@@ -69,7 +72,7 @@ const ProUpload = () => {
       render: (_, record) => {
         return (
           <div>
-            <Button type="link" size="small">调整</Button>
+            <Button type="link" size="small" onClick={() => handleAdjust(record.m_id)}>调整</Button>
             <Button type="link" size="small">售出</Button>
           </div>
         )
@@ -93,13 +96,97 @@ const ProUpload = () => {
     product_name: string
     product_type: string
   }
-  // 表单提交
-  const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+  // 查询表单提交
+  const onQueryFinish: FormProps<FieldType>['onFinish'] = (values) => {
     console.log('Success:', values)
   }
-
-  const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+  const onQueryFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
     console.log('Failed:', errorInfo)
+  }
+
+  // 调整产品数量弹窗
+  const [adjustModalOpen, setAdjustModalOpen] = useState(false)
+  // 调整产品序列号
+  const [adjustMId, setAdjustMId] = useState<number>(0)
+  const handleAdjust = (m_id: number) => {
+    setAdjustMId(m_id)
+    setAdjustModalOpen(true)
+  }
+  // 调整表单类型
+  type AdjustFieldType = {
+    action_type: number
+    product_num: number
+  }
+  // 加载状态
+  const {loading: adjustLoading, run: adjustRun} = useLoading()
+  // 调整表单实例
+  const [adjustForm] = Form.useForm()
+  // 调整表单提交
+  const onAdjustFinish: FormProps<AdjustFieldType>['onFinish'] = async (values) => {
+    try {
+      const res = await adjustRun(() => upDownProduct({
+        m_id: adjustMId,
+        action_type: values.action_type,
+        product_num: values.product_num,
+        action_all: false
+      }, Number(id)))
+
+      if (res.code === 4024) {
+        message.error(res.message)
+        return
+      }
+      message.success('调整成功')
+      setRefresh(!refresh)
+    } finally {
+      setAdjustMId(undefined)
+      adjustForm.resetFields()
+      setAdjustModalOpen(false)
+    }
+  }
+  const onAdjustFinishFailed: FormProps<AdjustFieldType>['onFinishFailed'] = (errorInfo) => {
+    console.log('Failed:', errorInfo)
+  }
+  // 全部上架按钮点击事件
+  const handleAllUpload = async () => {
+    try {
+      const res = await adjustRun(() => upDownProduct({
+        m_id: adjustMId,
+        action_type: 5,
+        action_all: true
+      }, Number(id)))
+
+      if (res.code === 4024) {
+        message.error(res.message)
+        return
+      }
+      message.success('调整成功')
+      setRefresh(!refresh)
+    } finally {
+      setAdjustMId(undefined)
+      adjustForm.resetFields()
+      setAdjustModalOpen(false)
+    }
+  }
+  // 全部下架按钮点击事件
+  const handleAllDown = async () => {
+    try {
+      const res = await adjustRun(() => upDownProduct({
+        m_id: adjustMId,
+        action_type: 6,
+        action_all: true
+      }, Number(id)))
+
+      if (res.code === 4024) {
+        message.error(res.message)
+        return
+      }
+      message.success('调整成功')
+      setRefresh(!refresh)
+    } finally {
+      setAdjustMId(undefined)
+      adjustForm.resetFields()
+      setAdjustModalOpen(false)
+    }
   }
 
   useEffect(() => {
@@ -116,7 +203,7 @@ const ProUpload = () => {
       setProduct(res.data)
     }
     getInfo()
-  }, [id])
+  }, [id, refresh])
 
   return (
     <div className="ProUpload">
@@ -138,15 +225,14 @@ const ProUpload = () => {
           <div className="query-bar">
             <Form 
               layout="inline"
-              initialValues={{ remember: true }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
+              onFinish={onQueryFinish}
+              onFinishFailed={onQueryFinishFailed}
               autoComplete="off">
-              <Form.Item name="p_stock" label="产品序列号" rules={[{ pattern: /^\d+$/, min: 1, message: '请输入有效的产品序列号' }]}>
+              <Form.Item name="m_id" label="产品序列号" rules={[{ pattern: /^\d+$/, min: 1, message: '请输入有效的产品序列号' }]}>
                 <InputNumber min={1} placeholder="请输入产品序列号" />
               </Form.Item>
 
-              <Form.Item name="p_name" label="产品名称"
+              <Form.Item name="product_name" label="产品名称"
                 rules={[{pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '产品名称只能包含汉字、字母和数字'}]}>
                 <Input placeholder="请输入产品名称" />
               </Form.Item>
@@ -184,6 +270,40 @@ const ProUpload = () => {
                 setCurrentPage(page)
               }
             }} />
+          <Modal
+            title="调整产品数量"
+            open={adjustModalOpen}
+            onCancel={() => setAdjustModalOpen(false)}
+            footer={null}
+            className='ProUpload-adjust-modal'
+          >
+            <Form
+              form={adjustForm}
+              onFinish={onAdjustFinish}
+              onFinishFailed={onAdjustFinishFailed}
+              autoComplete="off"
+              className="adjust-form"
+              disabled={adjustLoading}>
+              <Form.Item label="操作类型" name="action_type" >
+                <Select placeholder="请选择操作类型" className="type-select"
+                  options={[
+                    {value: 5, label: '上架'},
+                    {value: 6, label: '下架'}
+                  ]}
+                />
+              </Form.Item>
+
+              <Form.Item name="product_num" label="操作数量" 
+                rules={[{ pattern: /^\d+$/, min: 1, message: '请输入有效的操作数量' }]}>
+                <InputNumber min={1} placeholder="请输入操作数量" />
+              </Form.Item>
+              <Form.Item label={null} >
+                <Button onClick={handleAllUpload}>全部上架</Button>
+                <Button onClick={handleAllDown}>全部下架</Button>
+                <Button type="primary" htmlType="submit" className="confirm-btn">确认</Button>
+              </Form.Item>
+            </Form>
+          </Modal>
         </div>
       </div>
     </div>

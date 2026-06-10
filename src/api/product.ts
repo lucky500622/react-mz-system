@@ -128,3 +128,13 @@ export const getWarehouseProduct = (warehouse_m_id: number) => {
     }
   }) as Promise<ApiResponse<WarehouseProductData>>
 }
+
+// 上下架产品
+export const upDownProduct = (data: {m_id: number, action_type: number, product_num?: number, action_all: boolean},
+  warehouse_m_id: number) => {
+  return request.patch('/product/list/update', data, {
+    params: {
+      warehouse_m_id
+    }
+  }) as Promise<ApiResponse<null>>
+}

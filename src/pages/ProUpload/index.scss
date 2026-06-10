@@ -67,3 +67,22 @@
     }
   }
 }
+
+.ProUpload-adjust-modal {
+  .ant-modal-container {
+    transform: translateX(75px);
+    width: 370px;
+    .ant-form {
+      margin-top: 20px;
+      .type-select {
+        width: 190px;
+      }
+      .ant-input-number {
+        width: 190px;
+      }
+      .ant-btn {
+        margin-right: 10px;
+      }
+    }
+  }
+}
