@@ -93,10 +93,10 @@ export const editProductDescription = (data: {m_id: number, description: string}
   return request.patch('/product/editDescription', data) as Promise<ApiResponse<null>>
 }
 
+// 获取产品名称
 type ProductNameData = {
   name: {name: string }[]
 }
-// 获取产品名称
 export const getProductName = (text: string) => {
   return request.get('/product/name', {
     params: {
@@ -105,6 +105,7 @@ export const getProductName = (text: string) => {
   }) as Promise<ApiResponse<ProductNameData>>
 }
 
+// 获取仓库产品信息
 type WarehouseProduct = {
   listed_product_num: number;
   m_id: number;
@@ -121,10 +122,15 @@ export type WarehouseProductData = {
   warehouse_type: string;
   warehouseProduct: WarehouseProduct[]
 }
-export const getWarehouseProduct = (warehouse_m_id: number) => {
+export const getWarehouseProduct = (
+  warehouse_m_id: number, product_m_id?: number, product_name?: string, product_type?: string
+) => {
   return request.get('/product/infoOfWarehouse', {
     params: {
-      warehouse_m_id
+      warehouse_m_id,
+      product_m_id,
+      product_name,
+      product_type
     }
   }) as Promise<ApiResponse<WarehouseProductData>>
 }

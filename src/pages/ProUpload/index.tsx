@@ -1,15 +1,16 @@
 import { useParams } from 'react-router-dom'
 import { useEffect, useState ,useRef} from 'react'
 
-import { Table, Input, Button, Form, InputNumber, Select, Tag, Modal, message } from 'antd'
+import { Table, Button, Form, InputNumber, Select, Tag, Modal, message } from 'antd'
 import type { FormProps } from 'antd'
 
 import '@/pages/ProUpload/index.scss'
-import { getWarehouseProduct, upDownProduct, saleProduct } from '@/api/product'
+import { getWarehouseProduct, upDownProduct, saleProduct, getProductName } from '@/api/product'
 import { exitHandleWarehouse } from '@/api/warehouse'
 import type { WarehouseProductData } from '@/api/product'
 import MessageBoard from '@/pages/ProUpload/components/MessageBoard'
 import { useLoading } from '@/hooks/useLoading'
+import SelectNameAssociation from '@/components/SelectNameAssociation'
 
 const ProUpload = () => {
   // 从路由参数中获取仓库序列号
@@ -97,9 +98,16 @@ const ProUpload = () => {
     product_name: string
     product_type: string
   }
+  // 加载状态
+  const {loading: queryLoading, run: queryRun} = useLoading()
   // 查询表单提交
-  const onQueryFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values)
+  const onQueryFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    const res = await queryRun(() => getWarehouseProduct(Number(id), 
+      values.m_id,
+      values.product_name,
+      values.product_type
+    ))
+    setProduct(res.data)
   }
   const onQueryFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
     console.log('Failed:', errorInfo)
@@ -302,14 +310,18 @@ const ProUpload = () => {
               layout="inline"
               onFinish={onQueryFinish}
               onFinishFailed={onQueryFinishFailed}
-              autoComplete="off">
+              autoComplete="off"
+              disabled={queryLoading}>
               <Form.Item name="m_id" label="产品序列号" rules={[{ pattern: /^\d+$/, min: 1, message: '请输入有效的产品序列号' }]}>
                 <InputNumber min={1} placeholder="请输入产品序列号" />
               </Form.Item>
 
               <Form.Item name="product_name" label="产品名称"
                 rules={[{pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '产品名称只能包含汉字、字母和数字'}]}>
-                <Input placeholder="请输入产品名称" />
+                <SelectNameAssociation
+                  placeholder="请选择产品名称"
+                  SelectFn={getProductName}
+                />
               </Form.Item>
             
               <Form.Item label="产品类型" name="product_type" 
