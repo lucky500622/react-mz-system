@@ -4,3 +4,36 @@
   background-color: rgb(250, 250, 250);
   color: rgb(44, 44, 44);
 }
+
+.Home-table {
+  display: flex;
+  .warehouse-table-item {
+    flex: 0.4;
+  }
+  .product-table-item {
+    flex: 0.6;
+  }
+}
+
+.Home-main {
+  display: flex;
+  margin-top: 20px;
+  height: 356px;
+  background-color: rgb(250, 250, 250);
+
+  .left {
+    flex: 0.4;
+    padding-top: 10px;
+    .warehouse-chart {  
+      max-height: 360px;
+    }
+  }
+
+  .right {
+    flex: 0.6;
+    padding-top: 14px;
+    .product-chart {
+      max-height: 310px;
+    }
+  }
+}

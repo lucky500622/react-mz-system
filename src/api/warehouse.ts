@@ -13,6 +13,7 @@ export type WarehouseInfoData = {
   user_name: string;
   warehouse_create_time: string;
   warehouse_description: string;
+  total_product_num: number;
 }
 type WarehouseData = {
   warehouseInfo: WarehouseInfoData[]
@@ -36,6 +37,13 @@ export const getWarehouseInfo = (offset: number = 0, limit: number = 999, values
 }
 
 // 获取仓库操作记录
+export type warehouseConfig = {
+  m_id: number,
+  warehouse_m_id: number,
+  warehouse_name: string,
+  user_name: string,
+  action_type: number
+}
 export type WarehouseActionInfoData = {
   m_id: number;
   issue_object: number;
@@ -49,7 +57,6 @@ type WarehouseActionData = {
   actionInfo: WarehouseActionInfoData[]
 }
 type WarehouseActionResponse = ApiResponse<WarehouseActionData>
-import type { warehouseConfig } from '@/pages/ActInfo/components/ActTabs'
 export const getWarehouseAction = (offset: number = 0, limit: number = 999, values?: warehouseConfig) => {
   return request.get('/warehouse/action', {
     params: {
@@ -156,4 +163,13 @@ export const exitHandleWarehouse = (warehouse_m_id: number) => {
       warehouse_m_id
     }
   }) as Promise<ApiResponse<null>>
+}
+
+// 获取仓库总览
+export type WarehouseOverviewData = {
+  count: number;
+  handle_count: number;
+}
+export const getWarehouseOverview = () => {
+  return request.get('/warehouse/overview') as Promise<ApiResponse<WarehouseOverviewData>>
 }

@@ -8,24 +8,9 @@ import ProductTable from '@/pages/ActInfo/components/ProductTable'
 import FunctionBar from '@/pages/ActInfo/components/FunctionBar'
 import { useLoading } from '@/hooks/useLoading'
 import { getProductAction } from '@/api/product'
-import type { ProductActionInfoData } from '@/api/product'
+import type { ProductActionInfoData, productConfig } from '@/api/product'
 import { getWarehouseAction } from '@/api/warehouse'
-import type { WarehouseActionInfoData } from '@/api/warehouse'
-
-export type warehouseConfig = {
-  m_id: number,
-  warehouse_m_id: number,
-  warehouse_name: string,
-  user_name: string,
-  action_type: number
-}
-export type productConfig = {
-  m_id: number,
-  product_m_id: number,
-  product_name: string,
-  user_name: string,
-  action_type: number
-}
+import type { WarehouseActionInfoData, warehouseConfig } from '@/api/warehouse'
 
 const ActTable = () => {
   // FunctionBar配置

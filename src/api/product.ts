@@ -35,6 +35,13 @@ export const getProductInfo = (offset: number = 0, limit: number = 999, values?:
 }
 
 // 获取产品操作记录
+export type productConfig = {
+  m_id?: number,
+  product_m_id?: number,
+  product_name?: string,
+  user_name?: string,
+  action_type?: number
+}
 export type ProductActionInfoData = {  
   m_id: number;
   issue_object: number;
@@ -48,7 +55,6 @@ type ProductActionData = {
   actionInfo: ProductActionInfoData[]
 }
 type ProductActionResponse = ApiResponse<ProductActionData>
-import type { productConfig } from '@/pages/ActInfo/components/ActTabs'
 export const getProductAction = (offset: number = 0, limit: number = 999, values?: productConfig) => { 
   return request.get('/product/action', {
     params: {
@@ -152,4 +158,26 @@ export const saleProduct = (data: {m_id: number, product_num: number}, warehouse
       warehouse_m_id
     }
   }) as Promise<ApiResponse<null>>
+}
+
+// 获取产品总览
+export type ProductOverviewData = {
+  count: number;
+  total_product_num: number;
+  listed_product_num: number;
+}
+export const getProductOverview = () => {
+  return request.get('/product/overview') as Promise<ApiResponse<ProductOverviewData>>
+}
+
+type ProductDayActionData = {
+  productDayActionInfo: {
+    in_arr: string;
+    out_arr: string;
+    sale_arr: string;
+  }
+}
+// 获取产品近7天的新增总量减少总量售出总量操作信息
+export const getProductDayAction = () => {
+  return request.get('/product/dayActionInfo') as Promise<ApiResponse<ProductDayActionData>>
 }
