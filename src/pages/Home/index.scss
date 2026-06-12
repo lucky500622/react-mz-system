@@ -45,6 +45,12 @@
   height: calc(100vh - 643px);
   background-color: rgb(250, 250, 250);
   padding: 10px;
+  .warning-tip {
+    margin: 0 0 4px 4px;
+    font-size: 14px;
+    color: rgb(93, 93, 93);
+  }
+
   .ant-card {
     margin-bottom: 10px;
     .ant-card-body {

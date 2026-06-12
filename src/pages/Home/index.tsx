@@ -115,6 +115,7 @@ const Home = () => {
         </div>
       </div>
       <div className="Home-warning">
+        <div className="warning-tip">Tip：产品上架后，余量不足100时，触发余量不足警告</div>
         {productWarning.length > 0 ?
           productWarning.map(item => (
             <Card key={item.product_m_id}>

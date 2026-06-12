@@ -47,15 +47,15 @@ const router = createBrowserRouter([
           element: <UserCenter />
         }
       ]
+    },
+    {
+      path: '/pro-upload/:id',
+      element: <ProUpload />
     }]
   },
   {
     path: '/login',
     element: <Login />
-  },
-  {
-    path: '/pro-upload/:id',
-    element: <ProUpload />
   }
 ])
 
