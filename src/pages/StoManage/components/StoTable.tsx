@@ -56,7 +56,7 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
       render: (_, record) => {
         return (
           <div>
-            <Tag style={{marginBottom: 5}} color={record.exists_list_product? 'black' : 'gray'}>
+            <Tag style={{margin: '0 5px 5px 0'}} color={record.exists_list_product? 'black' : 'gray'}>
               {record.exists_list_product? '存在上架产品' : '不存在上架产品'}
             </Tag>
             <Tag color={record.exists_user_handle? 'black' : 'gray'}>

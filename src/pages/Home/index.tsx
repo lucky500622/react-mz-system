@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 
-import { Table } from 'antd'
+import { Table, Card } from 'antd'
 
 import '@/pages/Home/index.scss'
 import { getWarehouseOverview, getWarehouseInfo } from '@/api/warehouse'
 import type { WarehouseOverviewData } from '@/api/warehouse'
-import { getProductOverview, getProductDayAction } from '@/api/product'
-import type { ProductOverviewData } from '@/api/product'
+import { getProductOverview, getProductDayAction, getProductWarning } from '@/api/product'
+import type { ProductOverviewData, ProductWarning } from '@/api/product'
 import MyEChartsPie from '@/components/MyEChartsPie'
 import MyEChartsLine from '@/components/MyEChartsLine'
 
@@ -53,6 +53,8 @@ const Home = () => {
   const [subProductAction, setSubProductAction] = useState<number[]>([])
   // 近7日售出产品操作统计
   const [sellProductAction, setSellProductAction] = useState<number[]>([])
+  // 产品警告
+  const [productWarning, setProductWarning] = useState<ProductWarning[]>([])
 
   useEffect(() => {
     const getInfo = async () => {
@@ -77,6 +79,10 @@ const Home = () => {
       setSubProductAction(subArr)
       const sellArr = productDayAction.data.productDayActionInfo.sale_arr.split(',').map(item => Number(item) || 0)
       setSellProductAction(sellArr)
+
+      // 获取产品警告
+      const productWarning = await getProductWarning()
+      setProductWarning(productWarning.data.warning)
     } 
     getInfo()
   }, [])
@@ -107,6 +113,27 @@ const Home = () => {
             title={{text: '近7日出入库操作统计'}} 
             dataOne={addProductAction} dataTwo={subProductAction} dataThree={sellProductAction} />
         </div>
+      </div>
+      <div className="Home-warning">
+        {productWarning.length > 0 ?
+          productWarning.map(item => (
+            <Card key={item.product_m_id}>
+              <p>仓库名称: {item.warehouse_name}</p>
+              -
+              <p>产品名称: {item.product_name}</p>
+              -
+              <p>产品序列号: {item.product_m_id}</p>
+              -
+              <p>已上架数量: {item.product_list_num}</p>
+              -
+              <p>未上架余量: {item.product_diff_num}</p>
+              -
+              <p className="warning">警告：余量不足100</p>
+            </Card>
+          )) :
+          <Card >
+            <p className="no-warning">暂无警告</p>
+          </Card>}
       </div>
     </div>
   )

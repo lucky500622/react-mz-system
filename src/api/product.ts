@@ -170,6 +170,7 @@ export const getProductOverview = () => {
   return request.get('/product/overview') as Promise<ApiResponse<ProductOverviewData>>
 }
 
+// 获取产品近7天的新增总量减少总量售出总量操作信息
 type ProductDayActionData = {
   productDayActionInfo: {
     in_arr: string;
@@ -177,7 +178,22 @@ type ProductDayActionData = {
     sale_arr: string;
   }
 }
-// 获取产品近7天的新增总量减少总量售出总量操作信息
 export const getProductDayAction = () => {
   return request.get('/product/dayActionInfo') as Promise<ApiResponse<ProductDayActionData>>
+}
+
+// 获取产品警告
+export type ProductWarning = {
+  m_id: number;
+  product_m_id: number;
+  product_name: string;
+  warehouse_name: string;
+  product_diff_num: number;
+  product_list_num: number;
+}
+type ProductWarningData = {
+  warning: ProductWarning[]
+}
+export const getProductWarning = () => {
+  return request.get('/product/warning') as Promise<ApiResponse<ProductWarningData>>
 }

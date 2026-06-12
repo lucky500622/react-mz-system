@@ -17,7 +17,7 @@
 
 .Home-main {
   display: flex;
-  margin-top: 20px;
+  margin-top: 10px;
   height: 356px;
   background-color: rgb(250, 250, 250);
 
@@ -34,6 +34,33 @@
     padding-top: 14px;
     .product-chart {
       max-height: 310px;
+    }
+  }
+}
+
+.Home-warning {
+  overflow: auto;
+  scrollbar-width: none;
+  margin-top: 10px;
+  height: calc(100vh - 643px);
+  background-color: rgb(250, 250, 250);
+  padding: 10px;
+  .ant-card {
+    margin-bottom: 10px;
+    .ant-card-body {
+      display: flex;
+      justify-content: space-between;
+      .warning {  
+        color: rgb(255, 79, 79);
+      }
+    }
+  }
+  .no-warning-card { 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .no-warning {
+      color: rgb(93, 93, 93);
     }
   }
 }
