@@ -24,17 +24,32 @@ request.interceptors.request.use(function (config) {
 request.interceptors.response.use(function (response) {
   return response.data
 }, function (error) {
-  if (error.response.status === 500) {
+  if (!error.response) {
+    message.error('服务接口问题')
+    return Promise.reject(error)
+  }
+  const { status } = error.response
+  if (status === 500) {
     // 服务器错误
     console.log('服务器错误')
     message.error('服务器错误')
   }
-  if (error.response.status === 401) {
+  if (status === 401) {
     // 登录过期，删除token并跳转登录页
     removeStorage('token')
-    window.location.href = '/login'
     console.log('登录过期')
     message.error('登录过期，请重新登录')
+    setTimeout(() => {
+      window.location.href = '/login'
+    }, 1000)
+  }
+  if (status === 402) {
+    // 权限不足，不可操作，违规进入页面
+    console.log('权限不足，不可操作，违规进入页面')
+    message.error('权限不足，不可操作，违规进入页面')
+    setTimeout(() => {
+      window.location.href = '/'
+    }, 1000)
   }
   if (error.response.status === 403) {
     window.location.href = '/sto-handle'

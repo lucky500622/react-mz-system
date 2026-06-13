@@ -1,5 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import AuthRoute from '../components/AuthRoute'
+import StaffAnthRoute from '@/components/StaffAnthRoute'
+import AdminAnthRoute from '@/components/AdminAnthRoute'
 import Login from '@/pages/Login'
 import LayoutIndex from '@/pages/Layout/index'
 import Home from '@/pages/Home'
@@ -23,12 +25,16 @@ const router = createBrowserRouter([
           element: <Home />
         },
         {
-          path: '/sto-manage',
-          element: <StoManage />
-        },
-        {
-          path: '/pro-manage',
-          element: <ProManage />
+          element: <AdminAnthRoute />,
+          children: [
+            {
+              path: '/sto-manage',
+              element: <StoManage />
+            },
+            {
+              path: '/pro-manage',
+              element: <ProManage />
+            }]
         },
         {
           path: '/per-manage',
@@ -39,8 +45,13 @@ const router = createBrowserRouter([
           element: <ActInfo />
         },
         {
-          path: '/sto-handle',
-          element: <StoHandle />
+          element: <StaffAnthRoute />,
+          children: [
+            {
+              path: '/sto-handle',
+              element: <StoHandle />
+            }
+          ]
         },
         {
           path: '/user-center',
@@ -49,8 +60,13 @@ const router = createBrowserRouter([
       ]
     },
     {
-      path: '/pro-upload/:id',
-      element: <ProUpload />
+      element: <StaffAnthRoute />,
+      children: [
+        {
+          path: '/pro-upload/:id',
+          element: <ProUpload />
+        }
+      ]
     }]
   },
   {

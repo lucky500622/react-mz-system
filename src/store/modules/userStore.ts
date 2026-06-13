@@ -2,6 +2,8 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 
 import {getUserInfoService} from '@/api/user'
 
+import { setStorage } from '@/utils/storage'
+
 type UserInfo = {
   user_name: string
   user_role: string
@@ -10,6 +12,7 @@ type UserInfo = {
 // 获取用户信息
 export const fetchUserInfo = createAsyncThunk('userStore/fetchUserInfo', async () => {
   const res = await getUserInfoService()
+  setStorage('role', res.data.user_role)
   return res.data
 })
 
