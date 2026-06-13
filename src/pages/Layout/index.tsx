@@ -45,7 +45,7 @@ const LayoutIndex = () => {
     },
     {
       key: '7',
-      label: '个人中心'
+      label: '个人信息管理'
     }
   ]
   // 菜单点击事件
@@ -69,7 +69,7 @@ const LayoutIndex = () => {
       navigate('/act-info')
     }
     if (item.key === '7') {
-      navigate('/user-center')
+      console.log('个人中心')
     }
   }
   const pathToKeyMap: Record<string, string> = {
@@ -78,8 +78,7 @@ const LayoutIndex = () => {
     '/sto-manage': '3',
     '/pro-manage': '4',
     '/sto-handle': '5',
-    '/act-info': '6',
-    '/user-center': '7'
+    '/act-info': '6'
   }
   const currentKey = pathToKeyMap[location.pathname] || '1'
 

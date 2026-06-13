@@ -6,6 +6,7 @@ import { SolutionOutlined, UserOutlined, IdcardOutlined, RobotOutlined } from '@
 import '@/pages/Layout/components/styles/IndexHeader.scss'
 import { getInitial, turnRoleToChinese } from '@/utils/handleWord'
 import type { RootState } from '@/store/index'
+import { getStorage } from '@/utils/storage'
 
 const IndexHeader = () => {
   // 导航实例
@@ -17,10 +18,10 @@ const IndexHeader = () => {
     <div className="IndexHeader-header">
       <div className="left">
         <div className="logo" onClick={() => navigate('/')}><RobotOutlined className="icon" />Mz System</div>
-        <div className="request-info">
+        {getStorage('role') === 'sup_admin' ? <div className="request-info">
           <div className="text">待处理申请</div>
           <SolutionOutlined className="icon" />
-        </div>
+        </div> : null}
       </div>
       <div className="right">
         <div className="user-info">

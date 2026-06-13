@@ -11,7 +11,6 @@ import PerManage from '@/pages/PerManage'
 import ActInfo from '@/pages/ActInfo'
 import StoHandle from '@/pages/StoHandle' 
 import ProUpload from '@/pages/ProUpload'
-import UserCenter from '@/pages/UserCenter'
 
 const router = createBrowserRouter([
   {
@@ -52,10 +51,6 @@ const router = createBrowserRouter([
               element: <StoHandle />
             }
           ]
-        },
-        {
-          path: '/user-center',
-          element: <UserCenter />
         }
       ]
     },
