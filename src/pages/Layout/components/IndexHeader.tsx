@@ -1,23 +1,17 @@
 import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { SolutionOutlined, UserOutlined, IdcardOutlined, RobotOutlined } from '@ant-design/icons'
 
 import '@/pages/Layout/components/styles/IndexHeader.scss'
 import { getInitial, turnRoleToChinese } from '@/utils/handleWord'
-import type { RootState, AppDispatch } from '@/store/index'
-import { fetchUserInfo } from '@/store/modules/userStore'
+import type { RootState } from '@/store/index'
 
 const IndexHeader = () => {
   // 导航实例
   const navigate = useNavigate()
   // 获取用户信息
-  const dispatch = useDispatch<AppDispatch>()
   const userInfo = useSelector((state: RootState) => state.userStore.userInfo)
-  useEffect(() => {
-    dispatch(fetchUserInfo())
-  }, [dispatch])
   
   return (
     <div className="IndexHeader-header">

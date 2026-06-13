@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 import type { FormProps } from 'antd'
 import { Button, Form, Input, message } from 'antd'
@@ -9,8 +10,11 @@ import '@/pages/Login/index.scss'
 import { useLoading } from '@/hooks/useLoading'
 import { registerService, loginService } from '@/api/user'
 import { setStorage } from '@/utils/storage'
+import { fetchUserInfo } from '@/store/modules/userStore'
+import type { RootState, AppDispatch } from '@/store/index'
 
 const Login = () => {
+  const dispatch = useDispatch<AppDispatch>()
   // 导航实例
   const navigate = useNavigate()
 
@@ -61,6 +65,8 @@ const Login = () => {
         message.success('登录成功')
         // 存储唯一会话标识
         setStorage('token', res.data.token)
+        // 获取用户信息
+        await dispatch(fetchUserInfo())
         // 跳转到首页
         navigate('/', { replace: true })
       }

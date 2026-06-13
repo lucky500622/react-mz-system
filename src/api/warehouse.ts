@@ -1,5 +1,7 @@
 import request from '@/utils/request'
 
+import type { Dayjs } from 'dayjs'
+
 import type { ApiResponse } from '@/types/apiResponseType'
 
 // 获取仓库信息
@@ -38,11 +40,14 @@ export const getWarehouseInfo = (offset: number = 0, limit: number = 999, values
 
 // 获取仓库操作记录
 export type warehouseConfig = {
-  m_id: number,
-  warehouse_m_id: number,
-  warehouse_name: string,
-  user_name: string,
-  action_type: number
+  m_id?: number,
+  warehouse_m_id?: number,
+  warehouse_name?: string,
+  user_name?: string,
+  action_type?: number,
+  action_time?: [Dayjs | null, Dayjs | null] | null,
+  start_time?: string,
+  end_time?: string,
 }
 export type WarehouseActionInfoData = {
   m_id: number;

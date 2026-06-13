@@ -1,5 +1,7 @@
 import request from '@/utils/request'
 
+import type { Dayjs } from 'dayjs'
+
 import type { ApiResponse } from '@/types/apiResponseType'
 
 // 获取产品信息
@@ -40,7 +42,10 @@ export type productConfig = {
   product_m_id?: number,
   product_name?: string,
   user_name?: string,
-  action_type?: number
+  action_type?: number,
+  action_time?: [Dayjs | null, Dayjs | null] | null,
+  start_time?: string,
+  end_time?: string,
 }
 export type ProductActionInfoData = {  
   m_id: number;

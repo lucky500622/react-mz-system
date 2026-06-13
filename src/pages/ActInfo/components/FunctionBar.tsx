@@ -1,4 +1,4 @@
-import { Input, Button, InputNumber, Select, Form } from 'antd'
+import { Input, Button, InputNumber, Select, Form, DatePicker } from 'antd'
 import type { FormProps } from 'antd/es/form'
 
 import '@/pages/ActInfo/components/styles/functionBar.scss'
@@ -16,6 +16,10 @@ const FunctionBar = ({labelConfig, options, onSearch, loading} : {labelConfig: L
   const [form] = Form.useForm()
   // 新增仓库表单提交
   const onFinish: FormProps<warehouseConfig | productConfig>['onFinish'] = (values) => {
+    if (values.action_time) {
+      values.start_time = values.action_time[0]?.format('YYYY-MM-DD') || null
+      values.end_time = values.action_time[1]?.format('YYYY-MM-DD') || null
+    }
     onSearch(values, labelConfig.config_type)
   }
   // 新增仓库表单提交失败
@@ -63,6 +67,11 @@ const FunctionBar = ({labelConfig, options, onSearch, loading} : {labelConfig: L
             rules={[{ pattern: /^[a-zA-Z0-9]+$/, 
               message: '操作人只能包含字母和数字' }]}>
             <Input placeholder="请输入操作人" className="word-input"  />
+          </Form.Item>
+
+          <Form.Item label="操作时间" name="action_time">
+            <DatePicker.RangePicker 
+              allowEmpty={[true, true]}/>
           </Form.Item>
 
           <Form.Item label={null}>

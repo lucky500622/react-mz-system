@@ -37,6 +37,7 @@ request.interceptors.response.use(function (response) {
   if (status === 401) {
     // 登录过期，删除token并跳转登录页
     removeStorage('token')
+    removeStorage('role')
     console.log('登录过期')
     message.error('登录过期，请重新登录')
     setTimeout(() => {
