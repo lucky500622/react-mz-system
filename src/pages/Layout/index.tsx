@@ -3,10 +3,10 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import { Layout, Menu } from 'antd'
 import type { MenuProps } from 'antd'
 
-import IndexHeader from './components/IndexHeader'
+import IndexHeader from '@/pages/Layout/components/IndexHeader'
 import { getStorage } from '@/utils/storage'
 
-import './index.scss'
+import '@/pages/Layout/index.scss'
 
 const LayoutIndex = () => {
   // 导航实例
@@ -42,10 +42,6 @@ const LayoutIndex = () => {
     {
       key: '6',
       label: '操作信息'
-    },
-    {
-      key: '7',
-      label: '个人信息管理'
     }
   ]
   // 菜单点击事件
@@ -67,9 +63,6 @@ const LayoutIndex = () => {
     }
     if (item.key === '6') {
       navigate('/act-info')
-    }
-    if (item.key === '7') {
-      console.log('个人中心')
     }
   }
   const pathToKeyMap: Record<string, string> = {
