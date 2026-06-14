@@ -15,7 +15,7 @@ import SelectNameAssociation from '@/components/SelectNameAssociation'
 
 const ProManage = () => {
   const {loading, run} = useLoading()
-  // 新增产品表单字段类型
+  // 查询产品表单字段类型
   type FieldType = {
     m_id?: number;
     warehouse_m_id?: number;
@@ -24,12 +24,12 @@ const ProManage = () => {
   }
   const [form] = Form.useForm()
   const [querySource, setQuerySource] = useState<ProductInfoData[]>()
-  // 新增产品表单提交
+  // 查询产品
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     const res = await run(() => getProductInfo(0, 999, values))
     setQuerySource(res.data.productInfo)
   }
-  // 新增产品表单提交失败
+  // 查询产品失败
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
     console.log('Failed:', errorInfo)
   }
@@ -68,19 +68,19 @@ const ProManage = () => {
           autoComplete="off"
           layout="inline"
           disabled={loading}>
-          <Form.Item label="产品序列号" name="m_id"
+          <Form.Item<FieldType> label="产品序列号" name="m_id"
             rules={[{ type: 'number', min: 1, message: '请输入有效的产品序列号' }]}>
             <InputNumber placeholder="请输入产品序列号"/>
           </Form.Item>
-          <Form.Item label="所属仓库序列号" name="warehouse_m_id"
+          <Form.Item<FieldType> label="所属仓库序列号" name="warehouse_m_id"
             rules={[{ type: 'number', min: 1, message: '请输入所属仓库序列号' }]}>
             <InputNumber placeholder="请输入所属仓库序列号"/>
           </Form.Item>
-          <Form.Item label="产品名称" name="product_name" 
+          <Form.Item<FieldType> label="产品名称" name="product_name" 
             rules={[{pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '产品名称只能包含汉字、字母和数字'}]}>
             <SelectNameAssociation placeholder="请输入产品名称" SelectFn={getProductName} />
           </Form.Item>
-          <Form.Item label="产品类型" name="product_type" 
+          <Form.Item<FieldType> label="产品类型" name="product_type" 
             rules={[{ pattern: /^[\u4e00-\u9fa5]+$/, message: '产品类型只能包含汉字'}]}>
             <Select placeholder="请选择产品类型" className="type-select"
               options={[

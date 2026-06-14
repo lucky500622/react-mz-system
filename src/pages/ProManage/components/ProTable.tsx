@@ -253,7 +253,7 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
           form={form}
           className="adjust-form"
         >
-          <Form.Item label='调整类型' name="adjustType"
+          <Form.Item<FieldType> label='调整类型' name="adjustType"
             rules={[{ required: true, message: '请选择调整类型' }]}>
             <Select placeholder="请选择调整类型"
               options={[
@@ -268,7 +268,7 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
               ]} 
             />
           </Form.Item>
-          <Form.Item label='调整数量' name="adjustNum"
+          <Form.Item<FieldType> label='调整数量' name="adjustNum"
             rules={[{ required: true, min: 1, type: 'number', message: '请输入调整数量' }]}>
             <InputNumber placeholder="请输入调整数量"/>
           </Form.Item>

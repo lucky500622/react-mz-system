@@ -312,11 +312,13 @@ const ProUpload = () => {
               onFinishFailed={onQueryFinishFailed}
               autoComplete="off"
               disabled={queryLoading}>
-              <Form.Item name="m_id" label="产品序列号" rules={[{ pattern: /^\d+$/, min: 1, message: '请输入有效的产品序列号' }]}>
+              <Form.Item<FieldType> 
+                name="m_id" label="产品序列号" rules={[{ pattern: /^\d+$/, min: 1, message: '请输入有效的产品序列号' }]}>
                 <InputNumber min={1} placeholder="请输入产品序列号" />
               </Form.Item>
 
-              <Form.Item name="product_name" label="产品名称"
+              <Form.Item<FieldType> 
+                name="product_name" label="产品名称"
                 rules={[{pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '产品名称只能包含汉字、字母和数字'}]}>
                 <SelectNameAssociation
                   placeholder="请选择产品名称"
@@ -324,7 +326,8 @@ const ProUpload = () => {
                 />
               </Form.Item>
             
-              <Form.Item label="产品类型" name="product_type" 
+              <Form.Item<FieldType> 
+                name="product_type" label="产品类型" 
                 rules={[{ pattern: /^[\u4e00-\u9fa5]+$/, message: '产品类型只能包含汉字'}]}>
                 <Select placeholder="请选择产品类型" className="type-select"
                   options={[

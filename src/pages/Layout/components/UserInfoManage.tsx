@@ -61,19 +61,19 @@ return (
       labelCol={{ span: 6 }}
       wrapperCol={{ span: 14 }}
     >
-      <Form.Item
+      <Form.Item<FieldType> 
         name="oldPassword" label="旧密码" rules={[{ required: true, min: 6, max: 12, message: '请输入6-12个字符的密码' },
           {pattern: /^[a-zA-Z0-9]+$/, message: '密码只能包含字母和数字'}]}>
         <Input.Password />
       </Form.Item>
 
-      <Form.Item
+      <Form.Item<FieldType> 
         name="newPassword" label="新密码" rules={[{ required: true, min: 6, max: 12, message: '请输入6-12个字符的密码' },
           {pattern: /^[a-zA-Z0-9]+$/, message: '密码只能包含字母和数字'}]}>
         <Input.Password />
       </Form.Item>
       
-      <Form.Item
+      <Form.Item<FieldType> 
         dependencies={['newPassword']}
         name="confirmPassword" label="确认密码" rules={[{ required: true, message: '请输入确认密码' },
           ({ getFieldValue }) => ({

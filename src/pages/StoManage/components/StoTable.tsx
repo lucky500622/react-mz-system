@@ -251,7 +251,8 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
           disabled={editLoading}
           autoComplete="off"
         >
-          <Form.Item name="warehouse_name" label="仓库重命名"
+          <Form.Item<FieldType> 
+            name="warehouse_name" label="仓库重命名"
             rules={[{ required: true, min: 2, max: 20, message: '请输入2-20个字符的仓库名称' },
               {pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '仓库名称只能包含汉字、字母和数字'}]}>
             <Input placeholder="请输入仓库名称" />

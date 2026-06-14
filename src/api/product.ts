@@ -72,11 +72,11 @@ export const getProductAction = (offset: number = 0, limit: number = 999, values
 
 // 添加产品
 export const addProduct = (data: {
-  name: string,
-  belong_id: number,
-  type: string,
-  count: number,
-  description: string
+  m_id: number;
+  product_name: string;
+  product_type: string;
+  product_num: number;
+  product_description: string;
 }) => {
   return request.post('/product/add', data) as Promise<ApiResponse<null>>
 }

@@ -72,18 +72,21 @@ const StoManage = () => {
           autoComplete="off"
           layout="inline"
           disabled={loading}>
-          <Form.Item label="仓库序列号" name="m_id"
+          <Form.Item<FieldType> 
+            label="仓库序列号" name="m_id"
             rules={[{ type: 'number', min: 1, message: '请输入有效的仓库序列号' }]}>
             <InputNumber placeholder="请输入仓库序列号"/>
           </Form.Item>
-          <Form.Item label="仓库名称" name="warehouse_name" 
+          <Form.Item<FieldType> 
+            label="仓库名称" name="warehouse_name" 
             rules={[{pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '仓库名称只能包含汉字、字母和数字'}]}>
             <SelectNameAssociation
               placeholder="请输入仓库名称"
               SelectFn={getWarehouseName}
             />
           </Form.Item>
-          <Form.Item label="仓库类型" name="warehouse_type" 
+          <Form.Item<FieldType> 
+            label="仓库类型" name="warehouse_type" 
             rules={[{ pattern: /^[\u4e00-\u9fa5]+$/, message: '仓库类型只能包含汉字'}]}>
             <Select placeholder="请选择仓库类型" className="type-select"
               options={[
@@ -98,7 +101,8 @@ const StoManage = () => {
               ]}
             />
           </Form.Item>
-          <Form.Item label="创建人" name="user_name"
+          <Form.Item<FieldType> 
+            label="创建人" name="user_name"
             rules={[{ pattern: /^[a-zA-Z0-9]+$/, message: '用户名只能包含字母和数字'}]}>
             <Input placeholder="请输入创建人" className="word-input"  />
           </Form.Item>

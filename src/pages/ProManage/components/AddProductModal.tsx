@@ -23,11 +23,11 @@ type AddProductModalProps = {
 const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddProductModalProps) => {
   // 产品类型
   type FileType = {
-    name: string,
-    belong_id: number,
-    type: string,
-    count: number,
-    description: string
+    m_id: number,
+    product_name: string,
+    product_type: string,
+    product_num: number,
+    product_description: string
   }
   // 新增产品表单
   const [form] = Form.useForm()
@@ -76,17 +76,17 @@ const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddPro
         autoComplete="off"
         disabled={loading}
         form={form}>
-        <Form.Item label="仓库序列号" name="m_id"
+        <Form.Item<FileType> label="仓库序列号" name="m_id"
           rules={[{ required: true, type: 'number', min: 1, message: '请输入有效的仓库序列号' }]}>
           <InputNumber placeholder="请输入仓库序列号" />
         </Form.Item>
-        <Form.Item label="产品名称" name="product_name"
+        <Form.Item<FileType> label="产品名称" name="product_name"
           rules={[{ required: true, min: 2, max: 20, message: '请输入2-20个字符的产品名称' },
             {pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '产品名称只能包含中文、字母、数字'}
           ]}>
           <Input placeholder="请输入产品名称" maxLength={20} />
         </Form.Item>
-        <Form.Item label="产品类型" name="product_type"
+        <Form.Item<FileType> label="产品类型" name="product_type"
           rules={[{pattern: /^[\u4e00-\u9fa5]+$/, message: '产品类型只能包含中文'}]}>
           <Select
             placeholder="请选择产品类型"
@@ -105,11 +105,11 @@ const AddProductModal = memo(({visible, handleClose, handleRefresh, ref}: AddPro
             ]}
           />
         </Form.Item>
-        <Form.Item label="产品数量" name="product_num" rules={[{ required: true, min: 1,
+        <Form.Item<FileType> label="产品数量" name="product_num" rules={[{ required: true, min: 1,
           type: 'number', message: '请输入有效的产品数量' }]}>
           <InputNumber placeholder="请输入产品数量" />
         </Form.Item>
-        <Form.Item label="产品描述" name="product_description"
+        <Form.Item<FileType> label="产品描述" name="product_description"
           rules={[{ min: 0, max: 200, message: '请输入0-200个字符的产品描述' }]}>
           <Input.TextArea rows={3} placeholder="请输入产品描述" maxLength={200} />
         </Form.Item>
