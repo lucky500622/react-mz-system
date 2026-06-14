@@ -47,3 +47,15 @@ export const updatePasswordService = (data: {
 export const logoutService = () => {
   return request.post('/user/logout') as Promise<ApiResponse<null>>
 }
+
+// 获取用户列表
+export type UserListObj = {
+  user_name: string;
+  user_role: string;
+}
+type UserListData = {
+  userList: UserListObj[]
+}
+export const getUserListService = () => {
+  return request.get('/user/list') as Promise<ApiResponse<UserListData>>
+}
