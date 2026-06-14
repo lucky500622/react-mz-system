@@ -1,6 +1,8 @@
 import '@/pages/PerManage/index.scss'
+import { submitApply } from '@/api/apply'
 
 const PerManage = () => {
+
   return (
     <div>
       <div className="PerManage-top-bar">
