@@ -11,7 +11,7 @@ import { useLoading } from '@/hooks/useLoading'
 import { registerService, loginService } from '@/api/user'
 import { setStorage } from '@/utils/storage'
 import { fetchUserInfo } from '@/store/modules/userStore'
-import type { RootState, AppDispatch } from '@/store/index'
+import type { AppDispatch } from '@/store/index'
 
 const Login = () => {
   const dispatch = useDispatch<AppDispatch>()

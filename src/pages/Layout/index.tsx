@@ -1,10 +1,14 @@
 import { Outlet, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import {useDispatch} from 'react-redux'
 
 import { Layout, Menu } from 'antd'
 import type { MenuProps } from 'antd'
 
 import IndexHeader from '@/pages/Layout/components/IndexHeader'
 import { getStorage } from '@/utils/storage'
+import type { AppDispatch } from '@/store/index'
+import { fetchUserInfo } from '@/store/modules/userStore'
 
 import '@/pages/Layout/index.scss'
 
@@ -74,6 +78,11 @@ const LayoutIndex = () => {
     '/act-info': '6'
   }
   const currentKey = pathToKeyMap[location.pathname] || '1'
+
+  const dispatch = useDispatch<AppDispatch>()
+  useEffect(() => {
+    dispatch(fetchUserInfo())
+  }, [dispatch])
 
   return (
     <div> 

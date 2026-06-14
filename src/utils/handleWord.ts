@@ -1,12 +1,12 @@
 export const turnRoleToChinese = (role: string) => {
-  if (role === 'superadmin') {
+  if (role === 'sup_admin') {
     return '超级管理员'
   }
-  if (role === 'admin') {
+  if (role === 'com_admin') {
     return '管理员'
   }
   else {
-    return '普通成员'
+    return '普通用户'
   }
 }
 
