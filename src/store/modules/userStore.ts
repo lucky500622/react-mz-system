@@ -13,6 +13,7 @@ type UserInfo = {
 export const fetchUserInfo = createAsyncThunk('userStore/fetchUserInfo', async () => {
   const res = await getUserInfoService()
   setStorage('role', res.data.user_role)
+  setStorage('user_name', res.data.user_name)
   return res.data
 })
 
