@@ -72,11 +72,12 @@ const IndexHeader = () => {
   
   useEffect(() => {
     // 初始化与用户提起申请触发消息处理
-    if (userInfo.user_role === 'sup_admin' && messages) {
-      const getInfo = async () => {
-        const res = await getRequestApply()
-        setApplyList(res.data.applyList)
-      }
+    const getInfo = async () => {
+      const res = await getRequestApply()
+      setApplyList(res.data.applyList)
+    }
+    getInfo()
+    if (userInfo.user_role === 'sup_admin' && messages?.msg !== '连接成功' && messages) {
       getInfo()
     }
     // 处理申请后触发消息处理
