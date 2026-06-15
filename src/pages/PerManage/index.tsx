@@ -57,7 +57,12 @@ const PerManage = () => {
   // 提交表单
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     try {
-      await run(() => submitApply(values))
+      const res = await run(() => submitApply(values))
+      if (res.code === 4031 || res.code === 4032 || res.code === 4033) {
+        message.error(res.message)
+        return
+      }
+
       message.success('申请成功')
     } finally {
       form.resetFields()
@@ -125,8 +130,8 @@ const PerManage = () => {
           <Form.Item<FieldType> label="申请身份" name="apply_role"
             rules={[{ required: true, message: '请选择申请身份' }]}>
             <Select options={[
-              { label: '仓库管理员', value: 'com_admin' },
-              { label: '上架管理员', value: 'staff' }
+              { label: '仓库管理员', value: 'com_admin', disabled: userInfo.user_role === 'com_admin' },
+              { label: '上架管理员', value: 'staff', disabled: userInfo.user_role === 'staff' }
             ]} />
           </Form.Item>
           <Form.Item<FieldType> label="审批人" name="approve_user_name"

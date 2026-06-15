@@ -107,3 +107,27 @@
     }
   }
 }
+
+.IndexHeader-request-modal {
+  .ant-modal-body {
+    padding-top: 10px;
+    .apply-item {
+      display: flex;
+      align-items: center;
+      background-color: #f3f3f3;
+      padding: 10px 20px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      .apply-btn {
+        margin-left: auto;
+        .btn {
+          color: #000000;
+          cursor: pointer;
+        }
+        .anticon-check {
+          margin-bottom: 20px;
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import {useDispatch} from 'react-redux'
 
 import { Layout, Menu } from 'antd'
@@ -9,15 +9,10 @@ import IndexHeader from '@/pages/Layout/components/IndexHeader'
 import { getStorage } from '@/utils/storage'
 import type { AppDispatch } from '@/store/index'
 import { fetchUserInfo } from '@/store/modules/userStore'
-import useSse from '@/hooks/useSse'
 
 import '@/pages/Layout/index.scss'
 
 const LayoutIndex = () => {
-  // 消息状态
-  const [messages, setMessages] = useState([])
-  // 消息处理函数
-  useSse({onMessage: setMessages})
   // 导航实例
   const navigate = useNavigate()
   // 获取用户角色
@@ -88,10 +83,6 @@ const LayoutIndex = () => {
   useEffect(() => {
     dispatch(fetchUserInfo())
   }, [dispatch])
-
-  useEffect(() => {
-    console.log(messages)
-  }, [messages])
 
   return (
     <div> 
