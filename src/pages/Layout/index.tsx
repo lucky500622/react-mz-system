@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-import {useDispatch} from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { Layout, Menu } from 'antd'
 import type { MenuProps } from 'antd'
@@ -9,6 +9,7 @@ import IndexHeader from '@/pages/Layout/components/IndexHeader'
 import { getStorage } from '@/utils/storage'
 import type { AppDispatch } from '@/store/index'
 import { fetchUserInfo } from '@/store/modules/userStore'
+import { fetchHandleWarehouseInfo, fetchApplyInfo } from '@/store/modules/userStore'
 
 import '@/pages/Layout/index.scss'
 
@@ -82,6 +83,8 @@ const LayoutIndex = () => {
   const dispatch = useDispatch<AppDispatch>()
   useEffect(() => {
     dispatch(fetchUserInfo())
+    dispatch(fetchHandleWarehouseInfo())
+    dispatch(fetchApplyInfo())
   }, [dispatch])
 
   return (

@@ -25,6 +25,7 @@
     .function {
       display: flex;
       .fun-btn {
+        position: relative;
         display: flex;
         margin-right: 20px;
         padding: 0 20px;
@@ -43,6 +44,20 @@
         .icon {
           margin-top: 2px;
           font-size: 14px;
+        }
+
+        .apply-count {
+          position: absolute;
+          padding: 5px;
+          top: -6px;
+          right: 4px;
+          border-radius: 50%;
+          min-width: 16px;
+          height: 16px;
+          text-align: center;
+          line-height: 6px;
+          background-color: #ef3a3a;
+          font-size: 12px;
         }
       }
       .fun-btn:hover { 

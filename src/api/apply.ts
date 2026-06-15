@@ -25,3 +25,8 @@ export const getRequestApply = () => {
 export const handleApply = (data: { m_id: number, apply_status: number, apply_role: string, user_name: string }) => {
   return request.patch('/apply/approve', data) as Promise<ApiResponse<null>>
 }
+
+// 获取用户权限变更申请信息
+export const getApplyInfo = () => {
+  return request.get('/apply/info') as Promise<ApiResponse<ApplyObj>>
+}

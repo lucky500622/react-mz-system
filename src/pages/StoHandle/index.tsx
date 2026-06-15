@@ -1,28 +1,40 @@
 import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
 import { Card, Modal, List, Typography, Tag, InputNumber, message } from 'antd'
 import { PlusCircleOutlined } from '@ant-design/icons'
 
 import '@/pages/StoHandle/index.scss'
-import { getWarehouseInfo, getHandleWarehouseInfo, addHandleWarehouse } from '@/api/warehouse'
+import { getWarehouseInfo, addHandleWarehouse } from '@/api/warehouse'
 import type { WarehouseInfoData, HandleWarehouseInfo } from '@/api/warehouse'
 import { useLoading } from '@/hooks/useLoading'
+import type { RootState, AppDispatch } from '@/store'
+import { fetchHandleWarehouseInfo } from '@/store/modules/userStore'
 
 const StoHandle = () => {
+  // dispatch 实例
+  const dispatch = useDispatch<AppDispatch>()
+  // 经手仓库列表
+  const myWarehouseList = useSelector((state: RootState) => state.userStore.handleWarehouseInfo)
+
   // 刷新页面状态
   const [refresh, setRefresh] = useState(false)
 
   // 仓库列表
   const [warehouseList, setWarehouseList] = useState<WarehouseInfoData[]>([])
-  // 经手仓库列表
-  const [myWarehouseList, setMyWarehouseList] = useState<HandleWarehouseInfo[]>([])
 
+  // 是否存在申请
+  const existApply = useSelector((state: RootState) => state.userStore.existApply)
   // 仓库序列号
   const [warehouseId, setWarehouseId] = useState<number>()
   // 添加经手仓库弹窗
   const [visible, setVisible] = useState(false)
   // 添加经手仓库
   const handleAdd = async () => {
+    if (existApply) {
+      message.error('请先等待申请结果')
+      return
+    }
     setVisible(true)
   }
   // 加载状态
@@ -58,9 +70,8 @@ const StoHandle = () => {
     // 初始化仓库、经手仓库列表
     const getInfo = async () => {
       const res = await getWarehouseInfo()
-      const handleRes = await getHandleWarehouseInfo()
       setWarehouseList(res.data.warehouseInfo.filter(item => !item.exists_user_handle) || [])
-      setMyWarehouseList(handleRes.data.handleWarehouseInfo || [])
+      dispatch(fetchHandleWarehouseInfo())
     }
     getInfo()
     // 实例化广播通道
@@ -74,7 +85,7 @@ const StoHandle = () => {
     return () => {
       channel.close()
     }
-  }, [refresh])
+  }, [refresh, dispatch])
   
   return (
     <div className='ProUpload'>

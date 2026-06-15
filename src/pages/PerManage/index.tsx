@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo} from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import { Table, Tag, Modal, Form, Select, Button, message } from 'antd'
 import type { FormProps } from 'antd'
@@ -9,10 +9,14 @@ import { submitApply } from '@/api/apply'
 import { getUserListService } from '@/api/user'
 import type { UserListObj } from '@/api/user'
 import { getInitial, turnRoleToChinese } from '@/utils/handleWord'
-import type {RootState} from '@/store'
+import type { RootState, AppDispatch } from '@/store'
 import {useLoading} from '@/hooks/useLoading'
+import { setExistApply } from '@/store/modules/userStore'
 
 const PerManage = () => {
+  // 实例化dispatch
+  const dispatch = useDispatch<AppDispatch>()
+
   // 全部用户列表
   const [userList, setUserList] = useState<UserListObj[]>([])
   // 审批人列表
@@ -39,13 +43,20 @@ const PerManage = () => {
   const pageSize = 8
   // 用户信息
   const userInfo = useSelector((state: RootState) => state.userStore.userInfo)
+  // 经手仓库列表
+  const handleWarehouseInfo = useSelector((state: RootState) => state.userStore.handleWarehouseInfo)
 
   // 弹窗配置
   const [visible, setVisible] = useState(false)
   // 点击权限变更申请按钮
   const handleApply = async () => {
+    if (handleWarehouseInfo.length !== 0) {
+      message.error('无经手仓库才能申请权限变更')
+      return
+    }
     setVisible(true)
   }
+
   // 表单配置
   type FieldType = {
     apply_role: string;
@@ -58,11 +69,12 @@ const PerManage = () => {
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     try {
       const res = await run(() => submitApply(values))
-      if (res.code === 4031 || res.code === 4032 || res.code === 4033) {
+      if (res.code === 4031 || res.code === 4032 || res.code === 4033 || res.code === 4034) {
         message.error(res.message)
         return
       }
-
+      // 提交成功后，更新是否存在申请状态
+      dispatch(setExistApply(true))
       message.success('申请成功')
     } finally {
       form.resetFields()
