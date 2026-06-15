@@ -89,7 +89,7 @@ const PerManage = () => {
           <div className="avatar">{getInitial(userInfo.user_name) || 'U'}</div>
           <div className="user-info">
             <div className="user-name">
-              {userInfo.user_name}
+              {userInfo.user_name || '未知用户'}
             </div>
             <div className="user-role">
               {turnRoleToChinese(userInfo.user_role)}
