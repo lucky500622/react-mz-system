@@ -6,6 +6,7 @@ import { Layout, Menu } from 'antd'
 import type { MenuProps } from 'antd'
 
 import IndexHeader from '@/pages/Layout/components/IndexHeader'
+import ErrorBoundary from '@/components/ErrorBoundary'
 import { getStorage } from '@/utils/storage'
 import type { AppDispatch } from '@/store/index'
 import { fetchUserInfo } from '@/store/modules/userStore'
@@ -97,7 +98,9 @@ const LayoutIndex = () => {
           </Menu>
         </Layout.Sider>
         <Layout.Content className='content'>
-          <Outlet />
+          <ErrorBoundary key={location.pathname}>
+            <Outlet />
+          </ErrorBoundary>
         </Layout.Content>
       </Layout>
     </div>

@@ -4,11 +4,14 @@ import { Provider } from 'react-redux'
 
 import router from '@/router/index'
 import store from '@/store/index'
+import ErrorBoundary from '@/components/ErrorBoundary'
 
 import '@/assets/styles/base.scss'
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
-    <RouterProvider router={router} />
+    <ErrorBoundary>
+      <RouterProvider router={router} />
+    </ErrorBoundary>
   </Provider>
 )
