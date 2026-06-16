@@ -4,8 +4,11 @@
 
 ## 🛠️ 快速启动
 
-npm install
-npm run dev
+- npm install
+- npm run dev
+
+- npm run build
+- npm run preview
 
 ## 🚀 技术栈
 

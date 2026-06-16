@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createHashRouter  } from 'react-router-dom'
 import { Suspense } from 'react'
 import AuthRoute from '../components/AuthRoute'
 import StaffAnthRoute from '@/components/StaffAnthRoute'
@@ -9,7 +9,7 @@ import {
 } from '@/router/router'
 import Loading from '@/components/Loading'
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     element: <AuthRoute />,
     children: [{
