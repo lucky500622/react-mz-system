@@ -1,0 +1,1 @@
+var e=e=>e===`sup_admin`?`超级管理员`:e===`com_admin`?`仓库管理员`:`上架管理员`,t=e=>{let t=e?.trim().charAt(0)||``;return/[a-zA-Z]/.test(t)?t.toUpperCase():t};export{e as n,t};
