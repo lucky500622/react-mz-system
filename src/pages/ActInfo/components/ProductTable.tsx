@@ -34,7 +34,7 @@ const ProductTable = memo(( { queryProductRecordDataSource }:
       title: '操作类型',
       dataIndex: 'action_type',
       key: 'action_type',
-      render: (val) => {
+      render: (val: 1 | 2 | 3 | 4 | 5 | 6 | 7) => {
         const map = {
           1: '新增',
           2: '删除',
@@ -61,7 +61,7 @@ const ProductTable = memo(( { queryProductRecordDataSource }:
       title: '操作时间',
       dataIndex: 'issue_create_time',
       key: 'issue_create_time',
-      render: (val) => {  
+      render: (val: string) => {  
         return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
       }
     }

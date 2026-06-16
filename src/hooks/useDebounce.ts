@@ -17,14 +17,17 @@ export const useDebounceValue = <T>(value: T, delay: number) => {
 type DebouncedFn<T> = T & {
   cancel: () => void
 }
-export const useDebounceFn = <T extends (...args: unknown[]) => void>(fn: T, delay: number): DebouncedFn<T> => {
+// 允许any，适配任意参数类型的代替方案
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const useDebounceFn = <T extends (...args: any[]) => void | Promise<void>>
+  (fn: T, delay: number): DebouncedFn<T> => {
   const timerRef = useRef<number | null>(null)
   const debouncedFn = ((...args: Parameters<T>) => {
     if (timerRef.current) {
       clearTimeout(timerRef.current)
     }
     timerRef.current = setTimeout(() => {
-      fn.apply(this, args)
+      fn(...args)
       timerRef.current = null
     }, delay)
   }) as DebouncedFn<T>

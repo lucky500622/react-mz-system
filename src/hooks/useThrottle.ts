@@ -4,11 +4,13 @@ import { useRef } from 'react'
 type ThrottledFn<T> = T & {
   cancel: () => void
 }
-export const useThrottleFn = <T extends (...args: unknown[]) => void>(fn: T, delay: number): ThrottledFn<T> => {
+// 允许any，适配任意参数类型的代替方案
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const useThrottleFn = <T extends (...args: any[]) => void>(fn: T, delay: number): ThrottledFn<T> => {
   const timerRef = useRef<number | null>(null)
   const throttledFn = ((...args: Parameters<T>) => {
     if (timerRef.current) return                           
-    fn.apply(this, args)
+    fn(...args)
     timerRef.current = setTimeout(() => {
       timerRef.current = null
     }, delay)

@@ -32,9 +32,9 @@ const PerManage = () => {
       title: '用户身份',
       dataIndex: 'user_role',
       key: 'user_role',
-      render: (text) => {
-        const role = turnRoleToChinese(text)
-        return <Tag color={text === 'sup_admin' ? 'red' : text === 'com_admin' ? 'blue' : 'green'}>{role}</Tag>
+      render: (val: string) => {
+        const role = turnRoleToChinese(val)
+        return <Tag color={val === 'sup_admin' ? 'red' : val === 'com_admin' ? 'blue' : 'green'}>{role}</Tag>
       }
     }
   ]
@@ -90,7 +90,7 @@ const PerManage = () => {
     // 获取用户列表
     const getInfo = async () => {
       const res = await getUserListService()
-      setUserList(res.data.userList)
+      setUserList(res?.data?.userList ?? [])
     }
     getInfo()
   }, [])

@@ -13,14 +13,14 @@ type UserInfo = {
 // 获取用户信息
 export const fetchUserInfo = createAsyncThunk('userStore/fetchUserInfo', async () => {
   const res = await getUserInfoService()
-  setStorage('role', res.data.user_role)
-  setStorage('user_name', res.data.user_name)
+  setStorage('role', res.data?.user_role ?? '')
+  setStorage('user_name', res.data?.user_name ?? '')
   return res.data
 })
 // 获取用户经手仓库信息
 export const fetchHandleWarehouseInfo = createAsyncThunk('userStore/fetchHandleWarehouseInfo', async () => {
   const res = await getHandleWarehouseInfo()
-  return res.data.handleWarehouseInfo
+  return res.data?.handleWarehouseInfo ?? []
 })
 // 获取用户权限变更申请信息
 export const fetchApplyInfo = createAsyncThunk('userStore/fetchApplyInfo', async () => {
@@ -44,14 +44,17 @@ const userStore = createSlice({
     builder
       // 处理获取用户信息成功
       .addCase(fetchUserInfo.fulfilled, (state, action) => {
-        state.userInfo = action.payload
+        if (action.payload) {
+          state.userInfo = action.payload
+        }
       })
       // 处理获取用户经手仓库信息成功
       .addCase(fetchHandleWarehouseInfo.fulfilled, (state, action) => {
         state.handleWarehouseInfo = action.payload
       })
       .addCase(fetchApplyInfo.fulfilled, (state, action) => {
-        if (Object.keys(action.payload).length === 0) {
+        const payload = action.payload ?? {}
+        if (Object.keys(payload).length === 0) {
           state.existApply = false
         } else {  
           state.existApply = true

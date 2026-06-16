@@ -1,10 +1,11 @@
 // 请求拦截器
-
 import axios from 'axios'
 
 import { message } from 'antd'
 
 import { getStorage, removeStorage } from '@/utils/storage'
+
+console.log(import.meta.env.VITE_API_BASE_URL)
 
 // 创建axios实例
 const request = axios.create({
@@ -14,7 +15,7 @@ const request = axios.create({
 
 request.interceptors.request.use(function (config) {
   // 携带token到请求头
-  const token: string | null = getStorage('token')
+  const token: string | null = getStorage('token') ?? null
   if (token) config.headers['Authorization'] = `Bearer ${token}`
   return config
 }, function (error) {

@@ -16,7 +16,8 @@ export type StoTableRef = {
 }
 import { getWarehouseInfo, deleteWarehouse } from '@/api/warehouse'
 
-const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, queryDataSource: WarehouseInfoData[]}) => {
+const StoTable = memo(({ref, queryDataSource}
+  : {ref: React.Ref<StoTableRef>, queryDataSource?: WarehouseInfoData[] | null}) => {
   // 表格列配置
   const columns = [
     {
@@ -29,7 +30,7 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
       title: '仓库原名',
       dataIndex: 'warehouse_name_ed',
       key: 'warehouse_name_ed',
-      render: (val) => {
+      render: (val: string | null) => {
         if (!val) return '/'
         return val
       }
@@ -43,9 +44,9 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
       title: '仓库类型',
       dataIndex: 'warehouse_type',
       key: 'warehouse_type',
-      render: (_, record) => {
+      render: ({ warehouse_type }: { warehouse_type: string }) => {
         return (
-          <Tag color={'blue'}>{record.warehouse_type}</Tag>
+          <Tag color={'blue'}>{warehouse_type}</Tag>
         )
       }
     },
@@ -53,14 +54,15 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
       title: '仓库状态',
       dataIndex: 'exists_list_product',
       key: 'exists_list_product',
-      render: (_, record) => {
+      render: ({ exists_list_product, exists_user_handle }:
+         { exists_list_product: boolean, exists_user_handle: boolean }) => {
         return (
           <div>
-            <Tag style={{margin: '0 5px 5px 0'}} color={record.exists_list_product? 'black' : 'gray'}>
-              {record.exists_list_product? '存在上架产品' : '不存在上架产品'}
+            <Tag style={{margin: '0 5px 5px 0'}} color={exists_list_product? 'black' : 'gray'}>
+              {exists_list_product? '存在上架产品' : '不存在上架产品'}
             </Tag>
-            <Tag color={record.exists_user_handle? 'black' : 'gray'}>
-              {record.exists_user_handle? '存在经手成员' : '不存在经手成员'}
+            <Tag color={exists_user_handle? 'black' : 'gray'}>
+              {exists_user_handle? '存在经手成员' : '不存在经手成员'}
             </Tag>
           </div>
         )
@@ -75,7 +77,7 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
       title: '创建时间',
       dataIndex: 'warehouse_create_time',
       key: 'warehouse_create_time',
-      render: (val) => {
+      render: (val: string) => {
         return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
       }
     },
@@ -83,11 +85,11 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
       title: '仓库描述',
       key: 'warehouse_description',
       width: 100,
-      render: (_, record) => {
+      render: ({ warehouse_description, m_id }: { warehouse_description: string, m_id: number }) => {
         return (
           <div>
             <Button type="link" size="small" 
-              onClick={() => handleDetail(record.warehouse_description, record.m_id)}>详情</Button>
+              onClick={() => handleDetail(warehouse_description, m_id)}>详情</Button>
           </div>
         )
       } 
@@ -96,12 +98,13 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
       title: '操作',
       key: 'action',
       width: 160,
-      render: (_, record) => {
+      render: ({ exists_list_product, exists_user_handle, m_id }: 
+        { exists_list_product: boolean, exists_user_handle: boolean, m_id: number }) => {
         return (
           <div>
-            <Button type="link" size="small" onClick={() => handleEdit(record.m_id)}>编辑</Button>
-            <Button type="link" size="small" disabled={record.exists_list_product || record.exists_user_handle}
-              onClick={() => handleDelete(record.m_id)}>删除</Button>
+            <Button type="link" size="small" onClick={() => handleEdit(m_id)}>编辑</Button>
+            <Button type="link" size="small" disabled={exists_list_product || exists_user_handle}
+              onClick={() => handleDelete(m_id)}>删除</Button>
           </div>
         )
       } 
@@ -160,7 +163,7 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
       message.success('编辑成功')
       setRefresh(!refresh)
     } finally {
-      setEditId(null)
+      setEditId(0)
       form.resetFields()
       setEditModalOpen(false)
     }
@@ -194,7 +197,7 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
     } finally {
       setRefresh(!refresh)
       setDeleteModalOpen(false)
-      setDeleteId(null)
+      setDeleteId(0)
     }
   }
 
@@ -210,15 +213,13 @@ const StoTable = memo(({ref, queryDataSource}: {ref: React.Ref<StoTableRef>, que
   useEffect(() => {
     const getInfo = async () => {
       const res = await getWarehouseInfo()
-      setDataSource(res.data.warehouseInfo)
+      setDataSource(res.data?.warehouseInfo ?? [])
     }
     getInfo()
   }, [refresh])
 
   useEffect(() => {
-    if (queryDataSource) {
-      setDataSource(queryDataSource)
-    }
+    setDataSource(queryDataSource ?? [])
   }, [queryDataSource])
   return (
     <div>

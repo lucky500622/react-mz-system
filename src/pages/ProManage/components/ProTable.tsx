@@ -40,9 +40,9 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
       title: '产品类型',
       dataIndex: 'product_type',
       key: 'product_type',
-      render: (_, record) => {
+      render: (val: string) => {
         return (
-          <Tag color="blue">{record.product_type}</Tag>
+          <Tag color="blue">{val}</Tag>
         )
       }
     },
@@ -65,7 +65,7 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
       title: '创建时间',
       dataIndex: 'product_create_time',
       key: 'product_create_time',
-      render: (val) => {
+      render: (val: string) => {
         return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
       }
     },
@@ -73,11 +73,11 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
       title: '产品描述',
       key: 'product_description',
       width: 100,
-      render: (_, record) => {
+      render: ({ product_description, m_id }: { product_description: string, m_id: number }) => {
         return (
           <div>
             <Button type="link" size="small"
-              onClick={() => handleDetail(record.product_description, record.m_id)}>详情</Button>
+              onClick={() => handleDetail(product_description, m_id)}>详情</Button>
           </div>
         )
       } 
@@ -86,12 +86,12 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
       title: '操作',
       key: 'action',
       width: 160,
-      render: (_, record) => {
+      render: ({ product_list_num, m_id }: { product_list_num: number, m_id: number }) => {
         return (
           <div>
-            <Button type="link" size="small" onClick={() => handleAdjust(record.m_id)}>调整</Button>
-            <Button type="link" size="small"  disabled={record.product_list_num !== 0}
-              onClick={() => handleDelete(record.m_id)}>删除</Button>
+            <Button type="link" size="small" onClick={() => handleAdjust(m_id)}>调整</Button>
+            <Button type="link" size="small"  disabled={product_list_num !== 0}
+              onClick={() => handleDelete(m_id)}>删除</Button>
           </div>
         )
       } 
@@ -102,7 +102,7 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
   const pageSize = 8
 
   // 表格数据
-  const [dataSource, setDataSource] = useState([])
+  const [dataSource, setDataSource] = useState<ProductInfoData[]>([])
 
   // 编辑描述弹窗引用
   const editRef = useRef<EditDescriptionRef>(null)
@@ -120,7 +120,7 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
   const { loading: deleteLoading, run: deleteRun } = useLoading()
   // 删除点击事件
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [deleteMId, setDeleteMId] = useState(0)
+  const [deleteMId, setDeleteMId] = useState<number>(0)
   const handleDelete =  (m_id: number) => {
     setDeleteMId(m_id)
     setIsDeleteModalOpen(true)
@@ -138,7 +138,7 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
       message.success('删除成功')
       setRefresh(!refresh)
     } finally {
-      setDeleteMId(null)
+      setDeleteMId(0)
       setIsDeleteModalOpen(false)
       setAdjustAndDeleteModalOpen(false)
     }
@@ -156,8 +156,8 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
   // 登录表单实例
   const [form] = Form.useForm<FieldType>()
   type FieldType = {
-    adjustNum?: number;
-    adjustType?: number;
+    adjustNum: number;
+    adjustType: number;
   }
   // 调整数量确认事件
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) =>  {
@@ -172,7 +172,7 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
       message.success('调整成功')
       setRefresh(!refresh)
       // 调整数量为0 是否删除产品
-      if (res.data.endNum === 0) {
+      if (res?.data?.endNum === 0) {
         setDeleteMId(adjustMId)
         setAdjustAndDeleteModalOpen(true)
       }
@@ -201,7 +201,7 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
   useEffect(() => {
     const getInfo = async () => {
       const res = await getProductInfo()
-      setDataSource(res.data.productInfo)
+      setDataSource(res?.data?.productInfo ?? [])
     }
     getInfo()
   }, [refresh])
@@ -215,7 +215,7 @@ const ProTable = memo(({ref, querySource} : {ref: React.Ref<ProTableRef>, queryS
 
   return (
     <div>
-      <Table dataSource={dataSource} columns={columns} rowKey={(record) => record.m_id}
+      <Table dataSource={dataSource} columns={columns} rowKey={({ m_id }) => m_id}
         pagination={{
           current: currentPage,
           pageSize: pageSize,

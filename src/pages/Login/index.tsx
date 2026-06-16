@@ -64,7 +64,7 @@ const Login = () => {
       } else if (res.code === 200) {
         message.success('登录成功')
         // 存储唯一会话标识
-        setStorage('token', res.data.token)
+        setStorage('token', res?.data?.token ?? '')
         // 获取用户信息
         await dispatch(fetchUserInfo())
         // 跳转到首页

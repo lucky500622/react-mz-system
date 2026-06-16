@@ -31,7 +31,7 @@ const StoManage = () => {
     const res = await run(() => {
       return getWarehouseInfo(0, 999, values)
     })
-    setFormList(res.data.warehouseInfo)
+    setFormList(res.data?.warehouseInfo ?? [])
   }
   // 查询仓库表单提交失败
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {

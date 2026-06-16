@@ -23,11 +23,11 @@ const ProManage = () => {
     product_type?: string;
   }
   const [form] = Form.useForm()
-  const [querySource, setQuerySource] = useState<ProductInfoData[]>()
+  const [querySource, setQuerySource] = useState<ProductInfoData[]>([])
   // 查询产品
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     const res = await run(() => getProductInfo(0, 999, values))
-    setQuerySource(res.data.productInfo)
+    setQuerySource(res?.data?.productInfo ?? [])
   }
   // 查询产品失败
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {

@@ -46,8 +46,8 @@ export type warehouseConfig = {
   user_name?: string,
   action_type?: number,
   action_time?: [Dayjs | null, Dayjs | null] | null,
-  start_time?: string,
-  end_time?: string,
+  start_time?: string | null,
+  end_time?: string | null,
 }
 export type WarehouseActionInfoData = {
   m_id: number;

@@ -26,7 +26,7 @@ const StoHandle = () => {
   // 是否存在申请
   const existApply = useSelector((state: RootState) => state.userStore.existApply)
   // 仓库序列号
-  const [warehouseId, setWarehouseId] = useState<number>()
+  const [warehouseId, setWarehouseId] = useState<number | undefined>(undefined)
   // 添加经手仓库弹窗
   const [visible, setVisible] = useState(false)
   // 添加经手仓库
@@ -41,6 +41,10 @@ const StoHandle = () => {
   const {loading, run} = useLoading()
   // 确认添加经手仓库
   const handleAddConfirm = async () => {
+    if (!warehouseId) {
+      message.error('请输入仓库序列号')
+      return
+    }
     try {
       const res = await run(() => addHandleWarehouse({
         m_id: warehouseId
@@ -70,7 +74,7 @@ const StoHandle = () => {
     // 初始化仓库、经手仓库列表
     const getInfo = async () => {
       const res = await getWarehouseInfo()
-      setWarehouseList(res.data.warehouseInfo.filter(item => !item.exists_user_handle) || [])
+      setWarehouseList(res.data?.warehouseInfo?.filter(item => !item.exists_user_handle) || [])
       dispatch(fetchHandleWarehouseInfo())
     }
     getInfo()
@@ -155,7 +159,8 @@ const StoHandle = () => {
       >
         <div className="modal-item">
           <span>仓库序列号：</span>
-          <InputNumber placeholder="请输入仓库的序列号" value={warehouseId} onChange={(value) => setWarehouseId(value)} />
+          <InputNumber placeholder="请输入仓库的序列号" required min={1} value={warehouseId} 
+            onChange={(value) => setWarehouseId(value ?? undefined)} />
         </div>
       </Modal>
     </div>

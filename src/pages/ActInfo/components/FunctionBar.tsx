@@ -14,7 +14,7 @@ type LabelConfig = {
 const FunctionBar = ({labelConfig, options, onSearch, loading} : {labelConfig: LabelConfig, options: string[],
   onSearch: (values: warehouseConfig | productConfig, config_type: string) => void, loading: boolean}) => {
   const [form] = Form.useForm()
-  // 新增仓库表单提交
+  // 搜索表单提交
   const onFinish: FormProps<warehouseConfig | productConfig>['onFinish'] = (values) => {
     if (values.action_time) {
       values.start_time = values.action_time[0]?.format('YYYY-MM-DD') || null
@@ -22,7 +22,7 @@ const FunctionBar = ({labelConfig, options, onSearch, loading} : {labelConfig: L
     }
     onSearch(values, labelConfig.config_type)
   }
-  // 新增仓库表单提交失败
+  // 搜索表单提交失败
   const onFinishFailed: FormProps<warehouseConfig | productConfig>['onFinishFailed'] = (errorInfo) => {
     console.log('Failed:', errorInfo)
   }

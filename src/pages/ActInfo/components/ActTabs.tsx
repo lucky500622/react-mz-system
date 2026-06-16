@@ -36,12 +36,12 @@ const ActTable = () => {
       const res = await runWarehouseSearch(() => {
         return getWarehouseAction(0, 999, values as warehouseConfig)
       })
-      setQueryWarehouseRecordDataSource(res.data.actionInfo)
+      setQueryWarehouseRecordDataSource(res?.data?.actionInfo ?? [])
     } else {
       const res = await runProductSearch(() => {
         return getProductAction(0, 999, values as productConfig)
       })
-      setQueryProductRecordDataSource(res.data.actionInfo)
+      setQueryProductRecordDataSource(res?.data?.actionInfo ?? [])
     }
   }
 
@@ -49,13 +49,13 @@ const ActTable = () => {
     // 获取产品操作记录表格数据
     const getProductInfo = async () => {
       const res = await getProductAction()
-      setQueryProductRecordDataSource(res.data.actionInfo)
+      setQueryProductRecordDataSource(res?.data?.actionInfo ?? [])
     }
     getProductInfo()
     // 获取仓库操作记录表格数据
     const getWarehouseRecord = async () => {
       const res = await getWarehouseAction()
-      setQueryWarehouseRecordDataSource(res.data.actionInfo)
+      setQueryWarehouseRecordDataSource(res?.data?.actionInfo ?? [])
     }
     getWarehouseRecord()
   }, [])

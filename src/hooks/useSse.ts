@@ -40,7 +40,7 @@ const useSse = <T>({ onMessage }: { onMessage: Dispatch<SetStateAction<T>> }) =>
       // 出错自动重连
       sourceRef.current.onerror = () => {
         console.log('SSE连接异常，准备重连')
-        sourceRef.current.close()
+        sourceRef.current?.close()
 
         // 计算重连延迟时间
         const exponentialDelay = BASE_DELAY * Math.pow(2, retryCountRef.current)
@@ -64,7 +64,7 @@ const useSse = <T>({ onMessage }: { onMessage: Dispatch<SetStateAction<T>> }) =>
     }
 
     return () => {
-      clearTimeout(timerRef.current)
+      if (timerRef.current) clearTimeout(timerRef.current)
       sourceRef.current?.close()
       sourceRef.current = null
     }

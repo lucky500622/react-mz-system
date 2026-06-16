@@ -41,7 +41,7 @@ const MessageBoard = memo(({ id }: { id: number }) => {
   // 加载状态
   const { loading: deleteLoading, run: deleteRun } = useLoading()
   // 删除待办事项id
-  const [deleteMId, setDeleteMId] = useState<number | null>(null)
+  const [deleteMId, setDeleteMId] = useState<number>(0)
   // 删除待办事项
   const handleDelete = async (m_id: number) => {
     setDeleteMId(m_id)
@@ -67,7 +67,7 @@ const MessageBoard = memo(({ id }: { id: number }) => {
   useEffect(() => {
     const getInfo = async () => {
       const res = await getTodo({warehouse_m_id: id})
-      setTodoList(res.data.todoList)
+      setTodoList(res.data?.todoList ?? [])
     }
     getInfo()
   }, [id, refresh])

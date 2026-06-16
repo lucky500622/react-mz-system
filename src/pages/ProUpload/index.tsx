@@ -14,7 +14,8 @@ import SelectNameAssociation from '@/components/SelectNameAssociation'
 
 const ProUpload = () => {
   // 从路由参数中获取仓库序列号
-  const { id } = useParams()
+  const params = useParams()
+  const id = params.id ? Number(params.id) : 0
   // 刷新状态
   const [refresh, setRefresh] = useState(false)
 
@@ -34,9 +35,9 @@ const ProUpload = () => {
       title: '产品类型',
       dataIndex: 'product_type',
       key: 'product_type',
-      render: (_, record) => {
+      render: (product_type: string) => {
         return (
-          <Tag color="blue">{record.product_type}</Tag>
+          <Tag color="blue">{product_type}</Tag>
         )
       }
     },
@@ -59,10 +60,10 @@ const ProUpload = () => {
       title: '产品描述',
       key: 'product_description',
       width: 100,
-      render: (_, record) => {
+      render: ({m_id}: {m_id: number}) => {
         return (
           <div>
-            <Button type="link" size="small" onClick={() => handleDetailClick(record.m_id)}>详情</Button>
+            <Button type="link" size="small" onClick={() => handleDetailClick(m_id)}>详情</Button>
           </div>
         )
       } 
@@ -71,11 +72,11 @@ const ProUpload = () => {
       title: '操作',
       key: 'action',
       width: 160,
-      render: (_, record) => {
+      render: ({m_id}: {m_id: number}) => {
         return (
           <div>
-            <Button type="link" size="small" onClick={() => handleAdjust(record.m_id)}>调整</Button>
-            <Button type="link" size="small" onClick={() => handleSale(record.m_id)}>售出</Button>
+            <Button type="link" size="small" onClick={() => handleAdjust(m_id)}>调整</Button>
+            <Button type="link" size="small" onClick={() => handleSale(m_id)}>售出</Button>
           </div>
         )
       } 
@@ -107,7 +108,11 @@ const ProUpload = () => {
       values.product_name,
       values.product_type
     ))
-    setProduct(res.data)
+    setProduct(res.data ?? {
+      warehouse_name: '',
+      warehouse_type: '',
+      warehouseProduct: []
+    })
   }
   const onQueryFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
     console.log('Failed:', errorInfo)
@@ -147,7 +152,7 @@ const ProUpload = () => {
       message.success('调整成功')
       setRefresh(!refresh)
     } finally {
-      setAdjustMId(undefined)
+      setAdjustMId(0)
       adjustForm.resetFields()
       setAdjustModalOpen(false)
     }
@@ -171,7 +176,7 @@ const ProUpload = () => {
       message.success('调整成功')
       setRefresh(!refresh)
     } finally {
-      setAdjustMId(undefined)
+      setAdjustMId(0)
       adjustForm.resetFields()
       setAdjustModalOpen(false)
     }
@@ -192,7 +197,7 @@ const ProUpload = () => {
       message.success('调整成功')
       setRefresh(!refresh)
     } finally {
-      setAdjustMId(undefined)
+      setAdjustMId(0)
       adjustForm.resetFields()
       setAdjustModalOpen(false)
     }
@@ -204,7 +209,7 @@ const ProUpload = () => {
   const [detailContent, setDetailContent] = useState('')
   const handleDetailClick = (m_id: number) => {
     setDetailModalOpen(true)
-    setDetailContent(product.warehouseProduct.find(item => item.m_id === m_id)?.product_description)
+    setDetailContent(product.warehouseProduct.find(item => item.m_id === m_id)?.product_description ?? '')
   }
 
   // 售出产品弹窗
@@ -214,7 +219,7 @@ const ProUpload = () => {
   // 售出产品弹窗加载状态
   const {loading: saleLoading, run: saleRun} = useLoading()
   // 售出产品序列号
-  const [saleMId, setSaleMId] = useState<number>()
+  const [saleMId, setSaleMId] = useState<number>(0)
   const handleSale = (m_id: number) => {
     setSaleMId(m_id)
     setSaleModalOpen(true)
@@ -233,7 +238,7 @@ const ProUpload = () => {
       message.success('售出成功')
       setRefresh(!refresh)
     } finally {
-      setSaleMId(undefined)
+      setSaleMId(0)
       setSaleNum(1)
       setSaleModalOpen(false)
     }
@@ -248,7 +253,7 @@ const ProUpload = () => {
     setExitModalOpen(true)
   }
   // 退出仓库弹窗定时器
-  const timer = useRef<number>(null)
+  const timer = useRef<number | undefined>(undefined)
   // 退出仓库弹窗提交事件
   const handleExitSubmit = async () => {
     await exitRun(() => exitHandleWarehouse(Number(id)))
@@ -268,14 +273,16 @@ const ProUpload = () => {
     const getInfo = async () => {
       const res = await getWarehouseProduct(Number(id))
       // 如果仓库中没有产品，直接返回
-      if (res.data.warehouseProduct.length === 1 && !res.data.warehouseProduct[0].m_id) {
+      if (res?.data?.warehouseProduct.length === 1 && !res?.data?.warehouseProduct[0]?.m_id) {
         setProduct({
           ...res.data,
+          warehouse_name: res?.data?.warehouse_name ?? '',
+          warehouse_type: res?.data?.warehouse_type ?? '',
           warehouseProduct: []
         })
         return
       }
-      setProduct(res.data)
+      setProduct(res.data as WarehouseProductData)
     }
     getInfo()
   }, [id, refresh])
@@ -301,7 +308,7 @@ const ProUpload = () => {
 
       <div className="main">
         <div className="left">
-          <MessageBoard id={Number(id)} />
+          <MessageBoard id={id} />
         </div>
 
         <div className="right">
@@ -417,7 +424,7 @@ const ProUpload = () => {
             }}
           >
             <span>售出数量：</span>
-            <InputNumber value={saleNum} onChange={(v) => setSaleNum(v)}
+            <InputNumber value={saleNum} onChange={(v) => setSaleNum(v ?? 0)}
               required min={1} placeholder="请输入售出数量" />
           </Modal>
           <Modal

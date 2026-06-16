@@ -54,7 +54,7 @@ const IndexHeader = () => {
     }
     await run(() => handleApply({ m_id, apply_status: status, apply_role, user_name }))
     const res = await getRequestApply()
-    setApplyList(res.data.applyList)
+    setApplyList(res?.data?.applyList ?? [])
   }
 
   // 申请列表数据
@@ -74,7 +74,7 @@ const IndexHeader = () => {
     // 初始化与用户提起申请触发消息处理
     const getInfo = async () => {
       const res = await getRequestApply()
-      setApplyList(res.data.applyList)
+      setApplyList(res?.data?.applyList ?? [])
     }
     getInfo()
     if (userInfo.user_role === 'sup_admin' && messages?.msg !== '连接成功' && messages) {
