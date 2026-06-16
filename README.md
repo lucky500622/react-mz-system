@@ -1,73 +1,67 @@
-# React + TypeScript + Vite
+# MZ-System 仓库管理系统
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+基于 **React 19 + TypeScript + Vite** 构建的现代化仓库管理系统，集成了产品管理、仓库管理、人员管理和活动信息等功能模块，支持管理员与员工两种角色权限。
 
-Currently, two official plugins are available:
+## 🛠️ 快速启动
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+npm install
+npm run dev
 
-## React Compiler
+## 🚀 技术栈
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| 技术 | 版本 | 说明 |
+|------|------|------|
+| **React** | ^19.2 | 前端框架 |
+| **TypeScript** | ^6.0 | 类型安全 |
+| **Vite** | ^8.0 | 构建工具 |
+| **Ant Design** | ^6.4 | UI 组件库 |
+| **Redux Toolkit** | ^2.11 | 状态管理 |
+| **React Router DOM** | ^7.14 | 路由管理 |
+| **Axios** | ^1.16 | HTTP 请求 |
+| **ECharts** | ^6.1 | 数据可视化 |
+| **Sass** | ^1.99 | CSS 预处理器 |
+| **dayjs** | ^1.11 | 日期处理 |
 
-## Expanding the ESLint configuration
+## ✨ 功能模块
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 🔐 登录与权限
+- 用户登录 / 退出
+- **管理员** 与 **员工** 两种角色
+- 路由级权限控制（`AuthRoute`、`AdminAnthRoute`、`StaffAnthRoute`）
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 📊 首页数据概览
+- ECharts 折线图与饼图可视化
+- 核心数据一览
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 🏭 仓库管理（管理员）
+- 仓库列表查看、新增仓库
+- 仓库信息维护
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 📦 产品管理（管理员）
+- 产品列表查看、新增产品
+- 产品信息编辑
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 👥 人员管理
+- 人员信息查看与管理
+- 名称联想搜索
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 🎯 活动信息
+- 活动标签页切换
+- 门店信息表格
+- 产品信息表格
+- 功能栏操作
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 🔧 仓库处理（员工）
+- 日常仓库操作处理
+
+### 📤 产品上传（员工）
+- 产品数据上传
+- 留言板功能
+
+## ⚙️ 环境变量
+
+在 `.env.development` 中配置：
+
+## 📝 License
+
+此项目为个人项目，仅供学习与内部使用。
