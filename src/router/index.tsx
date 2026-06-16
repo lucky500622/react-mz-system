@@ -1,23 +1,23 @@
 import { createBrowserRouter } from 'react-router-dom'
+import { Suspense } from 'react'
 import AuthRoute from '../components/AuthRoute'
 import StaffAnthRoute from '@/components/StaffAnthRoute'
 import AdminAnthRoute from '@/components/AdminAnthRoute'
-import Login from '@/pages/Login'
-import LayoutIndex from '@/pages/Layout/index'
-import Home from '@/pages/Home'
-import StoManage from '@/pages/StoManage'
-import ProManage from '@/pages/ProManage'
-import PerManage from '@/pages/PerManage'
-import ActInfo from '@/pages/ActInfo'
-import StoHandle from '@/pages/StoHandle' 
-import ProUpload from '@/pages/ProUpload'
+
+import {
+  Login, LayoutIndex, Home, StoManage, ProManage, PerManage, ActInfo, StoHandle, ProUpload, Loading
+} from '@/router/router'
 
 const router = createBrowserRouter([
   {
     element: <AuthRoute />,
     children: [{
       path: '/',
-      element: <LayoutIndex />,
+      element: (
+        <Suspense fallback={<Loading />}>
+          <LayoutIndex />
+        </Suspense>
+      ),
       children: [
         {
           index: true,
@@ -33,7 +33,8 @@ const router = createBrowserRouter([
             {
               path: '/pro-manage',
               element: <ProManage />
-            }]
+            }
+          ]
         },
         {
           path: '/per-manage',
@@ -66,7 +67,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <Login />
+    element: (
+      <Suspense fallback={<Loading />}>
+        <Login />
+      </Suspense>
+    )
   }
 ])
 
