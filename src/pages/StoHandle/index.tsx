@@ -45,7 +45,7 @@ const StoHandle = () => {
       const res = await run(() => addHandleWarehouse({
         m_id: warehouseId
       }))
-      if (res.code === 4015 || res.code === 4014) {
+      if (res.code === 4015 || res.code === 4014 || res.code === 4016) {
         message.error(res.message)
         return
       }
