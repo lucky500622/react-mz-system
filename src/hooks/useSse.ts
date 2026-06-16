@@ -39,7 +39,7 @@ const useSse = <T>({ onMessage }: { onMessage: Dispatch<SetStateAction<T>> }) =>
 
       // 出错自动重连
       sourceRef.current.onerror = () => {
-        console.log('SSE连接异常，准备重连')
+        console.log('SSE连接异常')
         sourceRef.current?.close()
 
         // 计算重连延迟时间
@@ -49,6 +49,11 @@ const useSse = <T>({ onMessage }: { onMessage: Dispatch<SetStateAction<T>> }) =>
         const delay = Math.min(exponentialDelay + jitter, MAX_DELAY)
         if (delay === MAX_DELAY) {
           message.error('SSE连接异常，请您稍后重试或刷新网页，抱歉')
+          // 重连次数超过最大次数，不再重连
+          if (timerRef.current) clearTimeout(timerRef.current)
+          sourceRef.current?.close()
+          sourceRef.current = null
+          return
         }
         console.log(`SSE第${retryCountRef.current}次重连，等待${(delay / 1000).toFixed(1)}秒`)
         // 设置重连定时器
