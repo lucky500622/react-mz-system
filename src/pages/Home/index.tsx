@@ -61,30 +61,32 @@ const Home = () => {
       // 获取概览信息
       const warehouseOverview = await getWarehouseOverview()
       const productOverview = await getProductOverview()
-      setWarehouseInfo([warehouseOverview?.data ?? {} as WarehouseOverviewData])
-      setProductInfo([productOverview?.data ?? {} as ProductOverviewData])
-
       // 获取仓库产品数量
       const warehouseInfo = await getWarehouseInfo()
       const warehouseProductNum = warehouseInfo?.data?.warehouseInfo?.map(item => {
         return {value: Number(item.total_product_num) || 0, name: item.warehouse_name}
       }) || []
-      setWarehouseProductNum(warehouseProductNum)
-
       // 获取产品操作统计
       const productDayAction = await getProductDayAction()
       const addArr = productDayAction?.data?.productDayActionInfo?.in_arr.split(',')
         .map(item => Number(item) || 0) || []
-      setAddProductAction(addArr)
       const subArr = productDayAction?.data?.productDayActionInfo?.out_arr.split(',')
         .map(item => Number(item) || 0) || []
-      setSubProductAction(subArr)
       const sellArr = productDayAction?.data?.productDayActionInfo?.sale_arr.split(',')
         .map(item => Number(item) || 0) || []
-      setSellProductAction(sellArr)
-
       // 获取产品警告
       const productWarning = await getProductWarning()
+
+      // 概览信息
+      setWarehouseInfo([warehouseOverview?.data ?? {} as WarehouseOverviewData])
+      setProductInfo([productOverview?.data ?? {} as ProductOverviewData])
+      // 仓库产品数量
+      setWarehouseProductNum(warehouseProductNum)
+      // 近7日新增产品操作统计
+      setAddProductAction(addArr)
+      setSubProductAction(subArr)
+      setSellProductAction(sellArr)
+      // 产品警告
       setProductWarning(productWarning?.data?.warning ?? [])
     } 
     getInfo()

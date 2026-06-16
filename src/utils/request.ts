@@ -10,7 +10,11 @@ console.log(import.meta.env.VITE_API_BASE_URL)
 // 创建axios实例
 const request = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  timeout: Number(import.meta.env.VITE_API_TIMEOUT)
+  timeout: Number(import.meta.env.VITE_API_TIMEOUT),
+  headers: {
+    // 内网穿透ngrok时，跳过ngrok警告页
+    'ngrok-skip-browser-warning': 'true'
+  }
 })
 
 request.interceptors.request.use(function (config) {
