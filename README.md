@@ -5,10 +5,17 @@
 ## 🛠️ 快速启动
 
 - npm install
+
+开发
 - npm run dev
 
+生产打包
 - npm run build
 - npm run preview
+
+部署
+- 部署到githubpages，仅供作者本人使用，如需部署请remote新仓库
+- npm run deploy
 
 ## 🚀 技术栈
 
