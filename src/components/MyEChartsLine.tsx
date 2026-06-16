@@ -6,7 +6,6 @@ import {
   TitleComponent,
   TooltipComponent,
   GridComponent
-  // 删掉 XAxis、YAxis，这两个不存在导出
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 echarts.use([

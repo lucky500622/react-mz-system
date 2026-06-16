@@ -5,8 +5,9 @@ import StaffAnthRoute from '@/components/StaffAnthRoute'
 import AdminAnthRoute from '@/components/AdminAnthRoute'
 
 import {
-  Login, LayoutIndex, Home, StoManage, ProManage, PerManage, ActInfo, StoHandle, ProUpload, Loading
+  Login, LayoutIndex, Home, StoManage, ProManage, PerManage, ActInfo, StoHandle, ProUpload
 } from '@/router/router'
+import Loading from '@/components/Loading'
 
 const router = createBrowserRouter([
   {
@@ -60,7 +61,11 @@ const router = createBrowserRouter([
       children: [
         {
           path: '/pro-upload/:id',
-          element: <ProUpload />
+          element: (
+            <Suspense fallback={<Loading />}>
+              <ProUpload />
+            </Suspense>
+          )
         }
       ]
     }]

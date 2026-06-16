@@ -1,6 +1,5 @@
 import { lazy } from 'react'
 
-export const Loading = () => <div>页面加载中...</div>
 export const Login = lazy(() => import('@/pages/Login'))
 export const LayoutIndex = lazy(() => import('@/pages/Layout/index'))
 export const Home = lazy(() => import('@/pages/Home'))

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, use } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 import { AutoComplete } from 'antd'
 
@@ -24,7 +24,7 @@ const SelectNameAssociation = ({ value, onChange, placeholder, SelectFn, id = 's
       return
     }
     const res = await SelectFn(text)
-    setOptions(res.data.name.map(item => ({ label: item.name, value: item.name })))
+    setOptions(res?.data?.name?.map(item => ({ label: item.name, value: item.name })) || [])
   }
   // 防抖刷新事件
   const debounceRef = useRef(useDebounceFn(handleChange, 500))
