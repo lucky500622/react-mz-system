@@ -77,12 +77,12 @@ const IndexHeader = () => {
       setApplyList(res?.data?.applyList ?? [])
     }
     getInfo()
-    if (userInfo.user_role === 'sup_admin' && messages?.msg !== '连接成功' && messages) {
-      console.log( messages)
+    if (userInfo.user_role === 'sup_admin' && messages && messages?.msg !== '连接成功') {
       getInfo()
     }
     // 处理申请后触发消息处理
-    if (messages?.msg !== '连接成功' && messages && userInfo.user_role === 'com_admin' || userInfo.user_role === 'staff') {
+    if (messages && messages?.msg !== '连接成功' &&
+      (userInfo.user_role === 'com_admin' || userInfo.user_role === 'staff')) {
       dispatch(setExistApply(false))
       message.success('申请已被处理')
     }
