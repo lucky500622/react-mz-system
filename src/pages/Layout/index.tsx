@@ -72,14 +72,14 @@ const LayoutIndex = () => {
     }
   }
   const pathToKeyMap: Record<string, string> = {
-    '/': '1',
-    '/per-manage': '2',
-    '/sto-manage': '3',
-    '/pro-manage': '4',
-    '/sto-handle': '5',
-    '/act-info': '6'
+    '#/': '1',
+    '#/per-manage': '2',
+    '#/sto-manage': '3',
+    '#/pro-manage': '4',
+    '#/sto-handle': '5',
+    '#/act-info': '6'
   }
-  const currentKey = pathToKeyMap[location.pathname] || '1'
+  const currentKey = pathToKeyMap[location.hash] || '1'
 
   const dispatch = useDispatch<AppDispatch>()
   useEffect(() => {

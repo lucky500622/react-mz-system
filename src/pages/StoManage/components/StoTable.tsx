@@ -44,18 +44,17 @@ const StoTable = memo(({ref, queryDataSource}
       title: '仓库类型',
       dataIndex: 'warehouse_type',
       key: 'warehouse_type',
-      render: ({ warehouse_type }: { warehouse_type: string }) => {
+      render: (val: string) => {
         return (
-          <Tag color={'blue'}>{warehouse_type}</Tag>
+          <Tag color={'blue'}>{val}</Tag>
         )
       }
     },
     {
       title: '仓库状态',
-      dataIndex: 'exists_list_product',
       key: 'exists_list_product',
       render: ({ exists_list_product, exists_user_handle }:
-         { exists_list_product: boolean, exists_user_handle: boolean }) => {
+        { exists_list_product: boolean, exists_user_handle: number }) => {
         return (
           <div>
             <Tag style={{margin: '0 5px 5px 0'}} color={exists_list_product? 'black' : 'gray'}>

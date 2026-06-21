@@ -64,7 +64,7 @@ const StoHandle = () => {
   // 点击进入仓库事件
   const handleClick = (item: HandleWarehouseInfo) => {
     window.open(
-      `/pro-upload/${item.m_id}`,
+      `#/pro-upload/${item.m_id}`,
       '_blank',
       'noopener,noreferrer'
     )

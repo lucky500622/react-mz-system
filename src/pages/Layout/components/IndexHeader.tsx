@@ -71,16 +71,21 @@ const IndexHeader = () => {
   useSse({onMessage: setMessages})
   
   useEffect(() => {
-    // 初始化与用户提起申请触发消息处理
+    // 获取申请列表
     const getInfo = async () => {
       const res = await getRequestApply()
       setApplyList(res?.data?.applyList ?? [])
     }
-    getInfo()
+    // 初始化获取申请列表
+    if (messages && userInfo.user_role) {
+      getInfo()
+    }
+    // 用户提起申请触发消息处理
     if (userInfo.user_role === 'sup_admin' && messages && messages?.msg !== '连接成功') {
       getInfo()
     }
     // 处理申请后触发消息处理
+    console.log(messages, messages?.msg, userInfo.user_role)
     if (messages && messages?.msg !== '连接成功' &&
       (userInfo.user_role === 'com_admin' || userInfo.user_role === 'staff')) {
       dispatch(setExistApply(false))

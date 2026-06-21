@@ -46,7 +46,7 @@ request.interceptors.response.use(function (response) {
     console.log('登录过期')
     message.error('登录过期，请重新登录')
     setTimeout(() => {
-      window.location.href = '/login'
+      // window.location.href = '#/login'
     }, 1000)
   }
   if (status === 402) {
@@ -54,11 +54,11 @@ request.interceptors.response.use(function (response) {
     console.log('权限不足，不可操作，违规进入页面')
     message.error('权限不足，不可操作，违规进入页面')
     setTimeout(() => {
-      window.location.href = '/'
+      window.location.href = '#/'
     }, 1000)
   }
   if (error.response.status === 403) {
-    window.location.href = '/sto-handle'
+    window.location.href = '#/sto-handle'
   }
   if (error.response.status === 404) {
     // 接口资源不存在

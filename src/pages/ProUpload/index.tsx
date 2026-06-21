@@ -35,9 +35,9 @@ const ProUpload = () => {
       title: '产品类型',
       dataIndex: 'product_type',
       key: 'product_type',
-      render: (product_type: string) => {
+      render: (val: string) => {
         return (
-          <Tag color="blue">{product_type}</Tag>
+          <Tag color="blue">{val}</Tag>
         )
       }
     },
