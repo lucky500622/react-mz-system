@@ -85,7 +85,6 @@ const IndexHeader = () => {
       getInfo()
     }
     // 处理申请后触发消息处理
-    console.log(messages, messages?.msg, userInfo.user_role)
     if (messages && messages?.msg !== '连接成功' &&
       (userInfo.user_role === 'com_admin' || userInfo.user_role === 'staff')) {
       dispatch(setExistApply(false))

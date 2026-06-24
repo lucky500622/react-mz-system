@@ -5,7 +5,7 @@ import { Table, Button, Form, InputNumber, Select, Tag, Modal, message } from 'a
 import type { FormProps } from 'antd'
 
 import '@/pages/ProUpload/index.scss'
-import { getWarehouseProduct, upDownProduct, saleProduct, getProductName } from '@/api/product'
+import { getWarehouseProduct, upDownProduct, saleProduct, getWarehouseProductName } from '@/api/product'
 import { exitHandleWarehouse } from '@/api/warehouse'
 import type { WarehouseProductData } from '@/api/product'
 import MessageBoard from '@/pages/ProUpload/components/MessageBoard'
@@ -329,7 +329,8 @@ const ProUpload = () => {
                 rules={[{pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/, message: '产品名称只能包含汉字、字母和数字'}]}>
                 <SelectNameAssociation
                   placeholder="请选择产品名称"
-                  SelectFn={getProductName}
+                  SelectMIDFn={getWarehouseProductName}
+                  warehouse_m_id={Number(id)}
                 />
               </Form.Item>
             

@@ -146,6 +146,19 @@ export const getWarehouseProduct = (
   }) as Promise<ApiResponse<WarehouseProductData>>
 }
 
+// 获取仓库产品名称
+type WarehouseProductNameData = {
+  name: {name: string}[]
+}
+export const getWarehouseProductName = (text: string, warehouse_m_id: number) => {
+  return request.get('/product/nameOfWarehouse', {
+    params: {
+      text,
+      warehouse_m_id
+    }
+  }) as Promise<ApiResponse<WarehouseProductNameData>>
+}
+
 // 上下架产品
 export const upDownProduct = (data: {m_id: number, action_type: number, product_num?: number, action_all: boolean},
   warehouse_m_id: number) => {
