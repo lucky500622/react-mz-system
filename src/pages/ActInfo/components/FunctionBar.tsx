@@ -37,7 +37,7 @@ const FunctionBar = ({labelConfig, options, onSearch, loading} : {labelConfig: L
           autoComplete="off"
           layout="inline"
           disabled={loading}>
-          <Form.Item label="操作序列号" name="m_id"
+          <Form.Item label="序列号" name="m_id"
             rules={[{ type: 'number', min: 1, message: '请输入有效的序列号' }]}>
             <InputNumber placeholder="请输入序列号"/>
           </Form.Item>

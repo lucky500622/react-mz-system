@@ -39,17 +39,17 @@ request.interceptors.response.use(function (response) {
     console.log('服务器错误')
     message.error('服务器错误')
   }
-  if (status === 401) {
+  else if (status === 401) {
     // 登录过期，删除token并跳转登录页
     removeStorage('token')
     removeStorage('role')
     console.log('登录过期')
     message.error('登录过期，请重新登录')
     setTimeout(() => {
-      // window.location.href = '#/login'
+      window.location.href = '#/login'
     }, 1000)
   }
-  if (status === 402) {
+  else if (status === 402) {
     // 权限不足，不可操作，违规进入页面
     console.log('权限不足，不可操作，违规进入页面')
     message.error('权限不足，不可操作，违规进入页面')
@@ -57,10 +57,10 @@ request.interceptors.response.use(function (response) {
       window.location.href = '#/'
     }, 1000)
   }
-  if (error.response.status === 403) {
+  else if (status === 403) {
     window.location.href = '#/sto-handle'
   }
-  if (error.response.status === 404) {
+  else if (status === 404) {
     // 接口资源不存在
     console.log('资源不存在')
     message.error('服务接口问题')
